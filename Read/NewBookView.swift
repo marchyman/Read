@@ -12,7 +12,7 @@ struct NewBookView: View {
     @Environment(\.dismiss) var dismiss
 
     @State private var title = ""
-    @State private var authors = ""
+    @State private var author = ""
     @State private var series = ""
     @State private var seriesOrder = 1
     @State private var isFutureRelease = false
@@ -35,7 +35,7 @@ struct NewBookView: View {
                     Text("Add New Book")
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(title.isEmpty || authors.isEmpty)
+                .disabled(title.isEmpty || author.isEmpty)
             }
             .padding(.vertical)
 
@@ -45,9 +45,9 @@ struct NewBookView: View {
                 Text("Title")
             }
             LabeledContent {
-                TextField("authors, separated by comma", text: $authors)
+                TextField("authors, separated by comma", text: $author)
             } label: {
-                Text("Authors")
+                Text("Author")
             }
             LabeledContent {
                 TextField("series name", text: $series)
@@ -81,7 +81,7 @@ struct NewBookView: View {
     }
 
     func addBook() {
-        let newBook = Book(title: title, authors: authors)
+        let newBook = Book(title: title, author: author)
         if !series.isEmpty {
             newBook.series = series
             newBook.seriesOrder = seriesOrder

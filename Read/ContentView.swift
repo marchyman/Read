@@ -9,66 +9,33 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var books: [Book]
     @State private var newBook = false
-    @State private var releasePopover = false
+    @State private var sortOrder = SortDescriptor(\Book.series)
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(books) { book in
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(book.title).font(.title2)
-                            Text(book.authorString)                            .foregroundStyle(.secondary)
+            BookListView(sort: sortOrder)
+                .navigationTitle("Books")
+                .toolbar {
+                    Button("Add Book", systemImage: "plus",
+                           action: { newBook = true })
+                    Menu("Sort", systemImage: "arrow.up.arrow.down") {
+                        Picker("Sort", selection: $sortOrder) {
+                            Text("Title")
+                                .tag(SortDescriptor(\Book.title))
+                            Text("Series")
+                                .tag(SortDescriptor(\Book.series))
+                            Text("Author")
+                                .tag(SortDescriptor(\Book.author))
                         }
-                        Spacer()
-                        VStack(alignment: .trailing) {
-                            if let series = book.series {
-                                let order = book.seriesOrder ?? 0
-                                Text("\(series) No. \(order)")
-                            }
-                            if let estRelease = book.estRelease {
-                                Text("Est Release Date: \(estRelease .formatted(date: .numeric, time: .omitted))")
-                                    .foregroundStyle(.secondary)
-                                    .onTapGesture {
-                                        releasePopover.toggle()
-                                    }
-                                    .popover(isPresented: $releasePopover) {
-                                        BookReleasedView(book: book)
-                                            .padding(30)
-                                    }
-                            } else {
-                                Text("")
-                            }
-                        }
+                        .pickerStyle(.inline)
                     }
-                }
-                .onDelete(perform: deleteBooks)
-            }
-            .navigationTitle("Books")
-            .toolbar {
-                ToolbarItem {
-                    Button {
-                        newBook = true
-                    } label: {
-                        Label("Add Book", systemImage: "plus")
-                    }
-                }
-            }
-            .sheet(isPresented: $newBook) {
-                NewBookView()
-                    .presentationDetents([.medium])
-            }
-        }
-    }
 
-    private func deleteBooks(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(books[index])
-            }
+                }
+                .sheet(isPresented: $newBook) {
+                    NewBookView()
+                        .presentationDetents([.medium])
+                }
         }
     }
 }
