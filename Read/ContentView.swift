@@ -12,7 +12,7 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var books: [Book]
     @State private var newBook = false
-    @State private var showPopOver = false
+    @State private var releasePopover = false
 
     var body: some View {
         NavigationStack {
@@ -33,9 +33,9 @@ struct ContentView: View {
                                 Text("Est Release Date: \(estRelease .formatted(date: .numeric, time: .omitted))")
                                     .foregroundStyle(.secondary)
                                     .onTapGesture {
-                                        showPopOver.toggle()
+                                        releasePopover.toggle()
                                     }
-                                    .popover(isPresented: $showPopOver) {
+                                    .popover(isPresented: $releasePopover) {
                                         BookReleasedView(book: book)
                                             .padding(30)
                                     }
@@ -47,6 +47,7 @@ struct ContentView: View {
                 }
                 .onDelete(perform: deleteBooks)
             }
+            .navigationTitle("Books")
             .toolbar {
                 ToolbarItem {
                     Button {
