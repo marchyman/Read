@@ -10,46 +10,63 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Query private var books: [Book]
+    @State private var newBook = false
+    @State private var showPopOver = false
 
     var body: some View {
-        NavigationSplitView {
+        NavigationStack {
             List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                ForEach(books) { book in
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(book.title).font(.title2)
+                            Text(book.authorString)                            .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        VStack(alignment: .trailing) {
+                            if let series = book.series {
+                                let order = book.seriesOrder ?? 0
+                                Text("\(series) No. \(order)")
+                            }
+                            if let estRelease = book.estRelease {
+                                Text("Est Release Date: \(estRelease .formatted(date: .numeric, time: .omitted))")
+                                    .foregroundStyle(.secondary)
+                                    .onTapGesture {
+                                        showPopOver.toggle()
+                                    }
+                                    .popover(isPresented: $showPopOver) {
+                                        BookReleasedView(book: book)
+                                            .padding(30)
+                                    }
+                            } else {
+                                Text("")
+                            }
+                        }
                     }
                 }
-                .onDelete(perform: deleteItems)
+                .onDelete(perform: deleteBooks)
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
                 ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                    Button {
+                        newBook = true
+                    } label: {
+                        Label("Add Book", systemImage: "plus")
                     }
                 }
             }
-        } detail: {
-            Text("Select an item")
+            .sheet(isPresented: $newBook) {
+                NewBookView()
+                    .presentationDetents([.medium])
+            }
         }
     }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
+    private func deleteBooks(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(items[index])
+                modelContext.delete(books[index])
             }
         }
     }
@@ -57,5 +74,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: Book.self, inMemory: true)
 }
