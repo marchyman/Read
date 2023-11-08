@@ -11,7 +11,7 @@ import SwiftData
 struct BookListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var books: [Book]
-    @State private var releasePopover = false
+    @State private var editBook: Book?
     @State private var lastInSeries = false
 
     init(sort: SortDescriptor<Book>, search: String) {
@@ -37,7 +37,7 @@ struct BookListView: View {
     var body: some View {
         ScrollViewReader { proxy in
             List {
-                ForEach(books) { book in
+                ForEach(books, id: \.self) { book in
                     if !lastInSeries || lastInSeries(book) {
                         HStack {
                             VStack(alignment: .leading) {
@@ -45,31 +45,31 @@ struct BookListView: View {
                                 Text(book.author)
                                     .foregroundStyle(.secondary)
                             }
+                            .onTapGesture {
+                                editBook = book
+                            }
                             Spacer()
                             VStack(alignment: .trailing) {
                                 if let series = book.series {
                                     let order = book.seriesOrder ?? 0
                                     Text("\(series) No. \(order)")
+                                        .bold(lastInSeries)
                                         .onTapGesture {
                                             lastInSeries.toggle()
                                             proxy.scrollTo(book.title)
                                         }
-                                        .bold(lastInSeries)
                                 }
                                 if let estRelease = book.estRelease {
                                     Text("Est Release Date: \(estRelease .formatted(date: .numeric, time: .omitted))")
                                         .foregroundStyle(.secondary)
-                                        .onTapGesture {
-                                            releasePopover.toggle()
-                                        }
-                                        .popover(isPresented: $releasePopover) {
-                                            BookReleasedView(book: book)
-                                                .padding(30)
-                                        }
                                 } else {
                                     Text("")
                                 }
                             }
+                        }
+                        .sheet(item: $editBook) { book in
+                            EditBookView(book: book)
+                                .presentationDetents([.medium])
                         }
                         .id(book.title)
                     }

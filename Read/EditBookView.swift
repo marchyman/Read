@@ -1,23 +1,19 @@
 //
-//  NewBookView.swift
+//  EditBookView.swift
 //  Read
 //
-//  Created by Marco S Hyman on 11/6/23.
+//  Created by Marco S Hyman on 11/7/23.
 //
 
 import SwiftUI
 import SwiftData
 
-struct NewBookView: View {
+struct EditBookView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) var dismiss
-
-    @State private var title = ""
-    @State private var author = ""
-    @State private var series = ""
-    @State private var seriesOrder = 1
-    @State private var isFutureRelease = false
+    @Bindable var book: Book
     @State private var estRelease = Date.now
+    @State private var isFutureRelease = false
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -26,39 +22,32 @@ struct NewBookView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text("Cancel")
+                    Text("Dismiss")
                 }
                 .padding(.horizontal)
-                .buttonStyle(.bordered)
-                Button {
-                    addBook()
-                } label: {
-                    Text("Add New Book")
-                }
                 .buttonStyle(.borderedProminent)
-                .disabled(title.isEmpty || author.isEmpty)
             }
             .padding(.vertical)
 
             LabeledContent {
-                TextField("title", text: $title)
+                TextField("title", text: $book.title)
             } label: {
                 Text("Title")
             }
             LabeledContent {
-                TextField("authors, separated by comma", text: $author)
+                TextField("authors, separated by comma", text: $book.author)
             } label: {
                 Text("Author")
             }
             LabeledContent {
-                TextField("series name", text: $series)
+                TextField("series name", text: $book.series.bound)
             } label: {
                 Text("Series")
             }
-            if !series.isEmpty {
+            if !book.series.bound.isEmpty {
                 LabeledContent {
                     TextField("book number in series",
-                              value: $seriesOrder, format: .number)
+                              value: $book.seriesOrder, format: .number)
                 } label: {
                     Text("Series order")
                 }
@@ -67,34 +56,53 @@ struct NewBookView: View {
             Toggle(isOn: $isFutureRelease) {
                 Text("Future release?")
             }
+            .onChange(of: isFutureRelease) {
+                book.estRelease = isFutureRelease ? estRelease : nil
+
+            }
             if isFutureRelease {
                 LabeledContent {
                     DatePicker("", selection: $estRelease,
                                displayedComponents: .date)
+                    .onChange(of: estRelease) {
+                        book.estRelease = estRelease
+                    }
                 } label: {
                     Text("Est Release Date")
                 }
             }
             Spacer()
-       }
+        }
         .padding()
         .textFieldStyle(.roundedBorder)
-    }
-
-    func addBook() {
-        let newBook = Book(title: title, author: author)
-        if !series.isEmpty {
-            newBook.series = series
-            newBook.seriesOrder = seriesOrder
+        .onAppear() {
+            isFutureRelease = book.estRelease != nil
+            estRelease = book.estRelease ?? Date.now
         }
-        if isFutureRelease {
-            newBook.estRelease = estRelease
-        }
-        context.insert(newBook)
-        dismiss()
     }
 }
 
-#Preview {
-    NewBookView()
+// needed to bind to an optional string
+
+extension Optional where Wrapped == String {
+    var _bound: String? {
+        get {
+            return self
+        }
+        set {
+            self = newValue
+        }
+    }
+    public var bound: String {
+        get {
+            return _bound ?? ""
+        }
+        set {
+            _bound = newValue.isEmpty ? nil : newValue
+        }
+    }
 }
+
+//#Preview {
+//    EditBookView()
+//}

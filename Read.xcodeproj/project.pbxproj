@@ -15,6 +15,7 @@
 		4976F2872AF9A7DF004F01B0 /* NewBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4976F2862AF9A7DF004F01B0 /* NewBookView.swift */; };
 		4976F2892AF9C397004F01B0 /* BookReleasedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4976F2882AF9C397004F01B0 /* BookReleasedView.swift */; };
 		49804C7E2AFAC015006D74D6 /* BookListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49804C7D2AFAC015006D74D6 /* BookListView.swift */; };
+		49804C802AFB0F43006D74D6 /* EditBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49804C7F2AFB0F43006D74D6 /* EditBookView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		4976F2862AF9A7DF004F01B0 /* NewBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBookView.swift; sourceTree = "<group>"; };
 		4976F2882AF9C397004F01B0 /* BookReleasedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReleasedView.swift; sourceTree = "<group>"; };
 		49804C7D2AFAC015006D74D6 /* BookListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListView.swift; sourceTree = "<group>"; };
+		49804C7F2AFB0F43006D74D6 /* EditBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				4976F2782AF99D21004F01B0 /* ContentView.swift */,
 				49804C7D2AFAC015006D74D6 /* BookListView.swift */,
 				4976F2862AF9A7DF004F01B0 /* NewBookView.swift */,
+				49804C7F2AFB0F43006D74D6 /* EditBookView.swift */,
 				4976F2882AF9C397004F01B0 /* BookReleasedView.swift */,
 				4976F27A2AF99D21004F01B0 /* Book.swift */,
 				4976F27C2AF99D22004F01B0 /* Assets.xcassets */,
@@ -154,6 +157,7 @@
 				4976F2792AF99D21004F01B0 /* ContentView.swift in Sources */,
 				4976F27B2AF99D21004F01B0 /* Book.swift in Sources */,
 				4976F2772AF99D21004F01B0 /* ReadApp.swift in Sources */,
+				49804C802AFB0F43006D74D6 /* EditBookView.swift in Sources */,
 				4976F2892AF9C397004F01B0 /* BookReleasedView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
