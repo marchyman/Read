@@ -14,50 +14,69 @@ struct BookListView: View {
     @State private var releasePopover = false
     @State private var lastInSeries = false
 
-    init(sort: SortDescriptor<Book>) {
-        _books = Query(sort: [sort, SortDescriptor(\.seriesOrder, order: .reverse)])
+    init(sort: SortDescriptor<Book>, search: String) {
+        _books = Query(
+            filter: #Predicate { book in
+                if search.isEmpty {
+                    return true
+                } else {
+                    if let series = book.series {
+                        return book.title.localizedStandardContains(search) ||
+                        book.author.localizedStandardContains(search) ||
+                        series.localizedStandardContains(search)
+                    } else {
+                        return book.title.localizedStandardContains(search) ||
+                        book.author.localizedStandardContains(search)
+                    }
+                }
+            },
+            sort: [sort, SortDescriptor(\.seriesOrder, order: .reverse)]
+        )
     }
 
     var body: some View {
-        List {
-            ForEach(books) { book in
-                if !lastInSeries || lastInSeries(book) {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(book.title).font(.title2)
-                            Text(book.author)
-                                .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        VStack(alignment: .trailing) {
-                            if let series = book.series {
-                                let order = book.seriesOrder ?? 0
-                                Text("\(series) No. \(order)")
-                                    .onTapGesture {
-                                        lastInSeries.toggle()
-                                    }
-                                    .bold(lastInSeries)
-                            }
-                            if let estRelease = book.estRelease {
-                                Text("Est Release Date: \(estRelease .formatted(date: .numeric, time: .omitted))")
+        ScrollViewReader { proxy in
+            List {
+                ForEach(books) { book in
+                    if !lastInSeries || lastInSeries(book) {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(book.title).font(.title2)
+                                Text(book.author)
                                     .foregroundStyle(.secondary)
-                                    .onTapGesture {
-                                        releasePopover.toggle()
-                                    }
-                                    .popover(isPresented: $releasePopover) {
-                                        BookReleasedView(book: book)
-                                            .padding(30)
-                                    }
-                            } else {
-                                Text("")
+                            }
+                            Spacer()
+                            VStack(alignment: .trailing) {
+                                if let series = book.series {
+                                    let order = book.seriesOrder ?? 0
+                                    Text("\(series) No. \(order)")
+                                        .onTapGesture {
+                                            lastInSeries.toggle()
+                                            proxy.scrollTo(book.title)
+                                        }
+                                        .bold(lastInSeries)
+                                }
+                                if let estRelease = book.estRelease {
+                                    Text("Est Release Date: \(estRelease .formatted(date: .numeric, time: .omitted))")
+                                        .foregroundStyle(.secondary)
+                                        .onTapGesture {
+                                            releasePopover.toggle()
+                                        }
+                                        .popover(isPresented: $releasePopover) {
+                                            BookReleasedView(book: book)
+                                                .padding(30)
+                                        }
+                                } else {
+                                    Text("")
+                                }
                             }
                         }
+                        .id(book.title)
                     }
                 }
+                .onDelete(perform: deleteBooks)
             }
-            .onDelete(perform: deleteBooks)
         }
-
     }
 
     // return true if this is the only book or the last book in a series
@@ -82,6 +101,6 @@ struct BookListView: View {
 }
 
 #Preview {
-    BookListView(sort: SortDescriptor(\Book.title))
+    BookListView(sort: SortDescriptor(\Book.title), search: "")
         .modelContainer(for: Book.self, inMemory: true)
 }

@@ -11,11 +11,13 @@ import SwiftData
 struct ContentView: View {
     @State private var newBook = false
     @State private var sortOrder = SortDescriptor(\Book.series)
+    @State private var searchText = ""
 
     var body: some View {
         NavigationStack {
-            BookListView(sort: sortOrder)
+            BookListView(sort: sortOrder, search: searchText)
                 .navigationTitle("Books")
+                .searchable(text: $searchText)
                 .toolbar {
                     Button("Add Book", systemImage: "plus",
                            action: { newBook = true })
