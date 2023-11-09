@@ -47,9 +47,7 @@ struct NewBookView: View {
                 SeriesOrderFieldView(seriesOrder: $seriesOrder)
             }
             Divider()
-            Toggle(isOn: $isFutureRelease) {
-                Text("Future release?")
-            }
+            FutureReleaseToggleView(isFutureRelease: $isFutureRelease)
             if isFutureRelease {
                 EstReleasePickerView(estRelease: $estRelease)
             }

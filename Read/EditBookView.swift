@@ -45,13 +45,10 @@ struct EditBookView: View {
                     }
             }
             Divider()
-            Toggle(isOn: $isFutureRelease) {
-                Text("Future release?")
-            }
-            .onChange(of: isFutureRelease) {
-                book.estRelease = isFutureRelease ? estRelease : nil
-
-            }
+            FutureReleaseToggleView(isFutureRelease: $isFutureRelease)
+                .onChange(of: isFutureRelease) {
+                    book.estRelease = isFutureRelease ? estRelease : nil
+                }
             if isFutureRelease {
                 EstReleasePickerView(estRelease: $estRelease)
                     .onChange(of: estRelease) {
