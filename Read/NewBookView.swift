@@ -40,40 +40,18 @@ struct NewBookView: View {
             }
             .padding(.vertical)
 
-            LabeledContent {
-                TextField("title", text: $title)
-            } label: {
-                Text("Title")
-            }
-            LabeledContent {
-                TextField("authors, separated by comma", text: $author)
-            } label: {
-                Text("Author")
-            }
-            LabeledContent {
-                TextField("series name", text: $series)
-            } label: {
-                Text("Series")
-            }
+            TitleFieldView(title: $title)
+            AuthorFieldView(author: $author)
+            SeriesFieldView(series: $series)
             if !series.isEmpty {
-                LabeledContent {
-                    TextField("book number in series",
-                              value: $seriesOrder, format: .number)
-                } label: {
-                    Text("Series order")
-                }
+                SeriesOrderFieldView(seriesOrder: $seriesOrder)
             }
             Divider()
             Toggle(isOn: $isFutureRelease) {
                 Text("Future release?")
             }
             if isFutureRelease {
-                LabeledContent {
-                    DatePicker("", selection: $estRelease,
-                               displayedComponents: .date)
-                } label: {
-                    Text("Est Release Date")
-                }
+                EstReleasePickerView(estRelease: $estRelease)
             }
             Spacer()
        }
@@ -82,9 +60,12 @@ struct NewBookView: View {
     }
 
     func addBook() {
-        let newBook = Book(title: title, author: author)
+        let newBook = Book(
+            title: title.trimmingCharacters(in: .whitespacesAndNewlines),
+            author: author.trimmingCharacters(in: .whitespacesAndNewlines)
+            )
         if !series.isEmpty {
-            newBook.series = series
+            newBook.series = series.trimmingCharacters(in: .whitespacesAndNewlines)
             newBook.seriesOrder = seriesOrder
         }
         if isFutureRelease {

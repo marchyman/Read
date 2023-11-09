@@ -12,6 +12,7 @@ struct EditBookView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) var dismiss
     @Bindable var book: Book
+    @State private var seriesOrder = 0
     @State private var estRelease = Date.now
     @State private var isFutureRelease = false
 
@@ -29,28 +30,19 @@ struct EditBookView: View {
             }
             .padding(.vertical)
 
-            LabeledContent {
-                TextField("title", text: $book.title)
-            } label: {
-                Text("Title")
-            }
-            LabeledContent {
-                TextField("authors, separated by comma", text: $book.author)
-            } label: {
-                Text("Author")
-            }
-            LabeledContent {
-                TextField("series name", text: $book.series.bound)
-            } label: {
-                Text("Series")
-            }
-            if !book.series.bound.isEmpty {
-                LabeledContent {
-                    TextField("book number in series",
-                              value: $book.seriesOrder, format: .number)
-                } label: {
-                    Text("Series order")
+            TitleFieldView(title: $book.title)
+            AuthorFieldView(author: $book.author)
+            SeriesFieldView(series: $book.series.bound)
+                .onChange(of: book.series) {
+                    if book.series == nil {
+                        book.seriesOrder = nil
+                    }
                 }
+            if !book.series.bound.isEmpty {
+                SeriesOrderFieldView(seriesOrder: $seriesOrder)
+                    .onChange(of: seriesOrder) {
+                        book.seriesOrder = seriesOrder
+                    }
             }
             Divider()
             Toggle(isOn: $isFutureRelease) {
@@ -61,47 +53,23 @@ struct EditBookView: View {
 
             }
             if isFutureRelease {
-                LabeledContent {
-                    DatePicker("", selection: $estRelease,
-                               displayedComponents: .date)
+                EstReleasePickerView(estRelease: $estRelease)
                     .onChange(of: estRelease) {
                         book.estRelease = estRelease
                     }
-                } label: {
-                    Text("Est Release Date")
-                }
             }
             Spacer()
         }
         .padding()
         .textFieldStyle(.roundedBorder)
         .onAppear() {
+            seriesOrder = book.seriesOrder ?? 1
             isFutureRelease = book.estRelease != nil
             estRelease = book.estRelease ?? Date.now
         }
     }
 }
 
-// needed to bind to an optional string
-
-extension Optional where Wrapped == String {
-    var _bound: String? {
-        get {
-            return self
-        }
-        set {
-            self = newValue
-        }
-    }
-    public var bound: String {
-        get {
-            return _bound ?? ""
-        }
-        set {
-            _bound = newValue.isEmpty ? nil : newValue
-        }
-    }
-}
 
 //#Preview {
 //    EditBookView()
