@@ -33,18 +33,28 @@ enum BookSchemaV2: VersionedSchema {
              author: String,
              estRelease: Date? = nil) {
             self.author = author
+            updateAuthors()
             self.title = title
             self.series = series
             self.seriesOrder = seriesOrder
-
-            let allAuthors = author.split(separator: ",",
-                                          omittingEmptySubsequences: true)
-            self.authors = allAuthors.map {String($0) }
-
             self.added = Date.now
             self.estRelease = estRelease
         }
 
+        func updateAuthors() {
+            let allAuthors = author.split(separator: ",",
+                                          omittingEmptySubsequences: true)
+            authors = allAuthors.map { name in
+                var components = name.split(separator: " ",
+                                            omittingEmptySubsequences: true)
+                if components.count > 0 {
+                    let lastName = components.removeLast()
+                    let otherNames = components.joined(separator: " ")
+                    return "\(lastName), \(otherNames)"
+                }
+                return String(name)
+            }
+        }
     }
 }
 
