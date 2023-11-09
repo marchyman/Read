@@ -19,13 +19,13 @@ enum BookSchemaV2: VersionedSchema {
 
     @Model
     final class Book {
-        var author: String
-        var title: String
+        var author: String = "Unknown"
+        var title: String = "Unknown"
         var series: String?
         var seriesOrder: Int?
-        var added: Date
+        var added: Date = Date.now
         var estRelease: Date?
-        var authors: [String]
+        var authors: [String] = []
 
         init(title: String,
              series: String? = nil,
