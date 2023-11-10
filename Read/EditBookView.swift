@@ -33,7 +33,7 @@ struct EditBookView: View {
             TitleFieldView(title: $book.title)
             AuthorFieldView(author: $book.author)
                 .onChange(of: book.author) {
-                    book.updateAuthors()
+                    book.setSortAuthor()
                 }
             SeriesFieldView(series: $book.series.bound)
                 .onChange(of: book.series) {

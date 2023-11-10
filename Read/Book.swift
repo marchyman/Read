@@ -8,7 +8,56 @@
 import Foundation
 import SwiftData
 
-typealias Book = BookSchemaV2.Book
+typealias Book = BookSchemaV3.Book
+
+enum BookSchemaV3: VersionedSchema {
+    static var versionIdentifier = Schema.Version(3, 0, 0)
+
+    static var models: [any PersistentModel.Type] {
+        [Book.self]
+    }
+
+    @Model
+    final class Book {
+        var author: String = "Unknown"
+        var sortAuthor: String = "Unknown"
+        var title: String = "Unknown"
+        var series: String?
+        var seriesOrder: Int?
+        var added: Date = Date.now
+        var estRelease: Date?
+
+        init(title: String,
+             series: String? = nil,
+             seriesOrder: Int? = nil,
+             author: String,
+             estRelease: Date? = nil) {
+            self.author = author
+            setSortAuthor()
+            self.title = title
+            self.series = series
+            self.seriesOrder = seriesOrder
+            self.added = Date.now
+            self.estRelease = estRelease
+        }
+
+        func setSortAuthor() {
+            let allAuthors = author.split(separator: ",",
+                                          omittingEmptySubsequences: true)
+            if let name = allAuthors.first {
+                var components = name.split(separator: " ",
+                                            omittingEmptySubsequences: true)
+                if components.count > 0 {
+                    let lastName = components.removeLast()
+                    let otherNames = components.joined(separator: " ")
+                    sortAuthor = "\(lastName), \(otherNames)"
+                } else {
+                    sortAuthor = String(name)
+                }
+            }
+        }
+    }
+}
 
 enum BookSchemaV2: VersionedSchema {
     static var versionIdentifier = Schema.Version(2, 0, 0)
@@ -26,6 +75,9 @@ enum BookSchemaV2: VersionedSchema {
         var added: Date = Date.now
         var estRelease: Date?
         var authors: [String] = []
+        var lastName: String {
+            authors[0]
+        }
 
         init(title: String,
              series: String? = nil,
@@ -102,7 +154,7 @@ enum BookSchemaV1: VersionedSchema {
 
 enum BookMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [BookSchemaV1.self, BookSchemaV2.self]
+        [BookSchemaV1.self, BookSchemaV2.self, BookSchemaV3.self]
     }
 
     static let migrateV1toV2 = MigrationStage.custom(
@@ -127,7 +179,21 @@ enum BookMigrationPlan: SchemaMigrationPlan {
         }
     )
 
+    static let migrateV2toV3 = MigrationStage.custom(
+        fromVersion: BookSchemaV2.self,
+        toVersion: BookSchemaV3.self,
+        willMigrate: nil,
+        didMigrate: { context in
+            let books = try context.fetch(FetchDescriptor<BookSchemaV3.Book>())
+            for book in books {
+                book.setSortAuthor()
+            }
+            try context.save()
+        }
+    )
+
     static var stages: [MigrationStage] {
-        [migrateV1toV2]
+        [migrateV1toV2,
+         migrateV2toV3]
     }
 }

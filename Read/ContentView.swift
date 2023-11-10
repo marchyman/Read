@@ -28,7 +28,7 @@ struct ContentView: View {
                             Text("Series")
                                 .tag(SortDescriptor(\Book.series))
                             Text("Author")
-                                .tag(SortDescriptor(\Book.author))
+                                .tag(SortDescriptor(\Book.sortAuthor))
                         }
                         .pickerStyle(.inline)
                     }
