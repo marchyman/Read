@@ -14,24 +14,30 @@ struct BookListView: View {
     @State private var editBook: Book?
     @State private var lastInSeries = false
 
-    init(sort: SortDescriptor<Book>, search: String) {
-        _books = Query(
-            filter: #Predicate { book in
-                if search.isEmpty {
-                    return true
+    init(sort: SortOrder, search: String) {
+        let sortDescriptors: [SortDescriptor<Book>] = switch sort {
+        case .series:
+            [.init(\.series), .init(\.seriesOrder, order: .reverse)]
+        case .title:
+            [.init(\.title), .init(\.sortAuthor)]
+        case .author:
+            [.init(\.sortAuthor), .init(\.series), .init(\.seriesOrder, order: .reverse)]
+        }
+        let predicate = #Predicate<Book> { book in
+            if search.isEmpty {
+                return true
+            } else {
+                if let series = book.series {
+                    return book.title.localizedStandardContains(search) ||
+                    book.author.localizedStandardContains(search) ||
+                    series.localizedStandardContains(search)
                 } else {
-                    if let series = book.series {
-                        return book.title.localizedStandardContains(search) ||
-                        book.author.localizedStandardContains(search) ||
-                        series.localizedStandardContains(search)
-                    } else {
-                        return book.title.localizedStandardContains(search) ||
-                        book.author.localizedStandardContains(search)
-                    }
+                    return book.title.localizedStandardContains(search) ||
+                    book.author.localizedStandardContains(search)
                 }
-            },
-            sort: [sort, SortDescriptor(\.seriesOrder, order: .reverse)]
-        )
+            }
+        }
+        _books = Query(filter: predicate, sort: sortDescriptors)
     }
 
     var body: some View {
@@ -56,7 +62,7 @@ struct BookListView: View {
                                         .bold(lastInSeries)
                                         .onTapGesture {
                                             lastInSeries.toggle()
-                                            proxy.scrollTo(book.title)
+                                            proxy.scrollTo(book.added)
                                         }
                                 }
                                 if let estRelease = book.estRelease {
@@ -71,7 +77,7 @@ struct BookListView: View {
                             EditBookView(book: book)
                                 .presentationDetents([.medium])
                         }
-                        .id(book.title)
+                        .id(book.added)
                     }
                 }
                 .onDelete(perform: deleteBooks)
@@ -101,6 +107,6 @@ struct BookListView: View {
 }
 
 #Preview {
-    BookListView(sort: SortDescriptor(\Book.title), search: "")
+    BookListView(sort: SortOrder.title, search: "")
         .modelContainer(for: Book.self, inMemory: true)
 }

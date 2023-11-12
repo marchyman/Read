@@ -8,9 +8,17 @@
 import SwiftUI
 import SwiftData
 
+enum SortOrder: String, Identifiable, CaseIterable {
+    case series, title, author
+
+    var id: Self {
+        self
+    }
+}
+
 struct ContentView: View {
     @State private var newBook = false
-    @State private var sortOrder = SortDescriptor(\Book.series)
+    @State private var sortOrder = SortOrder.series
     @State private var searchText = ""
 
     var body: some View {
@@ -23,12 +31,9 @@ struct ContentView: View {
                            action: { newBook = true })
                     Menu("Sort", systemImage: "arrow.up.arrow.down") {
                         Picker("Sort", selection: $sortOrder) {
-                            Text("Title")
-                                .tag(SortDescriptor(\Book.title))
-                            Text("Series")
-                                .tag(SortDescriptor(\Book.series))
-                            Text("Author")
-                                .tag(SortDescriptor(\Book.sortAuthor))
+                            ForEach(SortOrder.allCases) { sortOrder in
+                                Text("Sort by \(sortOrder.rawValue)").tag(sortOrder)
+                            }
                         }
                         .pickerStyle(.inline)
                     }
