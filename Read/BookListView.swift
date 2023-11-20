@@ -107,6 +107,9 @@ struct BookListView: View {
 }
 
 #Preview {
-    BookListView(sort: SortOrder.title, search: "")
-        .modelContainer(for: Book.self, inMemory: true)
+    NavigationStack {
+        BookListView(sort: SortOrder.title, search: "")
+            .modelContainer(for: Book.self, inMemory: true)
+            .navigationTitle("Books")
+    }
 }

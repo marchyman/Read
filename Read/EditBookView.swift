@@ -71,6 +71,15 @@ struct EditBookView: View {
 }
 
 
-//#Preview {
-//    EditBookView()
-//}
+#Preview {
+    do {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: Book.self, configurations: config)
+        let book = Book(title: "Preview Book", author: "Preview Author")
+
+        return EditBookView(book: book)
+            .modelContainer(container)
+    } catch {
+        return Text("Preview failed: \(error.localizedDescription)")
+    }
+}
