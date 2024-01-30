@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		490B01972B697DA0005B85CC /* AuthorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490B01962B697DA0005B85CC /* AuthorsView.swift */; };
 		4976F2772AF99D21004F01B0 /* ReadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4976F2762AF99D21004F01B0 /* ReadApp.swift */; };
 		4976F2792AF99D21004F01B0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4976F2782AF99D21004F01B0 /* ContentView.swift */; };
 		4976F27B2AF99D21004F01B0 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4976F27A2AF99D21004F01B0 /* Book.swift */; };
@@ -21,7 +22,6 @@
 		49D174C92B684A1300718C8D /* BooksByAuthorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D174C82B684A1300718C8D /* BooksByAuthorView.swift */; };
 		49D174CB2B684A1E00718C8D /* BooksBySeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D174CA2B684A1E00718C8D /* BooksBySeriesView.swift */; };
 		49D174CD2B688FFE00718C8D /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D174CC2B688FFE00718C8D /* BookDetailView.swift */; };
-		49F57B942AFD553900A929F3 /* BookFieldViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57B932AFD553900A929F3 /* BookFieldViews.swift */; };
 		49FD47C92B14596900F8BE02 /* BookV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FD47C82B14596900F8BE02 /* BookV1.swift */; };
 		49FD47CB2B14597400F8BE02 /* BookV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FD47CA2B14597400F8BE02 /* BookV2.swift */; };
 		49FD47CD2B14597C00F8BE02 /* BookV3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FD47CC2B14597C00F8BE02 /* BookV3.swift */; };
@@ -29,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		490B01962B697DA0005B85CC /* AuthorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorsView.swift; sourceTree = "<group>"; };
 		4976F2732AF99D21004F01B0 /* Read.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Read.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4976F2762AF99D21004F01B0 /* ReadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadApp.swift; sourceTree = "<group>"; };
 		4976F2782AF99D21004F01B0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -46,7 +47,6 @@
 		49D174C82B684A1300718C8D /* BooksByAuthorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksByAuthorView.swift; sourceTree = "<group>"; };
 		49D174CA2B684A1E00718C8D /* BooksBySeriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksBySeriesView.swift; sourceTree = "<group>"; };
 		49D174CC2B688FFE00718C8D /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
-		49F57B932AFD553900A929F3 /* BookFieldViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookFieldViews.swift; sourceTree = "<group>"; };
 		49FD47C82B14596900F8BE02 /* BookV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookV1.swift; sourceTree = "<group>"; };
 		49FD47CA2B14597400F8BE02 /* BookV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookV2.swift; sourceTree = "<group>"; };
 		49FD47CC2B14597C00F8BE02 /* BookV3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookV3.swift; sourceTree = "<group>"; };
@@ -92,8 +92,8 @@
 				49804C7D2AFAC015006D74D6 /* BookListView.swift */,
 				4976F2862AF9A7DF004F01B0 /* NewBookView.swift */,
 				49804C7F2AFB0F43006D74D6 /* EditBookView.swift */,
-				49F57B932AFD553900A929F3 /* BookFieldViews.swift */,
 				4976F2882AF9C397004F01B0 /* BookReleasedView.swift */,
+				490B01962B697DA0005B85CC /* AuthorsView.swift */,
 				4976F27A2AF99D21004F01B0 /* Book.swift */,
 				49FD47C82B14596900F8BE02 /* BookV1.swift */,
 				49FD47CA2B14597400F8BE02 /* BookV2.swift */,
@@ -203,7 +203,7 @@
 				499FA87B2B6480B400819A07 /* BookV4.swift in Sources */,
 				4976F27B2AF99D21004F01B0 /* Book.swift in Sources */,
 				49FD47C92B14596900F8BE02 /* BookV1.swift in Sources */,
-				49F57B942AFD553900A929F3 /* BookFieldViews.swift in Sources */,
+				490B01972B697DA0005B85CC /* AuthorsView.swift in Sources */,
 				49FD47CD2B14597C00F8BE02 /* BookV3.swift in Sources */,
 				4976F2772AF99D21004F01B0 /* ReadApp.swift in Sources */,
 				49804C802AFB0F43006D74D6 /* EditBookView.swift in Sources */,

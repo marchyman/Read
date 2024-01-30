@@ -27,6 +27,7 @@ enum BookSchemaV4: VersionedSchema {
         init(title: String, release: Date? = nil) {
             self.title = title
             self.release = release
+            self.authors = []
         }
     }
 
@@ -39,6 +40,7 @@ enum BookSchemaV4: VersionedSchema {
         init(lastName: String, firstName: String = "") {
             self.lastName = lastName
             self.firstName = firstName
+            self.books = []
         }
     }
 
@@ -49,6 +51,7 @@ enum BookSchemaV4: VersionedSchema {
 
         init(name: String) {
             self.name = name
+            self.books = []
         }
     }
 

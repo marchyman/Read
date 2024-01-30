@@ -8,3 +8,5 @@
 import Foundation
 
 typealias Book = BookSchemaV4.Book
+typealias Author = BookSchemaV4.Author
+typealias Series = BookSchemaV4.Series
