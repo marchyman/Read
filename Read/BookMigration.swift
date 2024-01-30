@@ -12,7 +12,8 @@ enum BookMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
         [BookSchemaV1.self,
          BookSchemaV2.self,
-         BookSchemaV3.self]
+         BookSchemaV3.self,
+         BookSchemaV4.self]
     }
 
     static let migrateV1toV2 = MigrationStage.custom(
@@ -65,10 +66,11 @@ enum BookMigrationPlan: SchemaMigrationPlan {
         didMigrate: { context in
             let books = try context.fetch(FetchDescriptor<BookSchemaV4.Book>())
             let authors = try context.fetch(FetchDescriptor<BookSchemaV4.Author>())
+            let series = try context.fetch(FetchDescriptor<BookSchemaV4.Series>())
             for book in books {
                 try v4Authors(book, authors: authors, context: context)
                 if book.seriesOrder != nil {
-                    v4Series(book)
+                    try v4Series(book, series: series, context: context)
                 }
             }
             try context.save()
@@ -130,12 +132,33 @@ enum BookMigrationPlan: SchemaMigrationPlan {
         }
     }
 
-    static func v4Series(_ book: BookSchemaV4.Book) {
-        //
+    static func v4Series(_ book: BookSchemaV4.Book,
+                         series: [BookSchemaV4.Series],
+                         context: ModelContext) throws {
+        if let v3Book = v3Books.first(where: {$0.title == book.title}) {
+            guard let v3Series = v3Book.series else { return }
+            let existingSeries = series.first(where: {
+                $0.name == v3Series
+            })
+            let series: BookSchemaV4.Series
+            if let existingSeries {
+                series = existingSeries
+            } else {
+                series = BookSchemaV4.Series(name: v3Series)
+                context.insert(series)
+                series.books = []
+            }
+
+            // add the series to the book and the book to the series
+            book.series = series
+            series.books!.append(book)
+            try context.save()
+        }
     }
 
     static var stages: [MigrationStage] {
         [migrateV1toV2,
-         migrateV2toV3]
+         migrateV2toV3,
+         migrateV3toV4]
     }
 }

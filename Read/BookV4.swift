@@ -36,7 +36,7 @@ enum BookSchemaV4: VersionedSchema {
         var firstName: String = ""
         var books: [Book]?
         
-        init(lastName: String, firstName: String) {
+        init(lastName: String, firstName: String = "") {
             self.lastName = lastName
             self.firstName = firstName
         }

@@ -73,15 +73,15 @@ struct FutureReleaseToggleView: View {
         }
     }
 }
-struct EstReleasePickerView: View {
-    @Binding var estRelease: Date
+struct ReleasePickerView: View {
+    @Binding var release: Date
 
     var body: some View {
         LabeledContent {
-            DatePicker("", selection: $estRelease,
+            DatePicker("", selection: $release,
                        displayedComponents: .date)
         } label: {
-            Text("Est Release Date")
+            Text("Release Date")
         }
     }
 }

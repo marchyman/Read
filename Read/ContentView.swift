@@ -8,41 +8,48 @@
 import SwiftUI
 import SwiftData
 
-enum SortOrder: String, Identifiable, CaseIterable {
-    case series, title, author
-
-    var id: Self {
-        self
-    }
-}
-
 struct ContentView: View {
     @State private var newBook = false
-    @State private var sortOrder = SortOrder.series
     @State private var searchText = ""
 
     var body: some View {
-        NavigationStack {
-            BookListView(sort: sortOrder, search: searchText)
-                .navigationTitle("Books")
-                .searchable(text: $searchText)
-                .toolbar {
-                    Button("Add Book", systemImage: "plus",
-                           action: { newBook = true })
-                    Menu("Sort", systemImage: "arrow.up.arrow.down") {
-                        Picker("Sort", selection: $sortOrder) {
-                            ForEach(SortOrder.allCases) { sortOrder in
-                                Text("Sort by \(sortOrder.rawValue)").tag(sortOrder)
-                            }
-                        }
-                        .pickerStyle(.inline)
+        TabView {
+            NavigationStack {
+                BooksByTitleView(search: searchText)
+                    .navigationTitle("Books")
+                    .searchable(text: $searchText, prompt: "Title search")
+                    .toolbar {
+                        Button("Add Book", systemImage: "plus",
+                               action: { newBook = true })
                     }
+                    .navigationDestination(for: Book.self) { book in
+                        BookDetailView(book: book)
+                    }
+            }
+            .tabItem {
+                Label("Titles", systemImage: "book.closed")
+            }
 
-                }
-                .sheet(isPresented: $newBook) {
-                    NewBookView()
-                        .presentationDetents([.medium])
-                }
+            NavigationStack {
+                BooksByAuthorView()
+                    .navigationTitle("Authors")
+                    .searchable(text: $searchText, prompt: "Author search")
+            }
+            .tabItem {
+                Label("Authors", systemImage: "character.book.closed")
+            }
+
+            NavigationStack {
+                BooksBySeriesView()
+                    .navigationTitle("Series")
+                    .searchable(text: $searchText, prompt: "Series search")
+            }
+            .tabItem {
+                Label("Series", systemImage: "books.vertical")
+            }
+        }
+        .sheet(isPresented: $newBook) {
+            NewBookView()
         }
     }
 }

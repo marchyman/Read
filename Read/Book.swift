@@ -7,4 +7,4 @@
 
 import Foundation
 
-typealias Book = BookSchemaV3.Book
+typealias Book = BookSchemaV4.Book

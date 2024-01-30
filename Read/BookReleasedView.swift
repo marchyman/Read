@@ -16,7 +16,7 @@ struct BookReleasedView: View {
         VStack {
             Text("Mark book as released?")
             Button {
-                book.estRelease = nil
+                book.release = nil
                 dismiss()
             } label: {
                 Text("Released")
@@ -26,15 +26,15 @@ struct BookReleasedView: View {
     }
 }
 
-#Preview {
-    do {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: Book.self, configurations: config)
-        let book = Book(title: "Preview Book", author: "Preview Author")
-
-        return BookReleasedView(book: book)
-            .modelContainer(container)
-    } catch {
-        return Text("Preview failed: \(error.localizedDescription)")
-    }
-}
+//#Preview {
+//    do {
+//        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+//        let container = try ModelContainer(for: Book.self, configurations: config)
+//        let book = Book(title: "Preview Book", author: "Preview Author")
+//
+//        return BookReleasedView(book: book)
+//            .modelContainer(container)
+//    } catch {
+//        return Text("Preview failed: \(error.localizedDescription)")
+//    }
+//}
