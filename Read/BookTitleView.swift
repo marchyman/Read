@@ -34,7 +34,3 @@ struct BookTitleView: View {
         }
     }
 }
-
-//#Preview {
-//    BookTitleView(book: book)
-//}

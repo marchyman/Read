@@ -27,18 +27,26 @@ struct BooksByTitleView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            List() {
-                ForEach(books) { book in
-                    NavigationLink {
-                        BookDetailView(book: book)
-                    } label: {
-                        BookTitleView(book: book)
-                    }
+            if books.isEmpty {
+                ContentUnavailableView {
+                    Label("Books by Title", systemImage: "book.closed")
+                } description: {
+                    Text("No Books found. Check your search string")
                 }
-                .onDelete { indexSet in
-                    withAnimation {
-                        for index in indexSet {
-                            context.delete(books[index])
+            } else {
+                List {
+                    ForEach(books) { book in
+                        NavigationLink {
+                            BookDetailView(book: book)
+                        } label: {
+                            BookTitleView(book: book)
+                        }
+                    }
+                    .onDelete { indexSet in
+                        withAnimation {
+                            for index in indexSet {
+                                context.delete(books[index])
+                            }
                         }
                     }
                 }
@@ -59,8 +67,4 @@ struct BooksByTitleView: View {
             NewBookView()
         }
     }
-}
-
-#Preview {
-    BooksByTitleView(search: "")
 }

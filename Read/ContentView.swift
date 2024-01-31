@@ -15,7 +15,7 @@ struct ContentView: View {
         TabView {
             NavigationStack {
                 BooksByTitleView(search: searchText)
-                    .navigationTitle("Books")
+                    .navigationTitle("Book Titles")
                     .searchable(text: $searchText, prompt: "Title search")
             }
             .tabItem {
@@ -23,7 +23,7 @@ struct ContentView: View {
             }
 
             NavigationStack {
-                BooksByAuthorView()
+                BooksByAuthorView(search: searchText)
                     .navigationTitle("Authors")
                     .searchable(text: $searchText, prompt: "Author search")
             }
@@ -32,8 +32,8 @@ struct ContentView: View {
             }
 
             NavigationStack {
-                BooksBySeriesView()
-                    .navigationTitle("Series")
+                BooksBySeriesView(search: searchText)
+                    .navigationTitle("Series Name")
                     .searchable(text: $searchText, prompt: "Series search")
             }
             .tabItem {
