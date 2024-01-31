@@ -14,6 +14,7 @@ final class Book {
     var release: Date?
     var title: String = "Unknown"
     var authors: [Author]?
+    @Relationship(deleteRule: .nullify, inverse: \Series.books)
     var series: Series?
     var seriesOrder: Int?
 

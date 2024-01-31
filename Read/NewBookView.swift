@@ -13,7 +13,6 @@ struct NewBookView: View {
     @Environment(\.dismiss) var dismiss
     @Query private var series: [Series]
 
-
     // create state variables for each field of a book, author, and series.
     // A new book will be created from this state when the user selects the
     // add button.  An instance of a Book can not be used due to its many
@@ -47,6 +46,9 @@ struct NewBookView: View {
                 Section("Title") {
                     TextField("title", text: $title)
                         .focused($focusedField, equals: .title)
+                        .onSubmit {
+                            focusedField = .series // test until authors done
+                        }
                 }
                 Section("Author(s)") {
                     DisclosureGroup("Select author",
@@ -111,6 +113,9 @@ struct NewBookView: View {
             Spacer()
        }
         .padding()
+        .onAppear {
+            focusedField = .title
+        }
     }
 
     var cancelOrAdd: some View {
@@ -154,18 +159,27 @@ struct NewBookView: View {
 //            author.books?.append(newBook)
 //        }
 
-        // update series (what if the series already exists, i.e. you
-        // screwed up
-//        if series.name != "" {
-//            context.insert(series)
-//            newBook.series = series
-//            newBook.seriesOrder = seriesOrder
-//            series.books?.append(newBook)
-//        }
+        // update and/or create entry for series if needed
+        if seriesName != "" {
+            var aSeries: Series
+            if let existingSeries = series.first(where: { $0.name == seriesName } ) {
+                aSeries = existingSeries
+            } else {
+                aSeries = Series(name: seriesName)
+                context.insert(aSeries)
+            }
+
+            newBook.series = aSeries
+            newBook.seriesOrder = seriesOrder
+            aSeries.books?.append(newBook)
+        }
 
         // save changes and dismiss
-        try? context.save()
-        // show error when save throws
+        do {
+            try context.save()
+        } catch {
+            fatalError("NewBookView context.save")
+        }
         dismiss()
     }
 }

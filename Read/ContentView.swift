@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @State private var newBook = false
     @State private var searchText = ""
 
     var body: some View {
@@ -18,13 +17,6 @@ struct ContentView: View {
                 BooksByTitleView(search: searchText)
                     .navigationTitle("Books")
                     .searchable(text: $searchText, prompt: "Title search")
-                    .toolbar {
-                        Button("Add Book", systemImage: "plus",
-                               action: { newBook = true })
-                    }
-                    .navigationDestination(for: Book.self) { book in
-                        BookDetailView(book: book)
-                    }
             }
             .tabItem {
                 Label("Titles", systemImage: "book.closed")
@@ -47,9 +39,6 @@ struct ContentView: View {
             .tabItem {
                 Label("Series", systemImage: "books.vertical")
             }
-        }
-        .sheet(isPresented: $newBook) {
-            NewBookView()
         }
     }
 }

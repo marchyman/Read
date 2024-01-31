@@ -11,6 +11,7 @@ import SwiftUI
 struct BooksByTitleView: View {
     @Environment(\.modelContext) private var context
     @Query private var books: [Book]
+    @State private var newBook = false
 
     init(search: String) {
         let sortDescriptors: [SortDescriptor<Book>] = [ .init(\.title) ]
@@ -25,12 +26,37 @@ struct BooksByTitleView: View {
     }
 
     var body: some View {
-        List() {
-            ForEach(books) { book in
-                VStack {
-                    NavigationLink(book.title, value: book).font(.title2)
+        VStack(alignment: .leading) {
+            List() {
+                ForEach(books) { book in
+                    NavigationLink {
+                        BookDetailView(book: book)
+                    } label: {
+                        BookTitleView(book: book)
+                    }
+                }
+                .onDelete { indexSet in
+                    withAnimation {
+                        for index in indexSet {
+                            context.delete(books[index])
+                        }
+                    }
                 }
             }
+            HStack {
+                Button("Add Book", systemImage: "plus",
+                       action: { newBook = true })
+                    .font(.title)
+                    .buttonStyle(.bordered)
+                    .padding()
+                Spacer()
+                Text("Swipe left to delete")
+                    .font(.caption)
+                    .padding()
+            }
+        }
+        .sheet(isPresented: $newBook) {
+            NewBookView()
         }
     }
 }
