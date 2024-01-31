@@ -6,7 +6,20 @@
 //
 
 import Foundation
+import SwiftData
 
-typealias Book = BookSchemaV4.Book
-typealias Author = BookSchemaV4.Author
-typealias Series = BookSchemaV4.Series
+@Model
+final class Book {
+    var added: Date = Date.now
+    var release: Date?
+    var title: String = "Unknown"
+    var authors: [Author]?
+    var series: Series?
+    var seriesOrder: Int?
+
+    init(title: String, release: Date? = nil) {
+        self.title = title
+        self.release = release
+        self.authors = []
+    }
+}

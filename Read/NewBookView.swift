@@ -64,7 +64,6 @@ struct NewBookView: View {
                                     ForEach(seriesMatches, id: \.self) { match in
                                         Button {
                                             seriesName = match
-                                            autoselectSeries = false
                                             focusedField = .seriesOrder
                                         } label: {
                                             Text(match)
@@ -78,6 +77,8 @@ struct NewBookView: View {
                                 if seriesName.count > 1 {
                                     seriesMatches = lookups(prefix: seriesName)
                                     autoselectSeries = !seriesMatches.isEmpty
+                                } else {
+                                    autoselectSeries = false
                                 }
                             }
                             .onChange(of: focusedField) {
