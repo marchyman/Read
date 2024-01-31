@@ -33,6 +33,7 @@ enum BookSchemaV4: VersionedSchema {
 
     @Model
     final class Author {
+        var id: UUID = UUID()
         var lastName: String = ""
         var firstName: String = ""
         var books: [Book]?

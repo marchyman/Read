@@ -11,15 +11,20 @@ import SwiftUI
 struct AuthorsView: View {
     @Environment(\.modelContext) private var context
     @Query private var authors: [Author]
+    @Binding var selectedAuthors: Set<UUID>
+    @State private var selection: Author? = nil
 
     var body: some View {
-        List {
-            ForEach(authors) { author in
-                Text("\(author.firstName) \(author.lastName)")
+        VStack( alignment: .leading) {
+            if !authors.isEmpty {
+                List(authors, selection: $selectedAuthors ) { author in
+                    Text("\(author.firstName) \(author.lastName)")
+                }
             }
-        }
-        Button(action: addAuthor) {
-            Label("Add Author", systemImage: "character.book.closed")
+
+            Button(action: addAuthor) {
+                Label("Add Author", systemImage: "character.book.closed")
+            }
         }
     }
 
@@ -29,6 +34,7 @@ struct AuthorsView: View {
 }
 
 #Preview {
-    AuthorsView()
+    @State var authors: Set<UUID> = []
+    return AuthorsView(selectedAuthors: $authors)
         .modelContainer(for: Book.self, inMemory: true)
 }

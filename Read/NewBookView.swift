@@ -11,6 +11,8 @@ import SwiftData
 struct NewBookView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) var dismiss
+    @Query private var series: [Series]
+
 
     // create state variables for each field of a book, author, and series.
     // A new book will be created from this state when the user selects the
@@ -18,11 +20,25 @@ struct NewBookView: View {
     // optional fields.
     @State private var release: Date = .now
     @State private var title: String = ""
-    @State private var authors: [Author] = []
-    @State private var series: Series = Series(name: "")
+    @State private var authors: Set<UUID> = []
+    @State private var seriesName: String = ""
     @State private var seriesOrder: Int = 0
 
+    @State private var selectAuthors = false
+    @State private var selectSeries = false
+    @State private var autoselectSeries = false
+    @State private var seriesMatches: [String] = []
     @State private var isFutureRelease = false
+
+    enum FocusableFields: Hashable {
+        case title
+        case authors
+        case series
+        case seriesOrder
+        case release
+    }
+
+    @FocusState private var focusedField: FocusableFields?
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -30,31 +46,63 @@ struct NewBookView: View {
             Form {
                 Section("Title") {
                     TextField("title", text: $title)
+                        .focused($focusedField, equals: .title)
                 }
                 Section("Author(s)") {
-                    Text("Add/Select authors here")
+                    DisclosureGroup("Select author",
+                                    isExpanded: $selectAuthors) {
+                        AuthorsView(selectedAuthors: $authors)
+                    }
                 }
                 Section("Series") {
-                    TextField("series name", text: $series.name)
-                    if series.name != "" {
+                    DisclosureGroup("Add/Select series",
+                                    isExpanded: $selectSeries) {
+                        TextField("series name", text: $seriesName)
+                            .focused($focusedField, equals: .series)
+                            .popover(isPresented: $autoselectSeries) {
+                                VStack(alignment: .leading) {
+                                    ForEach(seriesMatches, id: \.self) { match in
+                                        Button {
+                                            seriesName = match
+                                            autoselectSeries = false
+                                            focusedField = .seriesOrder
+                                        } label: {
+                                            Text(match)
+                                                .font(.title)
+                                        }
+                                    }
+                                }
+                                .padding()
+                            }
+                            .onChange(of: seriesName) {
+                                if seriesName.count > 1 {
+                                    seriesMatches = lookups(prefix: seriesName)
+                                    autoselectSeries = !seriesMatches.isEmpty
+                                }
+                            }
+                            .onChange(of: focusedField) {
+                                autoselectSeries = false
+                            }
                         LabeledContent {
                             TextField("book number in series",
                                       value: $seriesOrder, format: .number)
                                 .multilineTextAlignment(.trailing)
+                                .focused($focusedField, equals: .seriesOrder)
                         } label: {
                             Text("Series order")
                         }
                     }
                 }
-                Toggle(isOn: $isFutureRelease) {
-                    Text("Future release?")
-                }
-                if isFutureRelease {
-                    LabeledContent {
-                        DatePicker("", selection: $release,
-                                   displayedComponents: .date)
-                    } label: {
-                        Text("Release Date")
+                Section("Release Date") {
+                    DisclosureGroup("Select optional future release date",
+                                     isExpanded: $isFutureRelease) {
+                        LabeledContent {
+                            DatePicker("", selection: $release,
+                                       displayedComponents: .date)
+                                .focused($focusedField, equals: .release)
+                        } label: {
+                            Text("Release Date")
+                        }
                     }
                 }
             }
@@ -80,9 +128,16 @@ struct NewBookView: View {
                 Text("Add New Book")
             }
             .buttonStyle(.borderedProminent)
-            .disabled(title.isEmpty || authors.isEmpty)
+            .disabled(title.isEmpty /* || authors.isEmpty */)
         }
         .padding(.vertical)
+    }
+
+    func lookups(prefix: String) -> [String] {
+        let lowercasedPrefix = prefix.lowercased()
+        return series
+            .map { $0.name }
+            .filter { $0.lowercased().hasPrefix(lowercasedPrefix) }
     }
 
     func addBook() {
@@ -93,18 +148,19 @@ struct NewBookView: View {
         context.insert(newBook)
 
         // update authors
-        newBook.authors = authors
+//        newBook.authors = authors
+//        for author in authors {
+//            author.books?.append(newBook)
+//        }
 
-        for author in authors {
-            author.books?.append(newBook)
-        }
-
-        // update series
-        if series.name != "" {
-            newBook.series = series
-            newBook.seriesOrder = seriesOrder
-            series.books?.append(newBook)
-        }
+        // update series (what if the series already exists, i.e. you
+        // screwed up
+//        if series.name != "" {
+//            context.insert(series)
+//            newBook.series = series
+//            newBook.seriesOrder = seriesOrder
+//            series.books?.append(newBook)
+//        }
 
         // save changes and dismiss
         try? context.save()
