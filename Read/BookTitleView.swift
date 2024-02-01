@@ -22,8 +22,8 @@ struct BookTitleView: View {
             }
             HStack(alignment: .top) {
                 ForEach(book.authors ?? []) { author in
-                    Text("\(author.firstName) \(author.lastName)")
-                        .font(.callout)
+                    Text(author.name)
+                        .foregroundStyle(.secondary)
                 }
                 Spacer()
                 if let release = book.release {

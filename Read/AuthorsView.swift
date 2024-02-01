@@ -13,28 +13,22 @@ struct AuthorsView: View {
     @Query private var authors: [Author]
     @Binding var selectedAuthors: Set<UUID>
     @State private var selection: Author? = nil
+    @State private var newAuthor = false
 
     var body: some View {
         VStack( alignment: .leading) {
             if !authors.isEmpty {
                 List(authors, selection: $selectedAuthors ) { author in
-                    Text("\(author.firstName) \(author.lastName)")
+                    Text(author.name)
                 }
             }
-
-            Button(action: addAuthor) {
-                Label("Add Author", systemImage: "character.book.closed")
-            }
+            Button("Add Author", systemImage: "plus",
+                   action: { newAuthor = true })
+                .buttonStyle(.bordered)
+                .padding()
+        }
+        .sheet(isPresented: $newAuthor) {
+            NewAuthorView()
         }
     }
-
-    func addAuthor() {
-        //
-    }
-}
-
-#Preview {
-    @State var authors: Set<UUID> = []
-    return AuthorsView(selectedAuthors: $authors)
-        .modelContainer(for: Book.self, inMemory: true)
 }

@@ -49,7 +49,8 @@ struct NewBookView: View {
                     TextField("title", text: $title)
                         .focused($focusedField, equals: .title)
                         .onSubmit {
-                            focusedField = .series // test until authors done
+                            selectAuthors = true
+                            focusedField = .authors
                         }
                 }
                 Section("Author(s)") {
@@ -163,8 +164,4 @@ struct NewBookView: View {
         }
         dismiss()
     }
-}
-
-#Preview {
-    NewBookView()
 }

@@ -15,6 +15,10 @@ final class Author {
     var firstName: String = ""
     var books: [Book]?
 
+    var name: String {
+        return "\(firstName) \(lastName)"
+    }
+
     init(lastName: String, firstName: String = "") {
         self.lastName = lastName
         self.firstName = firstName

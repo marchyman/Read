@@ -46,8 +46,7 @@ struct NewAuthorView: View {
 
     func invalidAuthor() -> Bool {
         guard !author.lastName.isEmpty else { return true }
-        let match = authors.first(where: { $0.firstName == author.firstName &&
-            $0.lastName == author.lastName })
+        let match = authors.first(where: { $0.name == author.name })
         return match != nil
     }
 

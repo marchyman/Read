@@ -5,17 +5,52 @@
 //  Created by Marco S Hyman on 1/29/24.
 //
 
+import SwiftData
 import SwiftUI
 
 struct BookDetailView: View {
-    let book: Book
+    @Environment(\.modelContext) private var context
+    @Bindable var book: Book
+    @State private var seriesName: String = ""
 
     var body: some View {
-        Text("Book: \(book.title)")
+        VStack {
+            Form {
+                TextField("Title", text: $book.title)
+                if let authors = book.authors, !authors.isEmpty {
+                    List {
+                        Text("Authors:")
+                        ForEach(authors) { author in
+                            Text(author.name)
+                        }
+                        .onDelete { indexSet in
+                            withAnimation {
+                                for index in indexSet {
+                                    book.authors?.remove(at: index)
+                                }
+                            }
+                        }
+                        Text("add author here!!")
+                    }
+                } else {
+                    Text("Author: unknown")
+                }
+                TextField("Series:", text: $seriesName)
+                TextField("Series Order:", value: $book.seriesOrder, format: .number)
+                //            LabeledContent {
+                //                DatePicker("", selection: $book.release,
+                //                           displayedComponents: .date)
+                //            } label: {
+                //                Text("Release Date")
+                //            }
+                Text("Date added: \(book.added.formatted(date: .abbreviated, time: .omitted))")
+            }
+            .padding()
             .navigationTitle("Book Information")
+            .onAppear {
+                seriesName = book.series?.name ?? ""
+            }
+        }
+        .padding()
     }
-}
-
-#Preview {
-    BookDetailView(book: Book(title: "A Test Book"))
 }
