@@ -11,6 +11,7 @@ import SwiftUI
 struct BooksBySeriesView: View {
     @Environment(\.modelContext) private var context
     @Query private var series: [Series]
+    @State private var newSeries = false
 
     init(search: String) {
         let sortDescriptors: [SortDescriptor<Series>] = [ .init(\.name) ]
@@ -25,34 +26,44 @@ struct BooksBySeriesView: View {
     }
 
     var body: some View {
-        if series.isEmpty {
-            ContentUnavailableView {
-                Label("Books by Series", systemImage: "books.vertical")
-            } description: {
-                Text("No Series found. Check your search string")
-            }
-        } else {
-            List {
-                ForEach(series) {item in
-                    DisclosureGroup(item.name) {
-                        if item.books == nil || item.books!.isEmpty {
-                            Text("There are no books in this series (swipe left to delete).")
-                                .italic()
-                        } else {
-                            ForEach(booksBySeriesOrder(item.books)) { book in
-                                BookTitleView(book: book)
+        VStack(alignment: .leading) {
+            if series.isEmpty {
+                ContentUnavailableView {
+                    Label("Books by Series", systemImage: "books.vertical")
+                } description: {
+                    Text("No Series found. Check your search string")
+                }
+            } else {
+                List {
+                    ForEach(series) {item in
+                        DisclosureGroup(item.name) {
+                            if item.books == nil || item.books!.isEmpty {
+                                Text("There are no books in this series (swipe left to delete).")
+                                    .italic()
+                            } else {
+                                ForEach(booksBySeriesOrder(item.books)) { book in
+                                    BookTitleView(book: book)
+                                }
+                            }
+                        }
+                    }
+                    .onDelete { indexSet in
+                        withAnimation {
+                            for index in indexSet {
+                                context.delete(series[index])
                             }
                         }
                     }
                 }
-                .onDelete { indexSet in
-                    withAnimation {
-                        for index in indexSet {
-                            context.delete(series[index])
-                        }
-                    }
-                }
             }
+            Button("Add Series", systemImage: "plus",
+                   action: { newSeries = true })
+                .font(.title)
+                .buttonStyle(.bordered)
+                .padding()
+        }
+        .sheet(isPresented: $newSeries) {
+            NewSeriesView()
         }
     }
 

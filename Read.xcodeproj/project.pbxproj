@@ -24,6 +24,9 @@
 		49FB9F222B6ACFA4005A53B0 /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FB9F212B6ACFA4005A53B0 /* Author.swift */; };
 		49FB9F242B6ACFE6005A53B0 /* Series.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FB9F232B6ACFE6005A53B0 /* Series.swift */; };
 		49FB9F262B6AD3ED005A53B0 /* BookTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FB9F252B6AD3ED005A53B0 /* BookTitleView.swift */; };
+		49FB9F282B6B1892005A53B0 /* NewAuthorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FB9F272B6B1892005A53B0 /* NewAuthorView.swift */; };
+		49FB9F2A2B6B194A005A53B0 /* NewSeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FB9F292B6B194A005A53B0 /* NewSeriesView.swift */; };
+		49FB9F2C2B6B1D10005A53B0 /* CancelOrAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FB9F2B2B6B1D10005A53B0 /* CancelOrAddView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +50,9 @@
 		49FB9F212B6ACFA4005A53B0 /* Author.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		49FB9F232B6ACFE6005A53B0 /* Series.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Series.swift; sourceTree = "<group>"; };
 		49FB9F252B6AD3ED005A53B0 /* BookTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookTitleView.swift; sourceTree = "<group>"; };
+		49FB9F272B6B1892005A53B0 /* NewAuthorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAuthorView.swift; sourceTree = "<group>"; };
+		49FB9F292B6B194A005A53B0 /* NewSeriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSeriesView.swift; sourceTree = "<group>"; };
+		49FB9F2B2B6B1D10005A53B0 /* CancelOrAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelOrAddView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +94,9 @@
 				49D174CC2B688FFE00718C8D /* BookDetailView.swift */,
 				49804C7D2AFAC015006D74D6 /* BookListView.swift */,
 				4976F2862AF9A7DF004F01B0 /* NewBookView.swift */,
+				49FB9F272B6B1892005A53B0 /* NewAuthorView.swift */,
+				49FB9F292B6B194A005A53B0 /* NewSeriesView.swift */,
+				49FB9F2B2B6B1D10005A53B0 /* CancelOrAddView.swift */,
 				49804C7F2AFB0F43006D74D6 /* EditBookView.swift */,
 				4976F2882AF9C397004F01B0 /* BookReleasedView.swift */,
 				490B01962B697DA0005B85CC /* AuthorsView.swift */,
@@ -188,13 +197,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49FB9F2A2B6B194A005A53B0 /* NewSeriesView.swift in Sources */,
 				4976F2872AF9A7DF004F01B0 /* NewBookView.swift in Sources */,
 				49D174CB2B684A1E00718C8D /* BooksBySeriesView.swift in Sources */,
 				49804C7E2AFAC015006D74D6 /* BookListView.swift in Sources */,
 				49FB9F242B6ACFE6005A53B0 /* Series.swift in Sources */,
 				4976F2792AF99D21004F01B0 /* ContentView.swift in Sources */,
 				49D174C92B684A1300718C8D /* BooksByAuthorView.swift in Sources */,
+				49FB9F282B6B1892005A53B0 /* NewAuthorView.swift in Sources */,
 				49D174C72B684A0300718C8D /* BooksByTitleView.swift in Sources */,
+				49FB9F2C2B6B1D10005A53B0 /* CancelOrAddView.swift in Sources */,
 				49FB9F262B6AD3ED005A53B0 /* BookTitleView.swift in Sources */,
 				4976F27B2AF99D21004F01B0 /* Book.swift in Sources */,
 				490B01972B697DA0005B85CC /* AuthorsView.swift in Sources */,

@@ -41,7 +41,9 @@ struct NewBookView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            cancelOrAdd
+            CancelOrAddView(addText: "Add New Book",
+                            addFunc: addBook,
+                            disabled: { title.isEmpty })
             Form {
                 Section("Title") {
                     TextField("title", text: $title)
@@ -116,27 +118,6 @@ struct NewBookView: View {
         .onAppear {
             focusedField = .title
         }
-    }
-
-    var cancelOrAdd: some View {
-        HStack {
-            Spacer()
-            Button {
-                dismiss()
-            } label: {
-                Text("Cancel")
-            }
-            .padding(.horizontal)
-            .buttonStyle(.bordered)
-            Button {
-                addBook()
-            } label: {
-                Text("Add New Book")
-            }
-            .buttonStyle(.borderedProminent)
-            .disabled(title.isEmpty /* || authors.isEmpty */)
-        }
-        .padding(.vertical)
     }
 
     func lookups(prefix: String) -> [String] {
