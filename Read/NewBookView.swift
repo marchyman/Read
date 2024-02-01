@@ -19,11 +19,10 @@ struct NewBookView: View {
     // optional fields.
     @State private var release: Date = .now
     @State private var title: String = ""
-    @State private var authors: Set<UUID> = []
+    @State private var selectedAuthors: [Author] = []
     @State private var seriesName: String = ""
     @State private var seriesOrder: Int = 0
 
-    @State private var selectAuthors = false
     @State private var selectSeries = false
     @State private var autoselectSeries = false
     @State private var seriesMatches: [String] = []
@@ -49,15 +48,27 @@ struct NewBookView: View {
                     TextField("title", text: $title)
                         .focused($focusedField, equals: .title)
                         .onSubmit {
-                            selectAuthors = true
                             focusedField = .authors
                         }
                 }
                 Section("Author(s)") {
-                    DisclosureGroup("Select author",
-                                    isExpanded: $selectAuthors) {
-                        AuthorsView(selectedAuthors: $authors)
+                    if selectedAuthors.isEmpty {
+                        Text("Please select one or more authors")
+                    } else {
+                        List {
+                            ForEach(selectedAuthors) { author in
+                                Text(author.name)
+                            }
+                            .onDelete {indexSet in
+                                withAnimation {
+                                    for index in indexSet {
+                                        selectedAuthors.remove(at: index)
+                                    }
+                                }
+                            }
+                        }
                     }
+                    AuthorsView(selectAction: selectAuthor)
                 }
                 Section("Series") {
                     DisclosureGroup("Add/Select series",
@@ -118,6 +129,12 @@ struct NewBookView: View {
         .padding()
         .onAppear {
             focusedField = .title
+        }
+    }
+
+    func selectAuthor(_ author: Author) {
+        if !selectedAuthors.map({ $0.id }).contains(author.id) {
+            selectedAuthors.append(author)
         }
     }
 

@@ -11,18 +11,31 @@ import SwiftUI
 struct AuthorsView: View {
     @Environment(\.modelContext) private var context
     @Query private var authors: [Author]
-    @Binding var selectedAuthors: Set<UUID>
-    @State private var selection: Author? = nil
     @State private var newAuthor = false
+    var selectAction: (Author) -> ()
+
+    init(selectAction: @escaping (Author) -> ()) {
+        let sortDescriptors: [SortDescriptor] = [
+            SortDescriptor<Author>(\.lastName, comparator: .localized),
+            SortDescriptor<Author>(\.firstName, comparator: .localized)
+        ]
+        _authors = Query(sort: sortDescriptors)
+        self.selectAction = selectAction
+    }
 
     var body: some View {
         VStack( alignment: .leading) {
             if !authors.isEmpty {
-                List(authors, selection: $selectedAuthors ) { author in
-                    Text(author.name)
+                List(authors) { author in
+                    Button {
+                        selectAction(author)
+                    } label: {
+                        Text(author.name)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
-            Button("Add Author", systemImage: "plus",
+            Button("Create New Author", systemImage: "plus",
                    action: { newAuthor = true })
                 .buttonStyle(.bordered)
                 .padding()
