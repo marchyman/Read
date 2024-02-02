@@ -1,5 +1,5 @@
 //
-//  AuthorsView.swift
+//  AuthorPickerView.swift
 //  Read
 //
 //  Created by Marco S Hyman on 1/30/24.
@@ -8,9 +8,10 @@
 import SwiftData
 import SwiftUI
 
-struct AuthorsView: View {
+struct AuthorPickerView: View {
     @Environment(\.modelContext) private var context
     @Query private var authors: [Author]
+    @State private var selectedAuthor = "none"
     @State private var newAuthor = false
     var selectAction: (Author) -> ()
 
@@ -26,13 +27,20 @@ struct AuthorsView: View {
     var body: some View {
         VStack( alignment: .leading) {
             if !authors.isEmpty {
-                List(authors) { author in
-                    Button {
-                        selectAction(author)
-                    } label: {
-                        Text(author.name)
+                Picker("Author", selection: $selectedAuthor) {
+                    Text("pick an author")
+                        .tag("none")
+                    ForEach(authors) {
+                        Text($0.name)
+                            .tag($0.name)
                     }
-                    .buttonStyle(.plain)
+                    .pickerStyle(.wheel)
+                }
+                .onChange(of: selectedAuthor) {
+                    if let author = authors.first(where: { $0.name == selectedAuthor}) {
+                        selectAction(author)
+                    }
+                    selectedAuthor = "none"
                 }
             }
             Button("Create New Author", systemImage: "plus",
@@ -40,6 +48,7 @@ struct AuthorsView: View {
                 .buttonStyle(.bordered)
                 .padding()
         }
+        .padding()
         .sheet(isPresented: $newAuthor) {
             NewAuthorView()
         }

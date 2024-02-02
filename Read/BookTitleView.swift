@@ -21,10 +21,13 @@ struct BookTitleView: View {
                 }
             }
             HStack(alignment: .top) {
-                ForEach(book.authors ?? []) { author in
-                    Text(author.name)
-                        .foregroundStyle(.secondary)
+                VStack(alignment: .leading) {
+                    ForEach(book.authors ?? []) { author in
+                        Text(author.name)
+                            .foregroundStyle(.secondary)
+                    }
                 }
+                .padding(.leading)
                 Spacer()
                 if let release = book.release {
                     Text("Release date: \(release.formatted(date: .abbreviated, time: .omitted))")
@@ -32,5 +35,6 @@ struct BookTitleView: View {
                 }
             }
         }
+        .padding(5)
     }
 }

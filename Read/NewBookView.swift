@@ -68,7 +68,7 @@ struct NewBookView: View {
                             }
                         }
                     }
-                    AuthorsView(selectAction: selectAuthor)
+                    AuthorPickerView(selectAction: selectAuthor)
                 }
                 Section("Series") {
                     DisclosureGroup("Add/Select series",
@@ -153,10 +153,10 @@ struct NewBookView: View {
         context.insert(newBook)
 
         // update authors
-//        newBook.authors = authors
-//        for author in authors {
-//            author.books?.append(newBook)
-//        }
+        newBook.authors = selectedAuthors
+        for author in selectedAuthors {
+            author.books?.append(newBook)
+        }
 
         // update and/or create entry for series if needed
         if seriesName != "" {
