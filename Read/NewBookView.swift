@@ -23,15 +23,11 @@ struct NewBookView: View {
     @State private var seriesOrder: Int = 0
 
     @State private var selectSeries = false
-    @State private var autoselectSeries = false
-    @State private var seriesMatches: [String] = []
     @State private var isFutureRelease = false
 
     enum FocusableFields: Hashable {
         case title
         case authors
-        case series
-        case seriesOrder
         case release
     }
 
@@ -46,8 +42,10 @@ struct NewBookView: View {
             Form {
                 Section("Title") {
                     TextField("title", text: $title)
+                        .font(.title2)
                         .focused($focusedField, equals: .title)
                 }
+
                 Section("Author(s)") {
                     if selectedAuthors.isEmpty {
                         Text("Please select one or more authors")
@@ -55,6 +53,7 @@ struct NewBookView: View {
                         List {
                             ForEach(selectedAuthors) { author in
                                 Text(author.name)
+                                    .font(.title2)
                             }
                             .onDelete {indexSet in
                                 withAnimation {
@@ -67,60 +66,33 @@ struct NewBookView: View {
                     }
                     AuthorPickerView(selectAction: selectAuthor)
                 }
+
                 Section("Series") {
-                    DisclosureGroup("Add/Select series",
-                                    isExpanded: $selectSeries) {
-                        TextField("series name", text: $seriesName)
-                            .focused($focusedField, equals: .series)
-                            .popover(isPresented: $autoselectSeries) {
-                                VStack(alignment: .leading) {
-                                    ForEach(seriesMatches, id: \.self) { match in
-                                        Button {
-                                            seriesName = match
-                                            focusedField = .seriesOrder
-                                        } label: {
-                                            Text(match)
-                                                .font(.title)
-                                        }
-                                    }
-                                }
-                                .padding()
-                            }
-                            .onChange(of: seriesName) {
-                                if seriesName.count > 1 {
-                                    seriesMatches = lookups(prefix: seriesName)
-                                    autoselectSeries = !seriesMatches.isEmpty
-                                } else {
-                                    autoselectSeries = false
-                                }
-                            }
-                            .onChange(of: focusedField) {
-                                autoselectSeries = false
-                            }
-                        LabeledContent {
-                            TextField("book number in series",
-                                      value: $seriesOrder, format: .number)
-                            .multilineTextAlignment(.trailing)
-                            .focused($focusedField, equals: .seriesOrder)
-                        } label: {
-                            Text("Series order")
-                        }
+                    DisclosureGroup(isExpanded: $selectSeries) {
+                        SeriesGroupView(seriesName: $seriesName,
+                                        seriesOrder: $seriesOrder)
+                    } label: {
+                        Text("Edit Series")
+                            .font(.title2)
                     }
                 }
+
                 Section("Release Date") {
                     DisclosureGroup("Select optional future release date",
                                     isExpanded: $isFutureRelease) {
                         LabeledContent {
                             DatePicker("", selection: $release,
                                        displayedComponents: .date)
+                            .font(.title2)
                             .focused($focusedField, equals: .release)
                         } label: {
                             Text("Release Date")
+                                .font(.title2)
                         }
                     }
                 }
             }
-            .cornerRadius(8)
+            .cornerRadius(10)
             Spacer()
         }
         .padding()
@@ -133,13 +105,6 @@ struct NewBookView: View {
         if !selectedAuthors.map({ $0.id }).contains(author.id) {
             selectedAuthors.append(author)
         }
-    }
-
-    func lookups(prefix: String) -> [String] {
-        let lowercasedPrefix = prefix.lowercased()
-        return series
-            .map { $0.name }
-            .filter { $0.lowercased().hasPrefix(lowercasedPrefix) }
     }
 
     func addBook() {

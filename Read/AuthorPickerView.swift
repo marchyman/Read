@@ -8,10 +8,13 @@
 import SwiftData
 import SwiftUI
 
+fileprivate let none = "none"
+
 struct AuthorPickerView: View {
     @Environment(\.modelContext) private var context
     @Query private var authors: [Author]
-    @State private var selectedAuthor = "none"
+
+    @State private var selectedAuthor = none
     @State private var newAuthor = false
     var selectAction: (Author) -> ()
 
@@ -27,9 +30,9 @@ struct AuthorPickerView: View {
     var body: some View {
         VStack( alignment: .leading) {
             if !authors.isEmpty {
-                Picker("Author", selection: $selectedAuthor) {
-                    Text("pick an author")
-                        .tag("none")
+                Picker("Select an author", selection: $selectedAuthor) {
+                    Text("pick author")
+                        .tag(none)
                     ForEach(authors) {
                         Text($0.name)
                             .tag($0.name)
@@ -37,13 +40,15 @@ struct AuthorPickerView: View {
                     .pickerStyle(.wheel)
                 }
                 .onChange(of: selectedAuthor) {
-                    if let author = authors.first(where: { $0.name == selectedAuthor}) {
-                        selectAction(author)
+                    if selectedAuthor != none {
+                        if let author = authors.first(where: { $0.name == selectedAuthor}) {
+                            selectAction(author)
+                        }
+                        selectedAuthor = none
                     }
-                    selectedAuthor = "none"
                 }
             }
-            Button("Create New Author", systemImage: "plus",
+            Button("Add a new author", systemImage: "plus",
                    action: { newAuthor = true })
                 .buttonStyle(.bordered)
                 .padding()
