@@ -37,7 +37,7 @@ struct BooksByTitleView: View {
                 List {
                     ForEach(books) { book in
                         NavigationLink {
-                            BookDetailView(book: book)
+                            EditBookView(book: book)
                         } label: {
                             BookTitleView(book: book)
                         }
@@ -64,7 +64,7 @@ struct BooksByTitleView: View {
             }
         }
         .sheet(isPresented: $newBook) {
-            NewBookView(editBook: nil)
+            NewBookView()
         }
     }
 }
