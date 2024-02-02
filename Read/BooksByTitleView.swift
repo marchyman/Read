@@ -64,7 +64,7 @@ struct BooksByTitleView: View {
             }
         }
         .sheet(isPresented: $newBook) {
-            NewBookView()
+            NewBookView(editBook: nil)
         }
     }
 }

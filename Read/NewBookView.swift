@@ -15,8 +15,7 @@ struct NewBookView: View {
 
     // create state variables for each field of a book, author, and series.
     // A new book will be created from this state when the user selects the
-    // add button.  An instance of a Book can not be used due to its many
-    // optional fields.
+    // add button.
     @State private var release: Date = .now
     @State private var title: String = ""
     @State private var selectedAuthors: [Author] = []
@@ -38,18 +37,32 @@ struct NewBookView: View {
 
     @FocusState private var focusedField: FocusableFields?
 
+    // This view can also used to edit existing books when editBook
+    // is non-nil
+    let editBook: Book?
+
     var body: some View {
         VStack(alignment: .leading) {
-            CancelOrAddView(addText: "Add New Book",
-                            addFunc: addBook,
-                            disabled: { title.isEmpty })
+            if editBook == nil {
+                CancelOrAddView(addText: "Add New Book",
+                                addFunc: addBook,
+                                disabled: { title.isEmpty })
+            } else {
+                HStack {
+                    Spacer()
+                    Button {
+                        updateBook()
+                    } label: {
+                        Text("Update Book")
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .padding(.vertical)
+            }
             Form {
                 Section("Title") {
                     TextField("title", text: $title)
                         .focused($focusedField, equals: .title)
-                        .onSubmit {
-                            focusedField = .authors
-                        }
                 }
                 Section("Author(s)") {
                     if selectedAuthors.isEmpty {
@@ -103,8 +116,8 @@ struct NewBookView: View {
                         LabeledContent {
                             TextField("book number in series",
                                       value: $seriesOrder, format: .number)
-                                .multilineTextAlignment(.trailing)
-                                .focused($focusedField, equals: .seriesOrder)
+                            .multilineTextAlignment(.trailing)
+                            .focused($focusedField, equals: .seriesOrder)
                         } label: {
                             Text("Series order")
                         }
@@ -112,11 +125,11 @@ struct NewBookView: View {
                 }
                 Section("Release Date") {
                     DisclosureGroup("Select optional future release date",
-                                     isExpanded: $isFutureRelease) {
+                                    isExpanded: $isFutureRelease) {
                         LabeledContent {
                             DatePicker("", selection: $release,
                                        displayedComponents: .date)
-                                .focused($focusedField, equals: .release)
+                            .focused($focusedField, equals: .release)
                         } label: {
                             Text("Release Date")
                         }
@@ -125,10 +138,24 @@ struct NewBookView: View {
             }
             .cornerRadius(8)
             Spacer()
-       }
+        }
         .padding()
         .onAppear {
             focusedField = .title
+
+            // initialize fields from an existing book
+            if let editBook {
+                if editBook.release != nil {
+                    release = editBook.release!
+                    isFutureRelease = true
+                } else {
+                    release = .now
+                }
+                title = editBook.title
+                selectedAuthors = editBook.authors ?? []
+                seriesName = editBook.series?.name ?? ""
+                seriesOrder = editBook.seriesOrder ?? 0
+            }
         }
     }
 
@@ -160,17 +187,7 @@ struct NewBookView: View {
 
         // update and/or create entry for series if needed
         if seriesName != "" {
-            var aSeries: Series
-            if let existingSeries = series.first(where: { $0.name == seriesName } ) {
-                aSeries = existingSeries
-            } else {
-                aSeries = Series(name: seriesName)
-                context.insert(aSeries)
-            }
-
-            newBook.series = aSeries
-            newBook.seriesOrder = seriesOrder
-            aSeries.books?.append(newBook)
+            updateSeries(newBook)
         }
 
         // save changes and dismiss
@@ -179,6 +196,63 @@ struct NewBookView: View {
         } catch {
             fatalError("NewBookView context.save")
         }
-        dismiss()
+//        dismiss()
+    }
+
+    func updateBook() {
+        guard let editBook else { return }
+
+        // Update future release.  Make it nil when toggled off
+        if isFutureRelease {
+            editBook.release = release
+        } else {
+            editBook.release = nil
+        }
+
+        // Update any changes in authors
+        if editBook.authors != selectedAuthors {
+            print("there are differences im author")
+        }
+
+        if editBook.series == nil {
+            if seriesName != "" {
+                updateSeries(editBook)
+            }
+        } else if editBook.series?.name != seriesName {
+            // series name changed or was removed
+            if seriesName == "" {
+                // remove series
+                editBook.series = nil
+                editBook.seriesOrder = nil
+            } else {
+                // series changed
+                updateSeries(editBook)
+            }
+        } else if editBook.seriesOrder != seriesOrder {
+            // only the series order changed
+            editBook.seriesOrder = seriesOrder
+        }
+
+        // save changes and dismiss
+        do {
+            try context.save()
+        } catch {
+            fatalError("NewBookView context.save")
+        }
+    }
+
+    func updateSeries(_ book: Book) {
+        var aSeries: Series
+
+        if let existingSeries = series.first(where: { $0.name == seriesName } ) {
+            aSeries = existingSeries
+        } else {
+            aSeries = Series(name: seriesName)
+            context.insert(aSeries)
+        }
+
+        book.series = aSeries
+        book.seriesOrder = seriesOrder
+        aSeries.books?.append(book)
     }
 }
