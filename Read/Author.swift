@@ -13,7 +13,7 @@ final class Author {
     var id: UUID = UUID()
     var lastName: String = ""
     var firstName: String = ""
-    var books: [Book]?
+    var books: [Book]!
 
     var name: String {
         return "\(firstName) \(lastName)"

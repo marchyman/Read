@@ -37,7 +37,7 @@ struct BooksBySeriesView: View {
                 List {
                     ForEach(series) {item in
                         DisclosureGroup(item.name) {
-                            if item.books == nil || item.books!.isEmpty {
+                            if item.books.isEmpty {
                                 Text("There are no books in this series (swipe left to delete).")
                                     .italic()
                             } else {

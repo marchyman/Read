@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct EditBookView: View {
-//    @Environment(\.modelContext) private var context
+    @Environment(\.modelContext) private var context
 //    @Query private var series: [Series]
 
     var book: Book
@@ -17,14 +17,13 @@ struct EditBookView: View {
     // create state variables for each field of a book, author, and series.
     // Initial values will be set from the above book when the view appears
     // and written back to the book when the update button is pressed.
-//    @State private var release: Date = .now
     @State private var title: String = ""
     @State private var selectedAuthors: [Author] = []
     @State private var selectSeries = false
     @State private var seriesName: String = ""
     @State private var seriesOrder: Int = 0
-//
-//    @State private var isFutureRelease = false
+    @State private var isFutureRelease = false
+//    @State private var release: Date = .now
 
     enum FocusableFields: Hashable {
         case title
@@ -73,42 +72,42 @@ struct EditBookView: View {
                             .font(.title2)
                     }
                 }
+
+                Section("Release Date") {
+                    DisclosureGroup(isExpanded: $isFutureRelease) {
+                        Text("Future release date editing not yet available")
+//                        LabeledContent {
+//                            DatePicker("", selection: $release,
+//                                       displayedComponents: .date)
+//                            .focused($focusedField, equals: .release)
+//                        } label: {
+//                            Text("Release Date")
+//                                .font(.title2)
+//                        }
+                    } label: {
+                        Text("Select optional future release date")
+                            .font(.title2)
+                    }
+                }
             }
             .cornerRadius(10)
             Spacer()
-
-
-            //
-
-            //
-            //                Section("Release Date") {
-            //                    DisclosureGroup("Select optional future release date",
-            //                                    isExpanded: $isFutureRelease) {
-            //                        LabeledContent {
-            //                            DatePicker("", selection: $release,
-            //                                       displayedComponents: .date)
-            //                            .focused($focusedField, equals: .release)
-            //                        } label: {
-            //                            Text("Release Date")
-            //                        }
-            //                    }
-            //                }
         }
         .padding()
         .onAppear {
             focusedField = .title
 
             // initialize fields from an existing book
+            title = book.title
+            selectedAuthors = book.authors
+            seriesName = book.series?.name ?? ""
+            seriesOrder = book.seriesOrder ?? 0
 //            if book.release != nil {
 //                release = book.release!
 //                isFutureRelease = true
 //            } else {
 //                release = .now
 //            }
-            title = book.title
-            selectedAuthors = book.authors ?? []
-            seriesName = book.series?.name ?? ""
-            seriesOrder = book.seriesOrder ?? 0
         }
         .navigationTitle("Edit book")
         .navigationBarTitleDisplayMode(.inline)
@@ -136,10 +135,10 @@ struct EditBookView: View {
 //            book.release = nil
 //        }
 //
-//        // Update any changes in authors
-//        if book.authors != selectedAuthors {
-//            print("there are differences im author")
-//        }
+        // Update any changes in authors
+        if book.authors != selectedAuthors {
+            updateAuthors()
+        }
 
 //        if book.series == nil {
 //            if seriesName != "" {
@@ -160,12 +159,12 @@ struct EditBookView: View {
 //            book.seriesOrder = seriesOrder
 //        }
 
-        // save changes and dismiss
-//        do {
-//            try context.save()
-//        } catch {
-//            fatalError("NewBookView context.save")
-//        }
+        // save changes
+        do {
+            try context.save()
+        } catch {
+            fatalError("NewBookView context.save")
+        }
     }
 
 //    func updateSeries() {
@@ -182,4 +181,22 @@ struct EditBookView: View {
 //        book.seriesOrder = seriesOrder
 //        aSeries.books?.append(book)
 //    }
+
+    func updateAuthors() {
+        // remove any authors from the book that are not in selectedAuthors
+        for author in book.authors {
+            if !selectedAuthors.map({$0.id}).contains(author.id) {
+                if let i = book.authors.firstIndex(where: {$0.id == author.id}) {
+                    book.authors.remove(at: i)
+                }
+            }
+        }
+        // add authors from selectedAuthors
+        for author in selectedAuthors {
+            if !book.authors.map({$0.id}).contains(author.id) {
+                book.authors.append(author)
+                author.books.append(book)
+            }
+        }
+    }
 }

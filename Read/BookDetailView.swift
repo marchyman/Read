@@ -17,16 +17,16 @@ struct BookDetailView: View {
         VStack {
             Form {
                 TextField("Title", text: $book.title)
-                if let authors = book.authors, !authors.isEmpty {
+                if !book.authors.isEmpty {
                     List {
                         Text("Authors:")
-                        ForEach(authors) { author in
+                        ForEach(book.authors) { author in
                             Text(author.name)
                         }
                         .onDelete { indexSet in
                             withAnimation {
                                 for index in indexSet {
-                                    book.authors?.remove(at: index)
+                                    book.authors.remove(at: index)
                                 }
                             }
                         }

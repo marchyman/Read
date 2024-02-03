@@ -117,7 +117,7 @@ struct NewBookView: View {
         // update authors
         newBook.authors = selectedAuthors
         for author in selectedAuthors {
-            author.books?.append(newBook)
+            author.books.append(newBook)
         }
 
         // update and/or create entry for series if needed
@@ -146,7 +146,7 @@ struct NewBookView: View {
 
         book.series = aSeries
         book.seriesOrder = seriesOrder
-        aSeries.books?.append(book)
+        aSeries.books.append(book)
     }
 
 }

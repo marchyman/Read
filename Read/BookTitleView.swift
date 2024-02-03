@@ -22,7 +22,7 @@ struct BookTitleView: View {
             }
             HStack(alignment: .top) {
                 VStack(alignment: .leading) {
-                    ForEach(book.authors ?? []) { author in
+                    ForEach(book.authors) { author in
                         Text(author.name)
                             .foregroundStyle(.secondary)
                     }

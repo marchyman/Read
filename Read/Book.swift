@@ -13,7 +13,8 @@ final class Book {
     var added: Date = Date.now
     var release: Date?
     var title: String = "Unknown"
-    var authors: [Author]?
+    @Relationship(deleteRule: .nullify, inverse: \Author.books)
+    var authors: [Author]!
     @Relationship(deleteRule: .nullify, inverse: \Series.books)
     var series: Series?
     var seriesOrder: Int?

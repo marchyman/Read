@@ -40,7 +40,7 @@ struct BooksByAuthorView: View {
                 List {
                     ForEach(author) {item in
                         DisclosureGroup("\(item.firstName) \(item.lastName)") {
-                            if item.books == nil || item.books!.isEmpty {
+                            if item.books.isEmpty {
                                 Text("There are no book by this author (swipe left to delete).")
                                     .italic()
                             } else {

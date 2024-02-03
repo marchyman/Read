@@ -11,7 +11,7 @@ import SwiftData
 @Model
 final class Series {
     var name: String = ""
-    var books: [Book]?
+    var books: [Book]!
 
     init(name: String) {
         self.name = name
