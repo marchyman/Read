@@ -13,6 +13,7 @@ struct EditBookView: View {
 //    @Query private var series: [Series]
 
     var book: Book
+//    let now = Date.now
 
     // create state variables for each field of a book, author, and series.
     // Initial values will be set from the above book when the view appears
@@ -23,7 +24,7 @@ struct EditBookView: View {
     @State private var seriesName: String = ""
     @State private var seriesOrder: Int = 0
     @State private var isFutureRelease = false
-//    @State private var release: Date = .now
+//    @State private var release: Date = now
 
     enum FocusableFields: Hashable {
         case title
@@ -95,19 +96,7 @@ struct EditBookView: View {
         }
         .padding()
         .onAppear {
-            focusedField = .title
-
-            // initialize fields from an existing book
-            title = book.title
-            selectedAuthors = book.authors
-            seriesName = book.series?.name ?? ""
-            seriesOrder = book.seriesOrder ?? 0
-//            if book.release != nil {
-//                release = book.release!
-//                isFutureRelease = true
-//            } else {
-//                release = .now
-//            }
+            setInitialState()
         }
         .navigationTitle("Edit book")
         .navigationBarTitleDisplayMode(.inline)
@@ -118,13 +107,45 @@ struct EditBookView: View {
                 Text("Update Book")
             }
             .buttonStyle(.borderedProminent)
+            .disabled(updatesDisabled())
         }
+    }
+
+    func setInitialState() {
+        focusedField = .title
+
+        // initialize fields from an existing book
+        title = book.title
+        selectedAuthors = book.authors
+        seriesName = book.series?.name ?? ""
+        seriesOrder = book.seriesOrder ?? 0
+//            if book.release != nil {
+//                release = book.release!
+//                isFutureRelease = true
+//            } else {
+//                release = .now
+//            }
     }
 
     func selectAuthor(_ author: Author) {
         if !selectedAuthors.map({ $0.id }).contains(author.id) {
             selectedAuthors.append(author)
         }
+    }
+
+    func updatesDisabled() -> Bool {
+        if book.title != title { return false }
+        if book.authors != selectedAuthors { return false }
+        if (book.series == nil && seriesName != "") ||
+            book.series?.name != seriesName {
+            return false
+        }
+        if book.series != nil && book.seriesOrder != seriesOrder { return false }
+//        if (book.release == nil && release != now) ||
+//           book.release? != release {
+//          return false
+//      }
+        return true
     }
 
     func updateBook() {
@@ -165,6 +186,7 @@ struct EditBookView: View {
         } catch {
             fatalError("NewBookView context.save")
         }
+        setInitialState()
     }
 
 //    func updateSeries() {
