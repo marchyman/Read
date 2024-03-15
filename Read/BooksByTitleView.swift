@@ -68,3 +68,8 @@ struct BooksByTitleView: View {
         }
     }
 }
+
+#Preview {
+    BooksByTitleView(search: "")
+        .modelContainer(Book.preview)
+}

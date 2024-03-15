@@ -76,3 +76,8 @@ struct BooksByAuthorView: View {
         return books.sorted(using: descriptors)
     }
 }
+
+#Preview {
+    BooksByAuthorView(search: "")
+        .modelContainer(Book.preview)
+}

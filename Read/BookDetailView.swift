@@ -54,3 +54,8 @@ struct BookDetailView: View {
         .padding()
     }
 }
+
+#Preview {
+    BookDetailView(book: Book.testBook)
+        .modelContainer(Book.preview)
+}

@@ -38,3 +38,14 @@ struct BookTitleView: View {
         .padding(5)
     }
 }
+
+#Preview {
+    List {
+        BookTitleView(book: Book(title: "Book Title View Test"))
+        BookTitleView(book: Book(title: "Future Release",
+                                 release: Calendar.current.date(byAdding: .day,
+                                                                value: 1,
+                                                                to: Date())!))
+        BookTitleView(book: Book.testBook)
+    }
+}
