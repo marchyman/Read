@@ -142,9 +142,10 @@ struct EditBookView: View {
     func updatesDisabled() -> Bool {
         if book.title != title { return false }
         if book.authors != selectedAuthors { return false }
-        if (book.series == nil && seriesName != "") ||
-            book.series?.name != seriesName {
-            return false
+        if let series = book.series {
+            if series.name != seriesName { return false }
+        } else {
+            if seriesName != "" { return false }
         }
         if book.series != nil && book.seriesOrder != seriesOrder { return false }
         if release != initialRelease { return false }
@@ -199,12 +200,10 @@ struct EditBookView: View {
             aSeries = existingSeries
         } else {
             aSeries = Series(name: seriesName)
-            context.insert(aSeries)
         }
 
         book.series = aSeries
         book.seriesOrder = seriesOrder
-        aSeries.books?.append(book)
     }
 
     func updateAuthors() {
@@ -220,7 +219,6 @@ struct EditBookView: View {
         for author in selectedAuthors {
             if !book.authors.map({$0.id}).contains(author.id) {
                 book.authors.append(author)
-                author.books.append(book)
             }
         }
     }

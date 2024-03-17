@@ -13,6 +13,7 @@ struct NewAuthorView: View {
     @Environment(\.dismiss) var dismiss
     @Query private var authors: [Author]
     @State private var author: Author = Author(lastName: "")
+    var selectedAuthor: Binding<String>? = nil
 
     enum FocusableFields: Hashable {
         case lastName
@@ -57,6 +58,13 @@ struct NewAuthorView: View {
         } catch {
             fatalError("NewAuthorView context.save")
         }
+        selectedAuthor?.wrappedValue = author.name
         dismiss()
     }
+}
+
+#Preview {
+    @State var selectedAuthor: String = "none"
+    return NewAuthorView(selectedAuthor: $selectedAuthor)
+        .modelContainer(Book.preview)
 }

@@ -56,7 +56,7 @@ struct AuthorPickerView: View {
         }
         .padding(.horizontal)
         .sheet(isPresented: $newAuthor) {
-            NewAuthorView()
+            NewAuthorView(selectedAuthor: $selectedAuthor)
         }
     }
 }

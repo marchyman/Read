@@ -26,7 +26,7 @@ struct NewSeriesView: View {
                             addFunc: addSeries,
                             disabled: invalidSeries)
             Form {
-                TextField("First name", text: $name)
+                TextField("Series name", text: $name)
                     .focused($focusedField, equals: .name)
             }
             .cornerRadius(8)
