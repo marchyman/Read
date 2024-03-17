@@ -10,10 +10,9 @@ import SwiftData
 
 struct EditBookView: View {
     @Environment(\.modelContext) private var context
-//    @Query private var series: [Series]
+    @Query private var series: [Series]
 
     var book: Book
-//    let now = Date.now
 
     // create state variables for each field of a book, author, and series.
     // Initial values will be set from the above book when the view appears
@@ -24,7 +23,7 @@ struct EditBookView: View {
     @State private var seriesName: String = ""
     @State private var seriesOrder: Int = 0
     @State private var isFutureRelease = false
-//    @State private var release: Date = now
+    @State private var release: Date = Date.now
 
     enum FocusableFields: Hashable {
         case title
@@ -76,15 +75,14 @@ struct EditBookView: View {
 
                 Section("Release Date") {
                     DisclosureGroup(isExpanded: $isFutureRelease) {
-                        Text("Future release date editing not yet available")
-//                        LabeledContent {
-//                            DatePicker("", selection: $release,
-//                                       displayedComponents: .date)
-//                            .focused($focusedField, equals: .release)
-//                        } label: {
-//                            Text("Release Date")
-//                                .font(.title2)
-//                        }
+                        LabeledContent {
+                            DatePicker("", selection: $release,
+                                       displayedComponents: .date)
+                            .focused($focusedField, equals: .release)
+                        } label: {
+                            Text("Release Date")
+                                .font(.title2)
+                        }
                     } label: {
                         Text("Select optional future release date")
                             .font(.title2)
@@ -119,12 +117,12 @@ struct EditBookView: View {
         selectedAuthors = book.authors
         seriesName = book.series?.name ?? ""
         seriesOrder = book.seriesOrder ?? 0
-//            if book.release != nil {
-//                release = book.release!
-//                isFutureRelease = true
-//            } else {
-//                release = .now
-//            }
+        if book.release != nil {
+            release = book.release!
+            isFutureRelease = true
+        } else {
+            release = .now
+        }
     }
 
     func selectAuthor(_ author: Author) {
@@ -141,44 +139,41 @@ struct EditBookView: View {
             return false
         }
         if book.series != nil && book.seriesOrder != seriesOrder { return false }
-//        if (book.release == nil && release != now) ||
-//           book.release? != release {
-//          return false
-//      }
+        // handle future release date changes
         return true
     }
 
     func updateBook() {
         // Update future release.  Make it nil when toggled off
-//        if isFutureRelease {
-//            book.release = release
-//        } else {
-//            book.release = nil
-//        }
-//
+        if isFutureRelease {
+            book.release = release
+        } else {
+            book.release = nil
+        }
+
         // Update any changes in authors
         if book.authors != selectedAuthors {
             updateAuthors()
         }
 
-//        if book.series == nil {
-//            if seriesName != "" {
-//                updateSeries()
-//            }
-//        } else if book.series?.name != seriesName {
-//            // series name changed or was removed
-//            if seriesName == "" {
-//                // remove series
-//                book.series = nil
-//                book.seriesOrder = nil
-//            } else {
-//                // series changed
-//                updateSeries()
-//            }
-//        } else if book.seriesOrder != seriesOrder {
-//            // only the series order changed
-//            book.seriesOrder = seriesOrder
-//        }
+        if book.series == nil {
+            if seriesName != "" {
+                updateSeries()
+            }
+        } else if book.series?.name != seriesName {
+            // series name changed or was removed
+            if seriesName == "" {
+                // remove series
+                book.series = nil
+                book.seriesOrder = nil
+            } else {
+                // series changed
+                updateSeries()
+            }
+        } else if book.seriesOrder != seriesOrder {
+            // only the series order changed
+            book.seriesOrder = seriesOrder
+        }
 
         // save changes
         do {
@@ -189,20 +184,20 @@ struct EditBookView: View {
         setInitialState()
     }
 
-//    func updateSeries() {
-//        var aSeries: Series
-//
-//        if let existingSeries = series.first(where: { $0.name == seriesName } ) {
-//            aSeries = existingSeries
-//        } else {
-//            aSeries = Series(name: seriesName)
-//            context.insert(aSeries)
-//        }
-//
-//        book.series = aSeries
-//        book.seriesOrder = seriesOrder
-//        aSeries.books?.append(book)
-//    }
+    func updateSeries() {
+        var aSeries: Series
+
+        if let existingSeries = series.first(where: { $0.name == seriesName } ) {
+            aSeries = existingSeries
+        } else {
+            aSeries = Series(name: seriesName)
+            context.insert(aSeries)
+        }
+
+        book.series = aSeries
+        book.seriesOrder = seriesOrder
+        aSeries.books?.append(book)
+    }
 
     func updateAuthors() {
         // remove any authors from the book that are not in selectedAuthors
@@ -221,4 +216,11 @@ struct EditBookView: View {
             }
         }
     }
+}
+
+#Preview {
+    let container = Book.preview
+    let fetchDescriptor = FetchDescriptor<Book>()
+    let book = try! container.mainContext.fetch(fetchDescriptor)[0]
+    return EditBookView(book: book)
 }

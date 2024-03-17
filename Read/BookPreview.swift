@@ -5,7 +5,6 @@
 //  Created by Marco S Hyman on 3/14/24.
 //
 
-#if DEBUG
 import Foundation
 import SwiftData
 
@@ -30,7 +29,6 @@ extension Book {
         for book in books {
             container.mainContext.insert(book)
         }
-        container.mainContext.insert(testBook)
 
         // create some authors
         let author1 = Author(lastName: "Jones", firstName: "Davey")
@@ -44,7 +42,6 @@ extension Book {
         books[1].authors.append(author3)
         books[2].authors.append(author4)
         books[3].authors.append(author4)
-        testBook.authors.append(author2)
 
         // create a series
         let series = Series(name: "Test Series")
@@ -55,11 +52,4 @@ extension Book {
 
         return container
     }
-
-    static let testBook: Book =
-        Book(title: "Another Future Release",
-             release: Calendar.current.date(byAdding: .day,
-                                            value: 1,
-                                            to: Date())!)
 }
-#endif

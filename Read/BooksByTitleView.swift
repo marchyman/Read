@@ -12,6 +12,7 @@ struct BooksByTitleView: View {
     @Environment(\.modelContext) private var context
     @Query private var books: [Book]
     @State private var newBook = false
+    @State private var path = NavigationPath()
 
     init(search: String) {
         let sortDescriptors: [SortDescriptor<Book>] = [ .init(\.title) ]
@@ -34,19 +35,22 @@ struct BooksByTitleView: View {
                     Text("No Books found. Check your search string")
                 }
             } else {
-                List {
-                    ForEach(books) { book in
-                        NavigationLink {
-                            EditBookView(book: book)
-                        } label: {
-                            BookTitleView(book: book)
-                        }
-                    }
-                    .onDelete { indexSet in
-                        withAnimation {
-                            for index in indexSet {
-                                context.delete(books[index])
+                NavigationStack(path: $path) {
+                    List {
+                        ForEach(books) { book in
+                            NavigationLink(value: book) {
+                                BookTitleView(book: book)
                             }
+                        }
+                        .onDelete { indexSet in
+                            withAnimation {
+                                for index in indexSet {
+                                    context.delete(books[index])
+                                }
+                            }
+                        }
+                        .navigationDestination(for: Book.self) { book in
+                            EditBookView(book: book)
                         }
                     }
                 }

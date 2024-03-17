@@ -150,3 +150,8 @@ struct NewBookView: View {
     }
 
 }
+
+#Preview {
+    NewBookView()
+        .modelContainer(Book.preview)
+}

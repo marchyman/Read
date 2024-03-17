@@ -5,6 +5,7 @@
 //  Created by Marco S Hyman on 1/31/24.
 //
 
+import SwiftData
 import SwiftUI
 
 struct BookTitleView: View {
@@ -40,12 +41,15 @@ struct BookTitleView: View {
 }
 
 #Preview {
-    List {
+    let container = Book.preview
+    let fetchDescriptor = FetchDescriptor<Book>()
+    let book = try! container.mainContext.fetch(fetchDescriptor)[0]
+    return List {
         BookTitleView(book: Book(title: "Book Title View Test"))
         BookTitleView(book: Book(title: "Future Release",
                                  release: Calendar.current.date(byAdding: .day,
                                                                 value: 1,
                                                                 to: Date())!))
-        BookTitleView(book: Book.testBook)
+        BookTitleView(book: book)
     }
 }
