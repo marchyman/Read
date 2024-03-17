@@ -49,9 +49,9 @@ struct BooksByTitleView: View {
                                 }
                             }
                         }
-                        .navigationDestination(for: Book.self) { book in
-                            EditBookView(book: book)
-                        }
+                    }
+                    .navigationDestination(for: Book.self) { book in
+                        EditBookView(book: book)
                     }
                 }
             }
