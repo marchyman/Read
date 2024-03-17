@@ -51,7 +51,12 @@ struct BooksByTitleView: View {
                         }
                     }
                     .navigationDestination(for: Book.self) { book in
-                        EditBookView(book: book)
+                        EditBookView(book: book) {
+                            // this breaks run time.  It causes a hang when
+                            // entering the view.  Same thing happens if I
+                            // pass a binding to path.
+                            // path.removeLast()
+                        }
                     }
                 }
             }

@@ -13,6 +13,7 @@ struct EditBookView: View {
     @Query private var series: [Series]
 
     var book: Book
+    var updated: () -> ()
 
     // create state variables for each field of a book, author, and series.
     // Initial values will be set from the above book when the view appears
@@ -191,6 +192,7 @@ struct EditBookView: View {
             fatalError("NewBookView context.save")
         }
         setInitialState()
+        updated()
     }
 
     func updateSeries() {
@@ -229,7 +231,7 @@ struct EditBookView: View {
     let fetchDescriptor = FetchDescriptor<Book>()
     let book = try! container.mainContext.fetch(fetchDescriptor)[0]
     return NavigationStack {
-        EditBookView(book: book)
+        EditBookView(book: book, updated: { })
             .modelContainer(Book.preview)
     }
 }
