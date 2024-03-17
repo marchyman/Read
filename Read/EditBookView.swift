@@ -23,7 +23,8 @@ struct EditBookView: View {
     @State private var seriesName: String = ""
     @State private var seriesOrder: Int = 0
     @State private var isFutureRelease = false
-    @State private var release: Date = Date.now
+    @State private var release: Date = .now
+    @State private var initialRelease: Date = .now
 
     enum FocusableFields: Hashable {
         case title
@@ -115,14 +116,21 @@ struct EditBookView: View {
         // initialize fields from an existing book
         title = book.title
         selectedAuthors = book.authors
-        seriesName = book.series?.name ?? ""
-        seriesOrder = book.seriesOrder ?? 0
+        if let series = book.series {
+            seriesName = series.name
+            seriesOrder = book.seriesOrder ?? 0
+            selectSeries = true
+        } else {
+            seriesName = ""
+            seriesOrder = 0
+        }
         if book.release != nil {
             release = book.release!
             isFutureRelease = true
         } else {
             release = .now
         }
+        initialRelease = release
     }
 
     func selectAuthor(_ author: Author) {
@@ -139,7 +147,7 @@ struct EditBookView: View {
             return false
         }
         if book.series != nil && book.seriesOrder != seriesOrder { return false }
-        // handle future release date changes
+        if release != initialRelease { return false }
         return true
     }
 
@@ -222,5 +230,8 @@ struct EditBookView: View {
     let container = Book.preview
     let fetchDescriptor = FetchDescriptor<Book>()
     let book = try! container.mainContext.fetch(fetchDescriptor)[0]
-    return EditBookView(book: book)
+    return NavigationStack {
+        EditBookView(book: book)
+            .modelContainer(Book.preview)
+    }
 }
