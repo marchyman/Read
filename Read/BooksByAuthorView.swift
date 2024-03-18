@@ -39,7 +39,7 @@ struct BooksByAuthorView: View {
             } else {
                 List {
                     ForEach(author) {item in
-                        DisclosureGroup("\(item.firstName) \(item.lastName)") {
+                        DisclosureGroup(authorAndBookCount(author: item)) {
                             if item.books.isEmpty {
                                 Text("There are no book by this author (swipe left to delete).")
                                     .italic()
@@ -68,6 +68,22 @@ struct BooksByAuthorView: View {
         .sheet(isPresented: $newAuthor) {
             NewAuthorView()
         }
+    }
+
+    func authorAndBookCount(author: Author) -> LocalizedStringKey {
+        var name = "\(author.firstName) **\(author.lastName)**  --  "
+        // doesn't look like ^[\(count) book](inflect: true) works here.
+        switch author.books.count {
+        case 0:
+            name.append(" *no books*")
+        case 1:
+            name.append(" *1 book*")
+        case let count where count > 1:
+            name.append(" *\(count) books*")
+        default:
+            break
+        }
+        return LocalizedStringKey(name)
     }
 
     func booksByTitle(_ books: [Book]?) -> [Book] {

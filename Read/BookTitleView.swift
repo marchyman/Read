@@ -22,12 +22,10 @@ struct BookTitleView: View {
                 }
             }
             HStack(alignment: .top) {
-                VStack(alignment: .leading) {
                     ForEach(book.authors) { author in
                         Text(author.name)
                             .foregroundStyle(.secondary)
                     }
-                }
                 .padding(.leading)
                 Spacer()
                 if let release = book.release {
@@ -36,7 +34,7 @@ struct BookTitleView: View {
                 }
             }
         }
-        .padding(5)
+        .padding(.horizontal, 5)
     }
 }
 
