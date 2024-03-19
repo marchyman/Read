@@ -72,10 +72,9 @@ struct SeriesGroupView: View {
     }
 
     func lookups(prefix: String) -> [String] {
-        let lowercasedPrefix = prefix.lowercased()
         return series
             .map { $0.name }
-            .filter { $0.lowercased().hasPrefix(lowercasedPrefix) }
+            .filter { $0.localizedStandardContains(prefix) }
     }
 
 }
