@@ -10,13 +10,20 @@ import SwiftData
 
 struct ContentView: View {
     @State private var searchText = ""
+    @State private var path = NavigationPath()
 
     var body: some View {
         TabView {
-            NavigationStack {
+            NavigationStack(path: $path) {
                 BooksByTitleView(search: searchText)
-                    .navigationTitle("Book Titles")
+                    .navigationTitle("Books")
                     .searchable(text: $searchText, prompt: "Title search")
+                    .navigationDestination(for: Book.self) { book in
+                        EditBookView(book: book) {
+                             path.removeLast()
+                        }
+                    }
+
             }
             .tabItem {
                 Label("Titles", systemImage: "book.closed")
@@ -45,5 +52,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(PreviewData.container)
+        .modelContainer(Book.preview)
 }

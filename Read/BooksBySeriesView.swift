@@ -73,3 +73,8 @@ struct BooksBySeriesView: View {
         return books.sorted(using: descriptors)
     }
 }
+
+#Preview {
+    BooksBySeriesView(search: "")
+        .modelContainer(Book.preview)
+}

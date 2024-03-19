@@ -34,22 +34,20 @@ struct BooksByTitleView: View {
                     Text("No Books found. Check your search string")
                 }
             } else {
-                List {
-                    ForEach(books) { book in
-                        NavigationLink {
-                            EditBookView(book: book)
-                        } label: {
-                            BookTitleView(book: book)
+                    List {
+                        ForEach(books) { book in
+                            NavigationLink(value: book) {
+                                BookTitleView(book: book)
+                            }
                         }
-                    }
-                    .onDelete { indexSet in
-                        withAnimation {
-                            for index in indexSet {
-                                context.delete(books[index])
+                        .onDelete { indexSet in
+                            withAnimation {
+                                for index in indexSet {
+                                    context.delete(books[index])
+                                }
                             }
                         }
                     }
-                }
             }
             HStack {
                 Button("Add Book", systemImage: "plus",
@@ -67,4 +65,9 @@ struct BooksByTitleView: View {
             NewBookView()
         }
     }
+}
+
+#Preview {
+    BooksByTitleView(search: "")
+        .modelContainer(Book.preview)
 }

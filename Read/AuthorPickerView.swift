@@ -28,9 +28,14 @@ struct AuthorPickerView: View {
     }
 
     var body: some View {
-        VStack( alignment: .leading) {
+        HStack {
+            Button("Add new author", systemImage: "plus",
+                   action: { newAuthor = true })
+                .buttonStyle(.bordered)
+                .padding()
+            Spacer()
             if !authors.isEmpty {
-                Picker("Select an author", selection: $selectedAuthor) {
+                Picker("or select an existing author", selection: $selectedAuthor) {
                     Text("pick author")
                         .tag(none)
                     ForEach(authors) {
@@ -48,14 +53,19 @@ struct AuthorPickerView: View {
                     }
                 }
             }
-            Button("Add a new author", systemImage: "plus",
-                   action: { newAuthor = true })
-                .buttonStyle(.bordered)
-                .padding()
         }
-        .padding()
+        .padding(.horizontal)
         .sheet(isPresented: $newAuthor) {
-            NewAuthorView()
+            NewAuthorView(selectedAuthor: $selectedAuthor)
+        }
+    }
+}
+
+#Preview {
+    Form {
+        Section("Authors") {
+            AuthorPickerView(selectAction: { _ in })
+                .modelContainer(Book.preview)
         }
     }
 }
