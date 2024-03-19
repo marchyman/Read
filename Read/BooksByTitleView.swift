@@ -12,7 +12,6 @@ struct BooksByTitleView: View {
     @Environment(\.modelContext) private var context
     @Query private var books: [Book]
     @State private var newBook = false
-    @State private var path = NavigationPath()
 
     init(search: String) {
         let sortDescriptors: [SortDescriptor<Book>] = [ .init(\.title) ]
@@ -35,7 +34,6 @@ struct BooksByTitleView: View {
                     Text("No Books found. Check your search string")
                 }
             } else {
-                NavigationStack(path: $path) {
                     List {
                         ForEach(books) { book in
                             NavigationLink(value: book) {
@@ -50,15 +48,6 @@ struct BooksByTitleView: View {
                             }
                         }
                     }
-                    .navigationDestination(for: Book.self) { book in
-                        EditBookView(book: book) {
-                            // this breaks run time.  It causes a hang when
-                            // entering the view.  Same thing happens if I
-                            // pass a binding to path.
-                            // path.removeLast()
-                        }
-                    }
-                }
             }
             HStack {
                 Button("Add Book", systemImage: "plus",
