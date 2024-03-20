@@ -29,21 +29,17 @@ struct AuthorPickerView: View {
 
     var body: some View {
         HStack {
-            Button("Add new author", systemImage: "plus",
-                   action: { newAuthor = true })
-                .buttonStyle(.bordered)
-                .padding()
-            Spacer()
             if !authors.isEmpty {
-                Picker("or select an existing author", selection: $selectedAuthor) {
-                    Text("pick author")
+                Picker("Select author(s)", selection: $selectedAuthor) {
+                    Text("Anonymous")
                         .tag(none)
                     ForEach(authors) {
                         Text($0.name)
                             .tag($0.name)
                     }
-                    .pickerStyle(.wheel)
+//                    .pickerStyle(.wheel)
                 }
+                .frame(width: 300)
                 .onChange(of: selectedAuthor) {
                     if selectedAuthor != none {
                         if let author = authors.first(where: { $0.name == selectedAuthor}) {
@@ -53,6 +49,11 @@ struct AuthorPickerView: View {
                     }
                 }
             }
+            Spacer()
+            Button("Add new author", systemImage: "plus",
+                   action: { newAuthor = true })
+                .buttonStyle(.bordered)
+                .padding()
         }
         .padding(.horizontal)
         .sheet(isPresented: $newAuthor) {
