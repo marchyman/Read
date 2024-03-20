@@ -11,7 +11,6 @@ import SwiftData
 struct NewBookView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) var dismiss
-    @Query private var books: [Book]
     @Query private var series: [Series]
 
     // create state variables for each field of a book, author, and series.
@@ -25,9 +24,6 @@ struct NewBookView: View {
 
     @State private var selectSeries = false
     @State private var isFutureRelease = false
-
-    @State private var showMatchingTitles = false
-    @State private var matchingTitles: [String] = []
 
     enum FocusableFields: Hashable {
         case title
@@ -45,29 +41,7 @@ struct NewBookView: View {
 
             Form {
                 Section("Title") {
-                    TextField("title", text: $title)
-                        .font(.title2)
-                        .focused($focusedField, equals: .title)
-                        .popover(isPresented: $showMatchingTitles) {
-                            VStack(alignment: .leading) {
-                                ForEach(matchingTitles, id: \.self) { title in
-                                    Text(title)
-                                        .font(.title2)
-                                }
-                            }
-                            .padding()
-                        }
-                        .onChange(of: title) {
-                            if title.count > 1 {
-                                matchingTitles = books.map { $0.title }
-                                    .filter {
-                                        $0.localizedStandardContains(title)
-                                    }
-                                showMatchingTitles = !matchingTitles.isEmpty
-                            } else {
-                                showMatchingTitles = false
-                            }
-                        }
+                    TitleGroupView(title: $title)
                 }
 
                 Section("Author(s)") {

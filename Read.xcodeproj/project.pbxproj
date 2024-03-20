@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		490B01972B697DA0005B85CC /* AuthorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490B01962B697DA0005B85CC /* AuthorPickerView.swift */; };
+		4919AF1B2BAA5B3A009270BA /* TitleGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4919AF1A2BAA5B3A009270BA /* TitleGroupView.swift */; };
 		494EF61B2B6D8D5D00800610 /* SeriesGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494EF61A2B6D8D5D00800610 /* SeriesGroupView.swift */; };
 		4976F2772AF99D21004F01B0 /* ReadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4976F2762AF99D21004F01B0 /* ReadApp.swift */; };
 		4976F2792AF99D21004F01B0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4976F2782AF99D21004F01B0 /* ContentView.swift */; };
@@ -30,6 +31,7 @@
 
 /* Begin PBXFileReference section */
 		490B01962B697DA0005B85CC /* AuthorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorPickerView.swift; sourceTree = "<group>"; };
+		4919AF1A2BAA5B3A009270BA /* TitleGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleGroupView.swift; sourceTree = "<group>"; };
 		494EF61A2B6D8D5D00800610 /* SeriesGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesGroupView.swift; sourceTree = "<group>"; };
 		4976F2732AF99D21004F01B0 /* Read.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Read.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4976F2762AF99D21004F01B0 /* ReadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadApp.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				49D174C82B684A1300718C8D /* BooksByAuthorView.swift */,
 				49D174CA2B684A1E00718C8D /* BooksBySeriesView.swift */,
 				4976F2862AF9A7DF004F01B0 /* NewBookView.swift */,
+				4919AF1A2BAA5B3A009270BA /* TitleGroupView.swift */,
 				49804C7F2AFB0F43006D74D6 /* EditBookView.swift */,
 				494EF61A2B6D8D5D00800610 /* SeriesGroupView.swift */,
 				49FB9F272B6B1892005A53B0 /* NewAuthorView.swift */,
@@ -195,6 +198,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				49FB9F2A2B6B194A005A53B0 /* NewSeriesView.swift in Sources */,
+				4919AF1B2BAA5B3A009270BA /* TitleGroupView.swift in Sources */,
 				4976F2872AF9A7DF004F01B0 /* NewBookView.swift in Sources */,
 				494EF61B2B6D8D5D00800610 /* SeriesGroupView.swift in Sources */,
 				49D174CB2B684A1E00718C8D /* BooksBySeriesView.swift in Sources */,
