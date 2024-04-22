@@ -22,7 +22,6 @@ struct NewBookView: View {
     @State private var seriesName: String = ""
     @State private var seriesOrder: Int = 0
 
-    @State private var selectSeries = false
     @State private var isFutureRelease = false
 
     enum FocusableFields: Hashable {
@@ -66,13 +65,8 @@ struct NewBookView: View {
                 }
 
                 Section("Series") {
-                    DisclosureGroup(isExpanded: $selectSeries) {
-                        SeriesGroupView(seriesName: $seriesName,
-                                        seriesOrder: $seriesOrder)
-                    } label: {
-                        Text("Edit Series")
-                            .font(.title2)
-                    }
+                    SeriesGroupView(seriesName: $seriesName,
+                                    seriesOrder: $seriesOrder)
                 }
 
                 Section("Release Date") {
@@ -91,7 +85,6 @@ struct NewBookView: View {
                 }
             }
             .cornerRadius(10)
-            Spacer()
         }
         .padding()
         .onAppear {

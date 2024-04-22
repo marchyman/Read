@@ -48,6 +48,7 @@ struct BooksByTitleView: View {
                             }
                         }
                     }
+                    .listStyle(.plain)
             }
             HStack {
                 Button("Add Book", systemImage: "plus",
@@ -68,6 +69,9 @@ struct BooksByTitleView: View {
 }
 
 #Preview {
-    BooksByTitleView(search: "")
-        .modelContainer(Book.preview)
+    NavigationStack {
+        BooksByTitleView(search: "")
+            .modelContainer(Book.preview)
+            .navigationTitle("Books")
+    }
 }

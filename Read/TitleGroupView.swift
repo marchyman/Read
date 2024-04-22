@@ -52,6 +52,9 @@ struct TitleGroupView: View {
                     showMatchingTitles = false
                 }
         }
+        .onAppear {
+            focusedField = .title
+        }
     }
 }
 

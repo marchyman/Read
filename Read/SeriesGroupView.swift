@@ -26,9 +26,11 @@ struct SeriesGroupView: View {
     @FocusState private var focusedField: FocusableFields?
 
     var body: some View {
-        Group {
+        HStack {
+            
             TextField("series name", text: $seriesName)
                 .font(.title2)
+                .textFieldStyle(.roundedBorder)
                 .focused($focusedField, equals: .series)
                 .popover(isPresented: $autoselectSeries) {
                     VStack(alignment: .leading) {
@@ -55,19 +57,18 @@ struct SeriesGroupView: View {
                 .onChange(of: focusedField) {
                     autoselectSeries = false
                 }
+            
             LabeledContent {
-                TextField("book number in series",
+                TextField("#",
                           value: $seriesOrder, format: .number)
-                .font(.title2)
-                .multilineTextAlignment(.trailing)
+                .textFieldStyle(.roundedBorder)
                 .focused($focusedField, equals: .seriesOrder)
             } label: {
-                Text("Series order")
-                    .font(.title2)
+                Text("Series order: ")
+                    .font(.headline)
+                    .frame(width: 100)
             }
-        }
-        .onAppear {
-            focusedField = .series
+            .frame(width: 160)
         }
     }
 

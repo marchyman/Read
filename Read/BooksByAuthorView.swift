@@ -11,6 +11,7 @@ import SwiftUI
 struct BooksByAuthorView: View {
     @Environment(\.modelContext) private var context
     @Query private var author: [Author]
+    @State private var newBook = false
     @State private var newAuthor = false
 
     init(search: String) {
@@ -58,12 +59,23 @@ struct BooksByAuthorView: View {
                         }
                     }
                 }
+                .listStyle(.plain)
             }
-            Button("Add Author", systemImage: "plus",
-                   action: { newAuthor = true })
+            HStack {
+                Button("Add Book", systemImage: "plus",
+                       action: { newBook = true })
+                    .font(.title)
+                    .buttonStyle(.bordered)
+                    .padding()
+                Button("Add Author", systemImage: "plus",
+                       action: { newAuthor = true })
                 .font(.title)
                 .buttonStyle(.bordered)
                 .padding()
+            }
+        }
+        .sheet(isPresented: $newBook) {
+            NewBookView()
         }
         .sheet(isPresented: $newAuthor) {
             NewAuthorView()

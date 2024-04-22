@@ -20,7 +20,6 @@ struct EditBookView: View {
     // and written back to the book when the update button is pressed.
     @State private var title: String = ""
     @State private var selectedAuthors: [Author] = []
-    @State private var selectSeries = false
     @State private var seriesName: String = ""
     @State private var seriesOrder: Int = 0
     @State private var isFutureRelease = false
@@ -66,13 +65,8 @@ struct EditBookView: View {
                 }
                 
                 Section("Series") {
-                    DisclosureGroup(isExpanded: $selectSeries) {
-                        SeriesGroupView(seriesName: $seriesName,
-                                        seriesOrder: $seriesOrder)
-                    } label: {
-                        Text("Edit Series")
-                            .font(.title2)
-                    }
+                    SeriesGroupView(seriesName: $seriesName,
+                                    seriesOrder: $seriesOrder)
                 }
 
                 Section("Release Date") {
@@ -120,7 +114,6 @@ struct EditBookView: View {
         if let series = book.series {
             seriesName = series.name
             seriesOrder = book.seriesOrder ?? 0
-            selectSeries = true
         } else {
             seriesName = ""
             seriesOrder = 0
@@ -159,6 +152,11 @@ struct EditBookView: View {
             book.release = release
         } else {
             book.release = nil
+        }
+
+        // Update title if changed
+        if book.title != title {
+            book.title = title
         }
 
         // Update any changes in authors

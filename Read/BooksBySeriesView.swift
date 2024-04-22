@@ -55,6 +55,7 @@ struct BooksBySeriesView: View {
                         }
                     }
                 }
+                .listStyle(.plain)
             }
             Button("Add Series", systemImage: "plus",
                    action: { newSeries = true })
