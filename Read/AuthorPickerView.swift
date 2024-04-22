@@ -8,13 +8,13 @@
 import SwiftData
 import SwiftUI
 
-fileprivate let none = "none"
+fileprivate let addAuthor = "Add new author"
 
 struct AuthorPickerView: View {
     @Environment(\.modelContext) private var context
     @Query private var authors: [Author]
 
-    @State private var selectedAuthor = none
+    @State private var selectedAuthor = ""
     @State private var newAuthor = false
     var selectAction: (Author) -> ()
 
@@ -30,30 +30,29 @@ struct AuthorPickerView: View {
     var body: some View {
         HStack {
             if !authors.isEmpty {
-                Picker("Select author(s)", selection: $selectedAuthor) {
-                    Text("Anonymous")
-                        .tag(none)
+                Picker(selection: $selectedAuthor) {
+                    Text("Add new author")
+                        .tag(addAuthor)
                     ForEach(authors) {
                         Text($0.name)
                             .tag($0.name)
                     }
-//                    .pickerStyle(.wheel)
+                } label: {
+                    Text("Select author from list: ")
+                        .font(.headline)
                 }
-                .frame(width: 300)
+                .frame(width: 350)
                 .onChange(of: selectedAuthor) {
-                    if selectedAuthor != none {
+                    if selectedAuthor == addAuthor {
+                        newAuthor.toggle()
+                    } else {
                         if let author = authors.first(where: { $0.name == selectedAuthor}) {
                             selectAction(author)
                         }
-                        selectedAuthor = none
+                        selectedAuthor = ""
                     }
                 }
             }
-            Spacer()
-            Button("Add new author", systemImage: "plus",
-                   action: { newAuthor = true })
-                .buttonStyle(.bordered)
-                .padding()
         }
         .padding(.horizontal)
         .sheet(isPresented: $newAuthor) {
