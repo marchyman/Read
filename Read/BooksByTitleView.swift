@@ -34,24 +34,30 @@ struct BooksByTitleView: View {
                     Text("No Books found. Check your search string")
                 }
             } else {
-                    List {
-                        ForEach(books) { book in
-                            NavigationLink(value: book) {
-                                BookTitleView(book: book)
-                            }
+                List {
+                    ForEach(books) { book in
+                        NavigationLink(value: book) {
+                            BookTitleView(book: book)
                         }
-                        .onDelete { indexSet in
-                            withAnimation {
-                                for index in indexSet {
-                                    context.delete(books[index])
-                                }
+                    }
+                    .onDelete { indexSet in
+                        withAnimation {
+                            for index in indexSet {
+                                context.delete(books[index])
                             }
                         }
                     }
-                    .listStyle(.plain)
+                }
+                .listStyle(.plain)
             }
         }
+        .padding(.horizontal)
+        .contentMargins(.horizontal, 40, for: .scrollContent)
         .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Text("Books")
+                    .font(.title2).bold()
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     newBook = true

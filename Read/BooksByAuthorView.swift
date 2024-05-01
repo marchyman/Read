@@ -62,7 +62,13 @@ struct BooksByAuthorView: View {
                 .listStyle(.plain)
             }
         }
+        .padding(.horizontal)
+        .contentMargins(.horizontal, 40, for: .scrollContent)
         .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Text("Authors")
+                    .font(.title2).bold()
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     newBook = true

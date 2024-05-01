@@ -16,7 +16,6 @@ struct ContentView: View {
         TabView {
             NavigationStack(path: $path) {
                 BooksByTitleView(search: searchText)
-                    .navigationTitle("Books")
                     .searchable(text: $searchText, prompt: "Title search")
                     .navigationDestination(for: Book.self) { book in
                         EditBookView(book: book) {
@@ -31,7 +30,6 @@ struct ContentView: View {
 
             NavigationStack {
                 BooksByAuthorView(search: searchText)
-                    .navigationTitle("Authors")
                     .searchable(text: $searchText, prompt: "Author search")
             }
             .tabItem {
@@ -40,7 +38,6 @@ struct ContentView: View {
 
             NavigationStack {
                 BooksBySeriesView(search: searchText)
-                    .navigationTitle("Series Name")
                     .searchable(text: $searchText, prompt: "Series search")
             }
             .tabItem {
