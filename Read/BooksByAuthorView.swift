@@ -61,17 +61,23 @@ struct BooksByAuthorView: View {
                 }
                 .listStyle(.plain)
             }
-            HStack {
-                Button("Add Book", systemImage: "plus",
-                       action: { newBook = true })
-                    .font(.title)
-                    .buttonStyle(.bordered)
-                    .padding()
-                Button("Add Author", systemImage: "plus",
-                       action: { newAuthor = true })
-                .font(.title)
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    newBook = true
+                } label: {
+                    Text("Add book")
+                }
                 .buttonStyle(.bordered)
-                .padding()
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    newAuthor = true
+                } label: {
+                    Text("Add Author")
+                }
+                .buttonStyle(.bordered)
             }
         }
         .sheet(isPresented: $newBook) {
@@ -106,6 +112,9 @@ struct BooksByAuthorView: View {
 }
 
 #Preview {
-    BooksByAuthorView(search: "")
-        .modelContainer(Book.preview)
+    NavigationStack() {
+        BooksByAuthorView(search: "")
+            .modelContainer(Book.preview)
+            .navigationTitle("Authors")
+    }
 }

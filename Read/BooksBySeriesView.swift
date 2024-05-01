@@ -11,6 +11,8 @@ import SwiftUI
 struct BooksBySeriesView: View {
     @Environment(\.modelContext) private var context
     @Query private var series: [Series]
+    @State private var newBook = false
+    @State private var newAuthor = false
     @State private var newSeries = false
 
     init(search: String) {
@@ -57,11 +59,38 @@ struct BooksBySeriesView: View {
                 }
                 .listStyle(.plain)
             }
-            Button("Add Series", systemImage: "plus",
-                   action: { newSeries = true })
-                .font(.title)
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    newBook = true
+                } label: {
+                    Text("Add book")
+                }
                 .buttonStyle(.bordered)
-                .padding()
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    newAuthor = true
+                } label: {
+                    Text("Add Author")
+                }
+                .buttonStyle(.bordered)
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    newSeries = true
+                } label: {
+                    Text("Add Series")
+                }
+                .buttonStyle(.bordered)
+            }
+        }
+        .sheet(isPresented: $newBook) {
+            NewBookView()
+        }
+        .sheet(isPresented: $newAuthor) {
+            NewAuthorView()
         }
         .sheet(isPresented: $newSeries) {
             NewSeriesView()

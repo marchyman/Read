@@ -50,16 +50,15 @@ struct BooksByTitleView: View {
                     }
                     .listStyle(.plain)
             }
-            HStack {
-                Button("Add Book", systemImage: "plus",
-                       action: { newBook = true })
-                    .font(.title)
-                    .buttonStyle(.bordered)
-                    .padding()
-                Spacer()
-                Text("Swipe left to delete")
-                    .font(.caption)
-                    .padding()
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    newBook = true
+                } label: {
+                    Text("Add book")
+                }
+                .buttonStyle(.bordered)
             }
         }
         .sheet(isPresented: $newBook) {
