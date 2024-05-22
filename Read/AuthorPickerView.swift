@@ -14,7 +14,7 @@ struct AuthorPickerView: View {
     @Environment(\.modelContext) private var context
     @Query private var authors: [Author]
 
-    @State private var selectedAuthor = ""
+    @State private var selectedAuthor = addAuthor
     @State private var newAuthor = false
     var selectAction: (Author) -> ()
 
@@ -41,6 +41,7 @@ struct AuthorPickerView: View {
                     Text("Select author from list: ")
                         .font(.headline)
                 }
+                .pickerStyle(.menu)
                 .frame(width: 350)
                 .onChange(of: selectedAuthor) {
                     if selectedAuthor == addAuthor {
