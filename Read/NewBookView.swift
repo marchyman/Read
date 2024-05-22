@@ -46,7 +46,6 @@ struct NewBookView: View {
                 Section("Author(s)") {
                     if selectedAuthors.isEmpty {
                         Text("Please select one or more authors")
-                            .opacity(0.50)
                     } else {
                         List {
                             ForEach(selectedAuthors) { author in
