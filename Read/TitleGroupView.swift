@@ -21,20 +21,24 @@ struct TitleGroupView: View {
         case title
     }
 
-    @FocusState private var focusedField: FocusableFields?
-
     var body: some View {
         Group {
             TextField("title", text: $title)
                 .font(.title2)
-                .focused($focusedField, equals: .title)
                 .popover(isPresented: $showMatchingTitles) {
-                    VStack(alignment: .leading) {
+                    ScrollView {
                         ForEach(matchingTitles, id: \.self) { title in
-                            Text(title)
-                                .font(.title2)
+                            HStack {
+                                Text(title)
+                                    .font(.title2)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
+                                Spacer()
+                            }
                         }
+                        .frame(maxWidth: 400)
                     }
+                    .frame(height: 400)
                     .padding()
                 }
                 .onChange(of: title) {
@@ -48,12 +52,6 @@ struct TitleGroupView: View {
                         showMatchingTitles = false
                     }
                 }
-                .onChange(of: focusedField) {
-                    showMatchingTitles = false
-                }
-        }
-        .onAppear {
-            focusedField = .title
         }
     }
 }
