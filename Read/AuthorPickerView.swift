@@ -29,29 +29,27 @@ struct AuthorPickerView: View {
 
     var body: some View {
         HStack {
-            if !authors.isEmpty {
-                Picker(selection: $selectedAuthor) {
-                    Text("Add new author")
-                        .tag(addAuthor)
-                    ForEach(authors) {
-                        Text($0.name)
-                            .tag($0.name)
-                    }
-                } label: {
-                    Text("Select author from list: ")
-                        .font(.headline)
+            Picker(selection: $selectedAuthor) {
+                Text("Add new author")
+                    .tag(addAuthor)
+                ForEach(authors) {
+                    Text($0.name)
+                        .tag($0.name)
                 }
-                .pickerStyle(.menu)
-                .frame(width: 350)
-                .onChange(of: selectedAuthor) {
-                    if selectedAuthor == addAuthor {
-                        newAuthor.toggle()
-                    } else {
-                        if let author = authors.first(where: { $0.name == selectedAuthor}) {
-                            selectAction(author)
-                        }
-                        selectedAuthor = ""
+            } label: {
+                Text("Select author from list: ")
+                    .font(.headline)
+            }
+            .pickerStyle(.menu)
+            .frame(width: 350)
+            .onChange(of: selectedAuthor) {
+                if selectedAuthor == addAuthor {
+                    newAuthor.toggle()
+                } else {
+                    if let author = authors.first(where: { $0.name == selectedAuthor}) {
+                        selectAction(author)
                     }
+                    selectedAuthor = ""
                 }
             }
         }
