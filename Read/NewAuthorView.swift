@@ -64,7 +64,7 @@ struct NewAuthorView: View {
 }
 
 #Preview {
-    @State var selectedAuthor: String = "none"
+    @Previewable @State var selectedAuthor: String = "none"
     return NewAuthorView(selectedAuthor: $selectedAuthor)
         .modelContainer(Book.preview)
 }
