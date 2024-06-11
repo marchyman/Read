@@ -15,7 +15,10 @@ struct BooksBySeriesView: View {
     @State private var newAuthor = false
     @State private var newSeries = false
 
+    let searchActive: Bool
+
     init(search: String) {
+        searchActive = !search.isEmpty
         let sortDescriptors: [SortDescriptor<Series>] = [ .init(\.name) ]
         let predicate = #Predicate<Series> { series in
             if search.isEmpty {
@@ -33,7 +36,10 @@ struct BooksBySeriesView: View {
                 ContentUnavailableView {
                     Label("Books by Series", systemImage: "books.vertical")
                 } description: {
-                    Text("No Series found. Check your search string")
+                    Text("No Series found.")
+                    if searchActive {
+                        Text("Check your search string")
+                    }
                 }
             } else {
                 List {
@@ -69,9 +75,9 @@ struct BooksBySeriesView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    newBook = true
+                    newSeries = true
                 } label: {
-                    Text("Add book")
+                    Text("Add Series")
                 }
                 .buttonStyle(.bordered)
             }
@@ -85,9 +91,9 @@ struct BooksBySeriesView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    newSeries = true
+                    newBook = true
                 } label: {
-                    Text("Add Series")
+                    Text("Add book")
                 }
                 .buttonStyle(.bordered)
             }

@@ -14,7 +14,10 @@ struct BooksByAuthorView: View {
     @State private var newBook = false
     @State private var newAuthor = false
 
+    let searchActive: Bool
+
     init(search: String) {
+        searchActive = !search.isEmpty
         let sortDescriptors: [SortDescriptor<Author>] = [
             .init(\.lastName),
             .init(\.firstName) ]
@@ -35,7 +38,10 @@ struct BooksByAuthorView: View {
                 ContentUnavailableView {
                     Label("Books by Author", systemImage: "character.book.closed")
                 } description: {
-                    Text("No Authors found.  Check your search string")
+                    Text("No Authors found.")
+                    if searchActive {
+                        Text("Check your search string")
+                    }
                 }
             } else {
                 List {
@@ -71,17 +77,17 @@ struct BooksByAuthorView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    newBook = true
+                    newAuthor = true
                 } label: {
-                    Text("Add book")
+                    Text("Add Author")
                 }
                 .buttonStyle(.bordered)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    newAuthor = true
+                    newBook = true
                 } label: {
-                    Text("Add Author")
+                    Text("Add book")
                 }
                 .buttonStyle(.bordered)
             }
