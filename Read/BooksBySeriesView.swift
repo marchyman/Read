@@ -111,7 +111,8 @@ struct BooksBySeriesView: View {
 
     func booksBySeriesOrder(_ books: [Book]?) -> [Book] {
         guard let books else { return [] }
-        let descriptors: [SortDescriptor<Book>] = [ .init(\.seriesOrder) ]
+        let descriptors: [SortDescriptor<Book>] = [ .init(\.seriesOrder,
+                                                          order: .reverse) ]
         return books.sorted(using: descriptors)
     }
 }
