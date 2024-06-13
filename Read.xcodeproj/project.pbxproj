@@ -32,6 +32,9 @@
 /* Begin PBXFileReference section */
 		490B01962B697DA0005B85CC /* AuthorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorPickerView.swift; sourceTree = "<group>"; };
 		4919AF1A2BAA5B3A009270BA /* TitleGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleGroupView.swift; sourceTree = "<group>"; };
+		492595EF2C1A826D00E0301C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		492595F02C1A827600E0301C /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		492595F12C1A828600E0301C /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		494EF61A2B6D8D5D00800610 /* SeriesGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesGroupView.swift; sourceTree = "<group>"; };
 		4976F2732AF99D21004F01B0 /* Read.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Read.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4976F2762AF99D21004F01B0 /* ReadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadApp.swift; sourceTree = "<group>"; };
@@ -69,6 +72,9 @@
 		4976F26A2AF99D21004F01B0 = {
 			isa = PBXGroup;
 			children = (
+				492595EF2C1A826D00E0301C /* README.md */,
+				492595F02C1A827600E0301C /* LICENSE */,
+				492595F12C1A828600E0301C /* .swiftlint.yml */,
 				4976F2752AF99D21004F01B0 /* Read */,
 				4976F2742AF99D21004F01B0 /* Products */,
 			);
