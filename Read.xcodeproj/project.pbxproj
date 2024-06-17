@@ -47,6 +47,7 @@
 		4981605E2AFC2F58002BDC33 /* Read.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Read.entitlements; sourceTree = "<group>"; };
 		4981605F2AFC2F7B002BDC33 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		49837EB32BA3BE6000734881 /* BookPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPreview.swift; sourceTree = "<group>"; };
+		49B8274D2C1FB9C9000F361E /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		49D174C62B684A0300718C8D /* BooksByTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksByTitleView.swift; sourceTree = "<group>"; };
 		49D174C82B684A1300718C8D /* BooksByAuthorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksByAuthorView.swift; sourceTree = "<group>"; };
 		49D174CA2B684A1E00718C8D /* BooksBySeriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksBySeriesView.swift; sourceTree = "<group>"; };
@@ -72,10 +73,11 @@
 		4976F26A2AF99D21004F01B0 = {
 			isa = PBXGroup;
 			children = (
+				4976F2752AF99D21004F01B0 /* Read */,
+				49B8274D2C1FB9C9000F361E /* Config.xcconfig */,
 				492595EF2C1A826D00E0301C /* README.md */,
 				492595F02C1A827600E0301C /* LICENSE */,
 				492595F12C1A828600E0301C /* .swiftlint.yml */,
-				4976F2752AF99D21004F01B0 /* Read */,
 				4976F2742AF99D21004F01B0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -273,6 +275,7 @@
 /* Begin XCBuildConfiguration section */
 		4976F2812AF99D22004F01B0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 49B8274D2C1FB9C9000F361E /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -308,7 +311,6 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -331,14 +333,12 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_STRICT_CONCURRENCY = complete;
-				SWIFT_VERSION = 6.0;
-				_EXPERIMENTAL_SWIFT_EXPLICIT_MODULES = YES;
 			};
 			name = Debug;
 		};
 		4976F2822AF99D22004F01B0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 49B8274D2C1FB9C9000F361E /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -374,7 +374,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -389,10 +388,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_STRICT_CONCURRENCY = complete;
-				SWIFT_VERSION = 6.0;
 				VALIDATE_PRODUCT = YES;
-				_EXPERIMENTAL_SWIFT_EXPLICIT_MODULES = YES;
 			};
 			name = Release;
 		};
