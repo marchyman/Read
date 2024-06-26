@@ -38,7 +38,7 @@ struct TitleGroupView: View {
                         }
                         .frame(maxWidth: 400)
                     }
-                    .frame(maxHeight: 400)
+                    .frame(maxHeight: 200)
                     .padding()
                 }
                 .onChange(of: title) {
