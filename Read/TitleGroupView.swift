@@ -26,20 +26,14 @@ struct TitleGroupView: View {
             TextField("title", text: $title)
                 .font(.title2)
                 .popover(isPresented: $showMatchingTitles) {
-                    ScrollView {
-                        ForEach(matchingTitles, id: \.self) { title in
-                            HStack {
-                                Text(title)
-                                    .font(.title2)
-                                    .lineLimit(1)
-                                    .truncationMode(.tail)
-                                Spacer()
-                            }
-                        }
-                        .frame(maxWidth: 400)
+                    List(matchingTitles, id: \.self) { title in
+                        Text(title)
+                            .font(.title2)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
                     }
-                    .frame(maxHeight: 200)
                     .padding()
+                    .frame(width: 500, height: 250, alignment: .leading)
                 }
                 .onChange(of: title) {
                     if title.count > 1 {
