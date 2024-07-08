@@ -34,6 +34,7 @@ struct TitleGroupView: View {
                     }
                     .padding()
                     .frame(width: 500, height: 250, alignment: .leading)
+                    .presentationCompactAdaptation(.popover)
                 }
                 .onChange(of: title) {
                     if title.count > 1 {
