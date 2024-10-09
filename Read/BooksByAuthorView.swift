@@ -10,11 +10,15 @@ import SwiftUI
 
 struct BooksByAuthorView: View {
     @Environment(\.modelContext) private var context
-    @Query private var author: [Author]
+    @Query private var authors: [Author]
     @State private var newBook = false
     @State private var newAuthor = false
+    @State private var editAuthor: Author? = nil
+
+    let searchActive: Bool
 
     init(search: String) {
+        searchActive = !search.isEmpty
         let sortDescriptors: [SortDescriptor<Author>] = [
             .init(\.lastName),
             .init(\.firstName) ]
@@ -26,20 +30,23 @@ struct BooksByAuthorView: View {
                     || author.firstName.localizedStandardContains(search)
             }
         }
-        _author = Query(filter: predicate, sort: sortDescriptors)
+        _authors = Query(filter: predicate, sort: sortDescriptors)
     }
 
     var body: some View {
         VStack(alignment: .leading) {
-            if author.isEmpty {
+            if authors.isEmpty {
                 ContentUnavailableView {
                     Label("Books by Author", systemImage: "character.book.closed")
                 } description: {
-                    Text("No Authors found.  Check your search string")
+                    Text("No Authors found.")
+                    if searchActive {
+                        Text("Check your search string")
+                    }
                 }
             } else {
                 List {
-                    ForEach(author) {item in
+                    ForEach(authors) {item in
                         DisclosureGroup(authorAndBookCount(author: item)) {
                             if item.books.isEmpty {
                                 Text("There are no book by this author (swipe left to delete).")
@@ -50,11 +57,17 @@ struct BooksByAuthorView: View {
                                 }
                             }
                         }
+                        .onLongPressGesture {
+                            editAuthor = item
+                        }
+                        .sheet(item: $editAuthor) { item in
+                            EditAuthorView(author: item)
+                        }
                     }
                     .onDelete { indexSet in
                         withAnimation {
                             for index in indexSet {
-                                context.delete(author[index])
+                                context.delete(authors[index])
                             }
                         }
                     }
@@ -71,17 +84,17 @@ struct BooksByAuthorView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    newBook = true
+                    newAuthor = true
                 } label: {
-                    Text("Add book")
+                    Text("Add Author")
                 }
                 .buttonStyle(.bordered)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    newAuthor = true
+                    newBook = true
                 } label: {
-                    Text("Add Author")
+                    Text("Add book")
                 }
                 .buttonStyle(.bordered)
             }

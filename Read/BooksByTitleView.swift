@@ -13,7 +13,10 @@ struct BooksByTitleView: View {
     @Query private var books: [Book]
     @State private var newBook = false
 
+    let searchActive: Bool
+
     init(search: String) {
+        searchActive = !search.isEmpty
         let sortDescriptors: [SortDescriptor<Book>] = [ .init(\.title) ]
         let predicate = #Predicate<Book> { book in
             if search.isEmpty {
@@ -31,7 +34,10 @@ struct BooksByTitleView: View {
                 ContentUnavailableView {
                     Label("Books by Title", systemImage: "book.closed")
                 } description: {
-                    Text("No Books found. Check your search string")
+                    Text("No Books found.")
+                    if searchActive {
+                        Text("Check your search string")
+                    }
                 }
             } else {
                 List {

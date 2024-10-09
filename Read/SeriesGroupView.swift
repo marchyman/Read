@@ -33,24 +33,20 @@ struct SeriesGroupView: View {
                 .textFieldStyle(.roundedBorder)
                 .focused($focusedField, equals: .series)
                 .popover(isPresented: $autoselectSeries) {
-                    ScrollView {
-                        ForEach(seriesMatches, id: \.self) { match in
-                            HStack {
-                                Button {
-                                    seriesName = match
-                                    focusedField = .seriesOrder
-                                } label: {
-                                    Text(match)
-                                        .font(.title2)
-                                        .lineLimit(1)
-                                        .truncationMode(.tail)
-                                }
-                                Spacer()
-                            }
+                    List(seriesMatches, id: \.self) { match in
+                        Button {
+                            seriesName = match
+                            focusedField = .seriesOrder
+                        } label: {
+                            Text(match)
+                                .font(.title2)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
                         }
-                        .frame(maxWidth: 600)
                     }
-                    .frame(maxHeight: 400)
+                    .padding()
+                    .frame(width: 500, height: 250, alignment: .leading)
+                    .presentationCompactAdaptation(.popover)
                 }
                 .onChange(of: seriesName) {
                     if seriesName.count > 1 {
