@@ -11,6 +11,7 @@
 		4919AF1B2BAA5B3A009270BA /* TitleGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4919AF1A2BAA5B3A009270BA /* TitleGroupView.swift */; };
 		494EF61B2B6D8D5D00800610 /* SeriesGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494EF61A2B6D8D5D00800610 /* SeriesGroupView.swift */; };
 		4964DCFB2CB6FD2A00DDFFB8 /* EditAuthorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4964DCFA2CB6FD2A00DDFFB8 /* EditAuthorView.swift */; };
+		4964DCFD2CB7111100DDFFB8 /* EditSeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4964DCFC2CB7111100DDFFB8 /* EditSeriesView.swift */; };
 		4976F2772AF99D21004F01B0 /* ReadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4976F2762AF99D21004F01B0 /* ReadApp.swift */; };
 		4976F2792AF99D21004F01B0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4976F2782AF99D21004F01B0 /* ContentView.swift */; };
 		4976F27B2AF99D21004F01B0 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4976F27A2AF99D21004F01B0 /* Book.swift */; };
@@ -38,6 +39,7 @@
 		492595F12C1A828600E0301C /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		494EF61A2B6D8D5D00800610 /* SeriesGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesGroupView.swift; sourceTree = "<group>"; };
 		4964DCFA2CB6FD2A00DDFFB8 /* EditAuthorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAuthorView.swift; sourceTree = "<group>"; };
+		4964DCFC2CB7111100DDFFB8 /* EditSeriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSeriesView.swift; sourceTree = "<group>"; };
 		4976F2732AF99D21004F01B0 /* Read.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Read.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4976F2762AF99D21004F01B0 /* ReadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadApp.swift; sourceTree = "<group>"; };
 		4976F2782AF99D21004F01B0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				4919AF1A2BAA5B3A009270BA /* TitleGroupView.swift */,
 				49804C7F2AFB0F43006D74D6 /* EditBookView.swift */,
 				4964DCFA2CB6FD2A00DDFFB8 /* EditAuthorView.swift */,
+				4964DCFC2CB7111100DDFFB8 /* EditSeriesView.swift */,
 				494EF61A2B6D8D5D00800610 /* SeriesGroupView.swift */,
 				49FB9F272B6B1892005A53B0 /* NewAuthorView.swift */,
 				49FB9F292B6B194A005A53B0 /* NewSeriesView.swift */,
@@ -263,6 +266,7 @@
 				49FB9F282B6B1892005A53B0 /* NewAuthorView.swift in Sources */,
 				49D174C72B684A0300718C8D /* BooksByTitleView.swift in Sources */,
 				49FB9F2C2B6B1D10005A53B0 /* CancelOrAddView.swift in Sources */,
+				4964DCFD2CB7111100DDFFB8 /* EditSeriesView.swift in Sources */,
 				49FB9F262B6AD3ED005A53B0 /* BookTitleView.swift in Sources */,
 				4976F27B2AF99D21004F01B0 /* Book.swift in Sources */,
 				490B01972B697DA0005B85CC /* AuthorPickerView.swift in Sources */,

@@ -14,6 +14,7 @@ struct BooksBySeriesView: View {
     @State private var newBook = false
     @State private var newAuthor = false
     @State private var newSeries = false
+    @State private var editSeries: Series? = nil
 
     let searchActive: Bool
 
@@ -43,7 +44,7 @@ struct BooksBySeriesView: View {
                 }
             } else {
                 List {
-                    ForEach(series) {item in
+                    ForEach(series) { item in
                         DisclosureGroup(item.name) {
                             if item.books.isEmpty {
                                 Text("There are no books in this series (swipe left to delete).")
@@ -53,6 +54,12 @@ struct BooksBySeriesView: View {
                                     BookTitleView(book: book)
                                 }
                             }
+                        }
+                        .onLongPressGesture {
+                            editSeries = item
+                        }
+                        .sheet(item: $editSeries) { item in
+                            EditSeriesView(series: item)
                         }
                     }
                     .onDelete { indexSet in
