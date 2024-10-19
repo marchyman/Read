@@ -1,0 +1,9 @@
+*~
+.DS_Store
+
+buildServer.json
+Build/
+DerivedData/
+xcuserdata/
+*.xcworkspace/
+*.trace/
