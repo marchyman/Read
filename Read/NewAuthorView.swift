@@ -13,7 +13,7 @@ struct NewAuthorView: View {
     @Environment(\.dismiss) var dismiss
     @Query private var authors: [Author]
     @State private var author: Author = Author(lastName: "")
-    var selectedAuthor: Binding<String>? = nil
+    var selectedAuthor: Binding<String>?
 
     enum FocusableFields: Hashable {
         case lastName

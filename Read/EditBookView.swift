@@ -13,7 +13,7 @@ struct EditBookView: View {
     @Query private var series: [Series]
 
     var book: Book
-    var updated: () -> ()
+    var updated: () -> Void
 
     // create state variables for each field of a book, author, and series.
     // Initial values will be set from the above book when the view appears
@@ -63,7 +63,7 @@ struct EditBookView: View {
                     }
                     AuthorPickerView(selectAction: selectAuthor)
                 }
-                
+
                 Section("Series") {
                     SeriesGroupView(seriesName: $seriesName,
                                     seriesOrder: $seriesOrder)
@@ -196,7 +196,7 @@ struct EditBookView: View {
     func updateSeries() {
         var aSeries: Series
 
-        if let existingSeries = series.first(where: { $0.name == seriesName } ) {
+        if let existingSeries = series.first(where: { $0.name == seriesName }) {
             aSeries = existingSeries
         } else {
             aSeries = Series(name: seriesName)
@@ -208,18 +208,16 @@ struct EditBookView: View {
 
     func updateAuthors() {
         // remove any authors from the book that are not in selectedAuthors
-        for author in book.authors {
-            if !selectedAuthors.map({$0.id}).contains(author.id) {
-                if let i = book.authors.firstIndex(where: {$0.id == author.id}) {
-                    book.authors.remove(at: i)
+        for author in book.authors
+            where !selectedAuthors.map({$0.id}).contains(author.id) {
+                if let ix = book.authors.firstIndex(where: {$0.id == author.id}) {
+                    book.authors.remove(at: ix)
                 }
-            }
         }
         // add authors from selectedAuthors
-        for author in selectedAuthors {
-            if !book.authors.map({$0.id}).contains(author.id) {
+        for author in selectedAuthors
+            where !book.authors.map({$0.id}).contains(author.id) {
                 book.authors.append(author)
-            }
         }
     }
 }
@@ -227,7 +225,9 @@ struct EditBookView: View {
 #Preview {
     let container = Book.preview
     let fetchDescriptor = FetchDescriptor<Book>()
+    // swiftlint:disable force_try
     let book = try! container.mainContext.fetch(fetchDescriptor)[0]
+    // swiftlint:enable force_try
     return NavigationStack {
         EditBookView(book: book, updated: { })
             .modelContainer(Book.preview)

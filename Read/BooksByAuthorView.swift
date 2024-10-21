@@ -13,7 +13,7 @@ struct BooksByAuthorView: View {
     @Query private var authors: [Author]
     @State private var newBook = false
     @State private var newAuthor = false
-    @State private var editAuthor: Author? = nil
+    @State private var editAuthor: Author?
 
     let searchActive: Bool
 
@@ -131,7 +131,7 @@ struct BooksByAuthorView: View {
 }
 
 #Preview {
-    NavigationStack() {
+    NavigationStack {
         BooksByAuthorView(search: "")
             .modelContainer(Book.preview)
             .navigationTitle("Authors")

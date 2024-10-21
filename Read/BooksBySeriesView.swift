@@ -14,7 +14,7 @@ struct BooksBySeriesView: View {
     @State private var newBook = false
     @State private var newAuthor = false
     @State private var newSeries = false
-    @State private var editSeries: Series? = nil
+    @State private var editSeries: Series?
 
     let searchActive: Bool
 

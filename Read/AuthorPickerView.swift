@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-fileprivate let addAuthor = "Add new author"
+private let addAuthor = "Add new author"
 
 struct AuthorPickerView: View {
     @Environment(\.modelContext) private var context
@@ -16,9 +16,9 @@ struct AuthorPickerView: View {
 
     @State private var selectedAuthor = addAuthor
     @State private var newAuthor = false
-    var selectAction: (Author) -> ()
+    var selectAction: (Author) -> Void
 
-    init(selectAction: @escaping (Author) -> ()) {
+    init(selectAction: @escaping (Author) -> Void) {
         let sortDescriptors: [SortDescriptor] = [
             SortDescriptor<Author>(\.lastName, comparator: .localized),
             SortDescriptor<Author>(\.firstName, comparator: .localized)

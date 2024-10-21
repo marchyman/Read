@@ -11,7 +11,7 @@ struct CancelOrAddView: View {
     @Environment(\.dismiss) var dismiss
 
     let addText: String
-    let addFunc: () -> ()
+    let addFunc: () -> Void
     let disabled: () -> Bool
 
     var body: some View {

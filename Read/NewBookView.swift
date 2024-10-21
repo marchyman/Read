@@ -128,7 +128,7 @@ struct NewBookView: View {
     func updateSeries(_ book: Book) {
         var aSeries: Series
 
-        if let existingSeries = series.first(where: { $0.name == seriesName } ) {
+        if let existingSeries = series.first(where: { $0.name == seriesName }) {
             aSeries = existingSeries
         } else {
             aSeries = Series(name: seriesName)

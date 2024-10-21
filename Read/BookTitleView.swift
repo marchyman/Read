@@ -41,7 +41,9 @@ struct BookTitleView: View {
 #Preview {
     let container = Book.preview
     let fetchDescriptor = FetchDescriptor<Book>()
+    // swiftlint:disable force_try
     let book = try! container.mainContext.fetch(fetchDescriptor)[0]
+    // swiftlint:enable force_try
     return List {
         BookTitleView(book: Book(title: "Book Title View Test"))
         BookTitleView(book: Book(title: "Future Release",

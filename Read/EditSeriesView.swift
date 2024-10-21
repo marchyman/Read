@@ -35,7 +35,3 @@ struct EditSeriesView: View {
         .padding()
     }
 }
-
-//#Preview {
-//    EditSeriesView()
-//}

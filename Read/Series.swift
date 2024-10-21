@@ -18,4 +18,3 @@ final class Series {
         self.books = []
     }
 }
-

@@ -55,7 +55,3 @@ struct EditAuthorView: View {
         author.firstName.isEmpty && author.lastName.isEmpty
     }
 }
-
-//#Preview {
-//    EditAuthorView()
-//}

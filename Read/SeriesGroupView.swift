@@ -27,7 +27,7 @@ struct SeriesGroupView: View {
 
     var body: some View {
         HStack {
-            
+
             TextField("series name", text: $seriesName)
                 .font(.title2)
                 .textFieldStyle(.roundedBorder)
@@ -61,7 +61,7 @@ struct SeriesGroupView: View {
                         autoselectSeries = false
                     }
                 }
-            
+
             LabeledContent {
                 TextField("#",
                           value: $seriesOrder, format: .number)
