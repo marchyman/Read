@@ -11,9 +11,11 @@ import SwiftData
 extension Book {
     @MainActor
     static var preview: ModelContainer {
+        // swiftlint:disable force_try
         let container = try! ModelContainer(
             for: Book.self,
             configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        // swiftlint:enable force_try
 
         // Define some books and add them to the container's context
         let books: [Book] = [
