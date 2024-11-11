@@ -21,7 +21,8 @@ struct BooksByAuthorView: View {
         searchActive = !search.isEmpty
         let sortDescriptors: [SortDescriptor<Author>] = [
             .init(\.lastName),
-            .init(\.firstName) ]
+            .init(\.firstName)
+        ]
         let predicate = #Predicate<Author> { author in
             if search.isEmpty {
                 return true
@@ -46,11 +47,16 @@ struct BooksByAuthorView: View {
                 }
             } else {
                 List {
-                    ForEach(authors) {item in
+                    ForEach(authors) { item in
                         DisclosureGroup(authorAndBookCount(author: item)) {
                             if item.books.isEmpty {
-                                Text("There are no book by this author (swipe left to delete).")
-                                    .italic()
+                                Text(
+                                    """
+                                    There are no books by this author \
+                                    (swipe left to delete).
+                                    """
+                                )
+                                .italic()
                             } else {
                                 ForEach(booksByTitle(item.books)) { book in
                                     BookTitleView(book: book)
@@ -125,7 +131,7 @@ struct BooksByAuthorView: View {
 
     func booksByTitle(_ books: [Book]?) -> [Book] {
         guard let books else { return [] }
-        let descriptors: [SortDescriptor<Book>] = [ .init(\.title) ]
+        let descriptors: [SortDescriptor<Book>] = [.init(\.title)]
         return books.sorted(using: descriptors)
     }
 }

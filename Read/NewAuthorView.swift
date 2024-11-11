@@ -24,9 +24,10 @@ struct NewAuthorView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            CancelOrAddView(addText: "Add New Author",
-                            addFunc: addAuthor,
-                            disabled: invalidAuthor)
+            CancelOrAddView(
+                addText: "Add New Author",
+                addFunc: addAuthor,
+                disabled: invalidAuthor)
             Form {
                 TextField("First name", text: $author.firstName)
                     .focused($focusedField, equals: .firstName)

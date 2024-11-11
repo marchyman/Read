@@ -5,8 +5,8 @@
 //  Created by Marco S Hyman on 11/6/23.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct EditBookView: View {
     @Environment(\.modelContext) private var context
@@ -52,7 +52,7 @@ struct EditBookView: View {
                                 Text(author.name)
                                     .font(.title2)
                             }
-                            .onDelete {indexSet in
+                            .onDelete { indexSet in
                                 withAnimation {
                                     for index in indexSet {
                                         selectedAuthors.remove(at: index)
@@ -65,15 +65,18 @@ struct EditBookView: View {
                 }
 
                 Section("Series") {
-                    SeriesGroupView(seriesName: $seriesName,
-                                    seriesOrder: $seriesOrder)
+                    SeriesGroupView(
+                        seriesName: $seriesName,
+                        seriesOrder: $seriesOrder)
                 }
 
                 Section("Release Date") {
                     DisclosureGroup(isExpanded: $isFutureRelease) {
                         LabeledContent {
-                            DatePicker("", selection: $release,
-                                       displayedComponents: .date)
+                            DatePicker(
+                                "", selection: $release,
+                                displayedComponents: .date
+                            )
                             .focused($focusedField, equals: .release)
                         } label: {
                             Text("Release Date")
@@ -209,15 +212,15 @@ struct EditBookView: View {
     func updateAuthors() {
         // remove any authors from the book that are not in selectedAuthors
         for author in book.authors
-            where !selectedAuthors.map({$0.id}).contains(author.id) {
-                if let ix = book.authors.firstIndex(where: {$0.id == author.id}) {
-                    book.authors.remove(at: ix)
-                }
+        where !selectedAuthors.map({ $0.id }).contains(author.id) {
+            if let ix = book.authors.firstIndex(where: { $0.id == author.id }) {
+                book.authors.remove(at: ix)
+            }
         }
         // add authors from selectedAuthors
         for author in selectedAuthors
-            where !book.authors.map({$0.id}).contains(author.id) {
-                book.authors.append(author)
+        where !book.authors.map({ $0.id }).contains(author.id) {
+            book.authors.append(author)
         }
     }
 }
@@ -229,7 +232,7 @@ struct EditBookView: View {
     let book = try! container.mainContext.fetch(fetchDescriptor)[0]
     // swiftlint:enable force_try
     return NavigationStack {
-        EditBookView(book: book, updated: { })
+        EditBookView(book: book, updated: {})
             .modelContainer(Book.preview)
     }
 }

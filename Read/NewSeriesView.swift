@@ -22,9 +22,10 @@ struct NewSeriesView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            CancelOrAddView(addText: "Add New Series",
-                            addFunc: addSeries,
-                            disabled: invalidSeries)
+            CancelOrAddView(
+                addText: "Add New Series",
+                addFunc: addSeries,
+                disabled: invalidSeries)
             Form {
                 TextField("Series name", text: $name)
                     .focused($focusedField, equals: .name)

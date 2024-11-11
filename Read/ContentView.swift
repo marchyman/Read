@@ -5,8 +5,8 @@
 //  Created by Marco S Hyman on 11/6/23.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct ContentView: View {
     @State private var searchText = ""
@@ -19,7 +19,7 @@ struct ContentView: View {
                     .searchable(text: $searchText, prompt: "Title search")
                     .navigationDestination(for: Book.self) { book in
                         EditBookView(book: book) {
-                             path.removeLast()
+                            path.removeLast()
                         }
                     }
 

@@ -5,8 +5,8 @@
 //  Created by Marco S Hyman on 11/6/23.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct NewBookView: View {
     @Environment(\.modelContext) private var context
@@ -34,9 +34,10 @@ struct NewBookView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            CancelOrAddView(addText: "Add New Book",
-                            addFunc: addBook,
-                            disabled: { title.isEmpty })
+            CancelOrAddView(
+                addText: "Add New Book",
+                addFunc: addBook,
+                disabled: { title.isEmpty })
 
             Form {
                 Section("Title") {
@@ -52,7 +53,7 @@ struct NewBookView: View {
                                 Text(author.name)
                                     .font(.title2)
                             }
-                            .onDelete {indexSet in
+                            .onDelete { indexSet in
                                 withAnimation {
                                     for index in indexSet {
                                         selectedAuthors.remove(at: index)
@@ -65,16 +66,21 @@ struct NewBookView: View {
                 }
 
                 Section("Series") {
-                    SeriesGroupView(seriesName: $seriesName,
-                                    seriesOrder: $seriesOrder)
+                    SeriesGroupView(
+                        seriesName: $seriesName,
+                        seriesOrder: $seriesOrder)
                 }
 
                 Section("Release Date") {
-                    DisclosureGroup("Select optional future release date",
-                                    isExpanded: $isFutureRelease) {
+                    DisclosureGroup(
+                        "Select optional future release date",
+                        isExpanded: $isFutureRelease
+                    ) {
                         LabeledContent {
-                            DatePicker("", selection: $release,
-                                       displayedComponents: .date)
+                            DatePicker(
+                                "", selection: $release,
+                                displayedComponents: .date
+                            )
                             .font(.title2)
                             .focused($focusedField, equals: .release)
                         } label: {

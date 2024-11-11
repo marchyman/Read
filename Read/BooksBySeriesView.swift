@@ -20,7 +20,7 @@ struct BooksBySeriesView: View {
 
     init(search: String) {
         searchActive = !search.isEmpty
-        let sortDescriptors: [SortDescriptor<Series>] = [ .init(\.name) ]
+        let sortDescriptors: [SortDescriptor<Series>] = [.init(\.name)]
         let predicate = #Predicate<Series> { series in
             if search.isEmpty {
                 return true
@@ -47,8 +47,13 @@ struct BooksBySeriesView: View {
                     ForEach(series) { item in
                         DisclosureGroup(item.name) {
                             if item.books.isEmpty {
-                                Text("There are no books in this series (swipe left to delete).")
-                                    .italic()
+                                Text(
+                                    """
+                                    There are no books in this series \
+                                    (swipe left to delete).
+                                    """
+                                )
+                                .italic()
                             } else {
                                 ForEach(booksBySeriesOrder(item.books)) { book in
                                     BookTitleView(book: book)
@@ -118,8 +123,9 @@ struct BooksBySeriesView: View {
 
     func booksBySeriesOrder(_ books: [Book]?) -> [Book] {
         guard let books else { return [] }
-        let descriptors: [SortDescriptor<Book>] = [ .init(\.seriesOrder,
-                                                          order: .reverse) ]
+        let descriptors: [SortDescriptor<Book>] = [
+            .init(\.seriesOrder, order: .reverse)
+        ]
         return books.sorted(using: descriptors)
     }
 }

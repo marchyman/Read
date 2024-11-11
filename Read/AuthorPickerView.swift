@@ -46,7 +46,7 @@ struct AuthorPickerView: View {
                 if selectedAuthor == addAuthor {
                     newAuthor.toggle()
                 } else {
-                    if let author = authors.first(where: { $0.name == selectedAuthor}) {
+                    if let author = authors.first(where: { $0.name == selectedAuthor }) {
                         selectAction(author)
                     }
                     selectedAuthor = ""

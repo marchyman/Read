@@ -22,15 +22,17 @@ struct BookTitleView: View {
                 }
             }
             HStack(alignment: .top) {
-                    ForEach(book.authors) { author in
-                        Text(author.name)
-                            .foregroundStyle(.secondary)
-                    }
+                ForEach(book.authors) { author in
+                    Text(author.name)
+                        .foregroundStyle(.secondary)
+                }
                 .padding(.leading)
                 Spacer()
                 if let release = book.release {
-                    Text("Release date: \(release.formatted(date: .abbreviated, time: .omitted))")
-                        .padding(.trailing)
+                    Text(
+                        "Release date: \(release.formatted(date: .abbreviated, time: .omitted))"
+                    )
+                    .padding(.trailing)
                 }
             }
         }
@@ -46,10 +48,13 @@ struct BookTitleView: View {
     // swiftlint:enable force_try
     return List {
         BookTitleView(book: Book(title: "Book Title View Test"))
-        BookTitleView(book: Book(title: "Future Release",
-                                 release: Calendar.current.date(byAdding: .day,
-                                                                value: 1,
-                                                                to: Date())!))
+        BookTitleView(
+            book: Book(
+                title: "Future Release",
+                release: Calendar.current.date(
+                    byAdding: .day,
+                    value: 1,
+                    to: Date())!))
         BookTitleView(book: book)
     }
 }

@@ -17,7 +17,7 @@ struct BooksByTitleView: View {
 
     init(search: String) {
         searchActive = !search.isEmpty
-        let sortDescriptors: [SortDescriptor<Book>] = [ .init(\.title) ]
+        let sortDescriptors: [SortDescriptor<Book>] = [.init(\.title)]
         let predicate = #Predicate<Book> { book in
             if search.isEmpty {
                 return true

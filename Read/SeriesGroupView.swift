@@ -63,10 +63,9 @@ struct SeriesGroupView: View {
                 }
 
             LabeledContent {
-                TextField("#",
-                          value: $seriesOrder, format: .number)
-                .textFieldStyle(.roundedBorder)
-                .focused($focusedField, equals: .seriesOrder)
+                TextField("#", value: $seriesOrder, format: .number)
+                    .textFieldStyle(.roundedBorder)
+                    .focused($focusedField, equals: .seriesOrder)
             } label: {
                 Text("Series order: ")
                     .font(.headline)
@@ -77,7 +76,8 @@ struct SeriesGroupView: View {
     }
 
     func lookups(prefix: String) -> [String] {
-        return series
+        return
+            series
             .map { $0.name }
             .filter { $0.localizedStandardContains(prefix) }
     }

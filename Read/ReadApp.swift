@@ -5,8 +5,8 @@
 //  Created by Marco S Hyman on 11/6/23.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct ReadApp: App {

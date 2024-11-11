@@ -4,8 +4,8 @@
 // https://www.snafu.org/
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct EditSeriesView: View {
     @Environment(\.modelContext) private var context
