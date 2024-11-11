@@ -9,12 +9,13 @@ import SwiftData
 import SwiftUI
 
 private let addAuthor = "Add new author"
+private let pickAuthor = "Select author(s)"
 
 struct AuthorPickerView: View {
     @Environment(\.modelContext) private var context
     @Query private var authors: [Author]
 
-    @State private var selectedAuthor = addAuthor
+    @State private var selectedAuthor = pickAuthor
     @State private var newAuthor = false
     var selectAction: (Author) -> Void
 
@@ -30,7 +31,9 @@ struct AuthorPickerView: View {
     var body: some View {
         HStack {
             Picker(selection: $selectedAuthor) {
-                Text("Add new author")
+                Text(pickAuthor)
+                    .tag(pickAuthor)
+                Text(addAuthor)
                     .tag(addAuthor)
                 ForEach(authors) {
                     Text($0.name)
