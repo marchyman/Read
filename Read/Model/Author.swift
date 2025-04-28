@@ -14,6 +14,7 @@ final class Author {
     var lastName: String = ""
     var firstName: String = ""
     var books: [Book]!
+    var expanded: Bool = false
 
     var name: String {
         return "\(firstName) \(lastName)"
@@ -23,5 +24,6 @@ final class Author {
         self.lastName = lastName
         self.firstName = firstName
         self.books = []
+        self.expanded = false
     }
 }

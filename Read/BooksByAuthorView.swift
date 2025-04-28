@@ -48,7 +48,9 @@ struct BooksByAuthorView: View {
             } else {
                 List {
                     ForEach(authors) { item in
-                        DisclosureGroup(authorAndBookCount(author: item)) {
+                        @Bindable var item = item
+                        DisclosureGroup(authorAndBookCount(author: item),
+                                        isExpanded: $item.expanded) {
                             if item.books.isEmpty {
                                 Text(
                                     """
@@ -65,6 +67,9 @@ struct BooksByAuthorView: View {
                         }
                         .onLongPressGesture {
                             editAuthor = item
+                        }
+                        .onTapGesture {
+                            item.expanded.toggle()
                         }
                         .sheet(item: $editAuthor) { item in
                             EditAuthorView(author: item)
