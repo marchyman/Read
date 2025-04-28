@@ -52,7 +52,7 @@ struct AuthorPickerView: View {
                     if let author = authors.first(where: { $0.name == selectedAuthor }) {
                         selectAction(author)
                     }
-                    selectedAuthor = ""
+                    selectedAuthor = pickAuthor
                 }
             }
         }
