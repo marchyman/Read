@@ -45,7 +45,8 @@ struct BooksBySeriesView: View {
             } else {
                 List {
                     ForEach(series) { item in
-                        DisclosureGroup(item.name) {
+                        @Bindable var item = item
+                        DisclosureGroup(item.name, isExpanded: j$item.expanded) {
                             if item.books.isEmpty {
                                 Text(
                                     """
@@ -59,6 +60,9 @@ struct BooksBySeriesView: View {
                                     BookTitleView(book: book)
                                 }
                             }
+                        }
+                        .onTapGesture {
+                            item.expanded.toggle()
                         }
                         .onLongPressGesture {
                             editSeries = item
