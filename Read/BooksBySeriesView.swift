@@ -46,7 +46,7 @@ struct BooksBySeriesView: View {
                 List {
                     ForEach(series) { item in
                         @Bindable var item = item
-                        DisclosureGroup(item.name, isExpanded: j$item.expanded) {
+                        DisclosureGroup(item.name, isExpanded: $item.expanded) {
                             if item.books.isEmpty {
                                 Text(
                                     """
