@@ -43,7 +43,7 @@ targets:
     sources:
       - Read
     info:
-      path: Read/Info.plist
+      path: Read/Gen/Info.plist
       properties:
         UIBackgroundModes:
           - remote-notification
@@ -57,20 +57,19 @@ targets:
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
     entitlements:
-      path: Read/Read.entitlements
+      path: Read/Gen/Read.entitlements
       properties:
         aps-environment: development
         com.apple.developer.icloud-container-identifiers:
           - iCloud.org.snafu.Read
         com.apple.developer.icloud-services:
           - CloudKit
-    preBuildScripts:
+    postBuildScripts:
       - path: Config/buildversion
         name: Build Version
-        inputFiles:
-          - $(SRCROOT)/plist.info
-        outputFiles:
-          - $(DERIVED_FILE_DIR)/plist.info
-    postCompileScripts:
+        showEnvVars: YES
+        basedOnDependencyAnalysis: NO
       - path: Config/swiftlint
         name: Swift Lint
+        showEnvVars: NO
+        basedOnDependencyAnalysis: NO
