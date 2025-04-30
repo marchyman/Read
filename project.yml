@@ -67,7 +67,7 @@ targets:
     postBuildScripts:
       - path: Config/buildversion
         name: Build Version
-        showEnvVars: YES
+        showEnvVars: NO
         basedOnDependencyAnalysis: NO
       - path: Config/swiftlint
         name: Swift Lint
