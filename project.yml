@@ -45,6 +45,7 @@ targets:
     info:
       path: Read/Gen/Info.plist
       properties:
+        UILaunchScreen: []
         UIApplicationSupportsMultipleScenes: YES
         UISceneConfigurations: []
         UIBackgroundModes:
