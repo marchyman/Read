@@ -45,6 +45,8 @@ targets:
     info:
       path: Read/Gen/Info.plist
       properties:
+        UIApplicationSupportsMultipleScenes: YES
+        UISceneConfigurations: []
         UIBackgroundModes:
           - remote-notification
         UISupportedInterfaceOrientations:
