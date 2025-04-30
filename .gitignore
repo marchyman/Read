@@ -2,8 +2,11 @@
 .DS_Store
 
 buildServer.json
+Info.plist
+Read.entitlements
 Build/
 DerivedData/
 xcuserdata/
+*.xcodeproj/
 *.xcworkspace/
 *.trace/
