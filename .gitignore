@@ -6,6 +6,7 @@ Info.plist
 Read.entitlements
 Build/
 DerivedData/
+Index.noindex/
 xcuserdata/
 *.xcodeproj/
 *.xcworkspace/
