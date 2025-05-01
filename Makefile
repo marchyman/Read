@@ -3,5 +3,5 @@ xcodebuild:
 	xcodebuild -scheme Read
 
 clean:
-	git clean -n -f -e buildServer.json -e Makefile
+	git clean -fx -e buildServer.json -e Makefile
 	# rm -rf Build DerivedData Index.noindex
