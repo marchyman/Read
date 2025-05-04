@@ -2,8 +2,8 @@
 .DS_Store
 
 buildServer.json
-Info.plist
 Read.entitlements
+
 Build/
 DerivedData/
 Index.noindex/
