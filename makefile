@@ -10,5 +10,8 @@ Build:	$(PROJECT).xcodeproj/project.pbxproj
 $(PROJECT).xcodeproj/project.pbxproj:	project.yml
 	xcodegen -c
 
+# remove files created during the build process
+# do **not** use the -d option to git clean as it will blow away .jj files
 clean:
-	git clean -fdx
+	git clean -fx
+	rm -rf Build DerivedData $(PROJECT).xcodeproj Index.noindex
