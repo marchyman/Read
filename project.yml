@@ -2,7 +2,7 @@ name: Read
 
 options:
   groupOrdering:
-    - order: [ Read, Packages, Products ]
+    - order: [ Read, ReadTests, Packages, Products ]
 
 settings:
   base:
@@ -39,7 +39,7 @@ targets:
     sources:
       - Read
     entitlements:
-      path: Read/Read.entitlements
+      path: Read/Supporting Files/Read.entitlements
       properties:
         aps-environment: development
         com.apple.developer.icloud-container-identifiers:
@@ -76,6 +76,20 @@ targets:
         name: Swift Lint
         showEnvVars: NO
         basedOnDependencyAnalysis: NO
+
+  ReadTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: 17.0
+    dependencies:
+      - target: Read
+    sources:
+      - ReadTests
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      PRODUCT_NAME: $(TARGET_NAME)
+      PRODUCT_BUNDLE_IDENTIFIER: org.snafu.ReadTests
+    schemes: none
  
 packages:
   UDF:
@@ -91,7 +105,8 @@ schemes:
     test:
       config: Debug
       gatherCoverageData: YES
-      # targets:
+      targets:
+        - ReadTests
     profile:
       config: Release
     analyze:
