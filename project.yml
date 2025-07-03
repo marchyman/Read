@@ -1,5 +1,9 @@
 name: Read
 
+options:
+  groupOrdering:
+    - order: [ Read, Packages, Products ]
+
 settings:
   base:
     ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
@@ -30,8 +34,18 @@ targets:
     type: application
     platform: iOS
     deploymentTarget: 17.0
+    dependencies:
+      - package: UDF
     sources:
       - Read
+    entitlements:
+      path: Read/Read.entitlements
+      properties:
+        aps-environment: development
+        com.apple.developer.icloud-container-identifiers:
+          - iCloud.org.snafu.Read
+        com.apple.developer.icloud-services:
+          - CloudKit
     settings:
       base:
         ENABLE_PREVIEWS: YES
@@ -53,14 +67,6 @@ targets:
         INFOPLIST_KEY_UIBackgroundModes:
           - remote-notification
         PRODUCT_BUNDLE_IDENTIFIER: org.snafu.Read
-    entitlements:
-      path: Read/Read.entitlements
-      properties:
-        aps-environment: development
-        com.apple.developer.icloud-container-identifiers:
-          - iCloud.org.snafu.Read
-        com.apple.developer.icloud-services:
-          - CloudKit
     postBuildScripts:
       - path: .buildversion.sh
         name: Build Version
@@ -70,3 +76,26 @@ targets:
         name: Swift Lint
         showEnvVars: NO
         basedOnDependencyAnalysis: NO
+ 
+packages:
+  UDF:
+    path: UDF
+
+schemes:
+  Read:
+    build:
+      targets:
+        Read: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: YES
+      # targets:
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+      revealArchiveInOrganizer: YES
