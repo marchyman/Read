@@ -104,6 +104,8 @@ schemes:
       config: Debug
     test:
       config: Debug
+      commandLineArguments:
+        "-TESTING": true
       gatherCoverageData: YES
       targets:
         - ReadTests
