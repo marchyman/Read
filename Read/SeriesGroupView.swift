@@ -1,16 +1,14 @@
 //
-//  SeriesGroupView.swift
-//  Read
-//
-//  Created by Marco S Hyman on 2/2/24.
+// Copyright 2024 Marco S Hyman
+// https://www.snafu.org/
 //
 
 import SwiftData
 import SwiftUI
+import UDF
 
 struct SeriesGroupView: View {
-    @Environment(\.modelContext) private var context
-    @Query(sort: [SortDescriptor<Series>(\.name)]) private var series: [Series]
+    @Environment(Store<BookState, ModelAction>.self) var store
 
     @Binding var seriesName: String
     @Binding var seriesOrder: Int
@@ -76,8 +74,7 @@ struct SeriesGroupView: View {
     }
 
     func lookups(prefix: String) -> [String] {
-        return
-            series
+        store.series
             .map { $0.name }
             .filter { $0.localizedStandardContains(prefix) }
     }

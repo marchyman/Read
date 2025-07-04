@@ -1,14 +1,14 @@
 //
-//  ContentView.swift
-//  Read
-//
-//  Created by Marco S Hyman on 11/6/23.
+// Copyright 2023 Marco S Hyman
+// https://www.snafu.org/
 //
 
 import SwiftData
 import SwiftUI
+import UDF
 
 struct ContentView: View {
+    @Environment(Store<BookState, ModelAction>.self) var store
     @State private var searchText = ""
     @State private var path = NavigationPath()
 
@@ -22,7 +22,6 @@ struct ContentView: View {
                             path.removeLast()
                         }
                     }
-
             }
             .tabItem {
                 Label("Titles", systemImage: "book.closed")
@@ -31,6 +30,11 @@ struct ContentView: View {
             NavigationStack {
                 BooksByAuthorView(search: searchText)
                     .searchable(text: $searchText, prompt: "Author search")
+                    .navigationDestination(for: Book.self) { book in
+                        EditBookView(book: book) {
+                            path.removeLast()
+                        }
+                    }
             }
             .tabItem {
                 Label("Authors", systemImage: "character.book.closed")
@@ -39,6 +43,11 @@ struct ContentView: View {
             NavigationStack {
                 BooksBySeriesView(search: searchText)
                     .searchable(text: $searchText, prompt: "Series search")
+                    .navigationDestination(for: Book.self) { book in
+                        EditBookView(book: book) {
+                            path.removeLast()
+                        }
+                    }
             }
             .tabItem {
                 Label("Series", systemImage: "books.vertical")
@@ -49,5 +58,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(Book.preview)
+        .environment(Store(initialState: BookState(forPreview: true,
+                                                   addTestData: true),
+                           reduce: ModelReducer()))
 }

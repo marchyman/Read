@@ -1,8 +1,6 @@
 //
-//  CancelOrAddView.swift
-//  Read
-//
-//  Created by Marco S Hyman on 1/31/24.
+// Copyright 2023 Marco S Hyman
+// https://www.snafu.org/
 //
 
 import SwiftUI

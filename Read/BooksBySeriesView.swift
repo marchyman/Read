@@ -1,44 +1,32 @@
 //
-//  BooksBySeriesView.swift
-//  Read
-//
-//  Created by Marco S Hyman on 1/29/24.
+// Copyright 2024 Marco S Hyman
+// https://www.snafu.org/
 //
 
 import SwiftData
 import SwiftUI
+import UDF
 
 struct BooksBySeriesView: View {
-    @Environment(\.modelContext) private var context
-    @Query private var series: [Series]
+    @Environment(Store<BookState, ModelAction>.self) var store
+
     @State private var newBook = false
-    @State private var newAuthor = false
-    @State private var newSeries = false
     @State private var editSeries: Series?
 
-    let searchActive: Bool
-
-    init(search: String) {
-        searchActive = !search.isEmpty
-        let sortDescriptors: [SortDescriptor<Series>] = [.init(\.name)]
-        let predicate = #Predicate<Series> { series in
-            if search.isEmpty {
-                return true
-            } else {
-                return series.name.localizedStandardContains(search)
-            }
-        }
-        _series = Query(filter: predicate, sort: sortDescriptors)
-    }
+    let search: String
 
     var body: some View {
+        let series = store.series.filter {
+            search.isEmpty ? true
+                           : $0.name.localizedStandardContains(search)
+        }
         VStack(alignment: .leading) {
             if series.isEmpty {
                 ContentUnavailableView {
                     Label("Books by Series", systemImage: "books.vertical")
                 } description: {
                     Text("No Series found.")
-                    if searchActive {
+                    if !search.isEmpty {
                         Text("Check your search string")
                     }
                 }
@@ -57,12 +45,16 @@ struct BooksBySeriesView: View {
                                 .italic()
                             } else {
                                 ForEach(booksBySeriesOrder(item.books)) { book in
-                                    BookTitleView(book: book)
+                                    NavigationLink(value: book) {
+                                        BookTitleView(book: book)
+                                    }
                                 }
                             }
                         }
                         .onTapGesture {
-                            item.expanded.toggle()
+                            withAnimation {
+                                item.expanded.toggle()
+                            }
                         }
                         .onLongPressGesture {
                             editSeries = item
@@ -74,7 +66,7 @@ struct BooksBySeriesView: View {
                     .onDelete { indexSet in
                         withAnimation {
                             for index in indexSet {
-                                context.delete(series[index])
+                                store.send(.onSeriesDelete(series[index]))
                             }
                         }
                     }
@@ -91,37 +83,14 @@ struct BooksBySeriesView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    newSeries = true
-                } label: {
-                    Text("Add Series")
-                }
-                .buttonStyle(.bordered)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    newAuthor = true
-                } label: {
-                    Text("Add Author")
-                }
-                .buttonStyle(.bordered)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
                     newBook = true
                 } label: {
-                    Text("Add book")
+                    Image(systemName: "plus.circle.fill")
                 }
-                .buttonStyle(.bordered)
             }
         }
         .sheet(isPresented: $newBook) {
             NewBookView()
-        }
-        .sheet(isPresented: $newAuthor) {
-            NewAuthorView()
-        }
-        .sheet(isPresented: $newSeries) {
-            NewSeriesView()
         }
     }
 
@@ -135,6 +104,11 @@ struct BooksBySeriesView: View {
 }
 
 #Preview {
-    BooksBySeriesView(search: "")
-        .modelContainer(Book.preview)
+    NavigationStack {
+        BooksBySeriesView(search: "")
+            .environment(Store(initialState: BookState(forPreview: true,
+                                                       addTestData: true),
+                               reduce: ModelReducer()))
+            .navigationTitle("Authors")
+    }
 }

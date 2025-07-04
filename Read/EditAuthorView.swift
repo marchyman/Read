@@ -1,15 +1,20 @@
 //
 // Copyright 2024 Marco S Hyman
-// See LICENSE file for info
 // https://www.snafu.org/
 //
 
 import SwiftData
 import SwiftUI
+import UDF
 
 struct EditAuthorView: View {
-    @Environment(\.modelContext) private var context
+    @Environment(Store<BookState, ModelAction>.self) var store
     @Environment(\.dismiss) private var dismiss
+
+    var author: Author
+
+    @State private var firstName: String = ""
+    @State private var lastName: String = ""
 
     enum FocusableFields: Hashable {
         case lastName
@@ -18,13 +23,14 @@ struct EditAuthorView: View {
 
     @FocusState private var focusedField: FocusableFields?
 
-    @Bindable var author: Author
-
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
                 Spacer()
                 Button {
+                    if author.firstName != firstName || author.lastName != lastName {
+                        store.send(.editAuthorDone(author, firstName, lastName))
+                    }
                     dismiss()
                 } label: {
                     Text("done")
@@ -34,11 +40,11 @@ struct EditAuthorView: View {
                 .disabled(doneDisabled())
             }
             Form {
-                TextField("First name", text: $author.firstName)
+                TextField("First name", text: $firstName)
                     .focused($focusedField, equals: .firstName)
                     .onSubmit { focusedField = .lastName }
 
-                TextField("Last name", text: $author.lastName)
+                TextField("Last name", text: $lastName)
                     .focused($focusedField, equals: .lastName)
                     .onSubmit { focusedField = .firstName }
             }
@@ -48,6 +54,8 @@ struct EditAuthorView: View {
         .padding()
         .onAppear {
             focusedField = .firstName
+            firstName = author.firstName
+            lastName = author.lastName
         }
     }
 

@@ -1,8 +1,6 @@
 //
-//  Series.swift
-//  Read
-//
-//  Created by Marco S Hyman on 1/31/24.
+// Copyright 2024 Marco S Hyman
+// https://www.snafu.org/
 //
 
 import Foundation

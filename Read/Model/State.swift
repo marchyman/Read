@@ -19,55 +19,25 @@ struct BookState {
             inMemory = true
         }
         bookDB = try! BookDB(inMemory: inMemory, addTestData: addTestData)
-        switch sortedBooks() {
-        case .success(let books):
-            self.books = books
-        case .failure(let error):
-            lastError = error.localizedDescription
-        }
-        switch sortedAuthors() {
-        case .success(let authors):
-            self.authors = authors
-        case .failure(let error):
-            lastError = error.localizedDescription
-        }
-        switch sortedSeries() {
-        case .success(let series):
-            self.series = series
-        case .failure(let error):
-            lastError = error.localizedDescription
-        }
+        self.books = (try? sortedBooks()) ?? []
+        self.authors = (try? sortedAuthors()) ?? []
+        self.series = (try? sortedSeries()) ?? []
     }
 }
 
 extension BookState {
-    func sortedBooks() -> Result<[Book], Error> {
-        do {
-            let books = try bookDB.read(sortBy: [SortDescriptor<Book>(\.title)])
-            return .success(books)
-        } catch {
-            return .failure(error)
-        }
+    func sortedBooks() throws -> [Book] {
+        return try bookDB.read(sortBy: [SortDescriptor<Book>(\.title)])
     }
 
-    func sortedAuthors() -> Result<[Author], Error> {
-        do {
-            let authors = try bookDB.read(sortBy: [
-                SortDescriptor<Author>(\.lastName),
-                SortDescriptor<Author>(\.firstName)
-            ])
-            return .success(authors)
-        } catch {
-            return .failure(error)
-        }
+    func sortedAuthors() throws -> [Author] {
+        return try bookDB.read(sortBy: [
+            SortDescriptor<Author>(\.lastName),
+            SortDescriptor<Author>(\.firstName)
+        ])
     }
 
-    func sortedSeries() -> Result<[Series], Error> {
-        do {
-            let series = try bookDB.read(sortBy: [SortDescriptor<Series>(\.name)])
-            return .success(series)
-        } catch {
-            return .failure(error)
-        }
+    func sortedSeries() throws -> [Series] {
+        return try bookDB.read(sortBy: [SortDescriptor<Series>(\.name)])
     }
 }

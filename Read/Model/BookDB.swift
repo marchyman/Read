@@ -72,26 +72,60 @@ extension BookDB {
 }
 
 // BookDB CRUD functions
+//
+// Design note: All database updates happen in the following functions.
+// At no time will the UI code modify a database item. Instead, the UI
+// code updates copies of the fields.  Updated fields are processed by
+// a reducer which then calls one of these functions to perform the
+// actual update.
+//
+// The read function is used to access arrays of current items in
+// a given order.
+//
+// And because every rule need and exception there is a case where the
+// UI code directly updates a database item: toggling a boolean the determines
+// if the contents of a disclosure group is presented.
+
 extension BookDB {
-    func create(book: Book) throws {
-        context.insert(book)
+    func create<T: PersistentModel>(item: T) throws {
+        context.insert(item)
         try context.save()
     }
 
-    // T is Book, Author, or Series
     func read<T: PersistentModel>(sortBy sortDescriptors: [SortDescriptor<T>]) throws -> [T] {
         let fetchDescriptor = FetchDescriptor<T>(sortBy: sortDescriptors)
         return try context.fetch(fetchDescriptor)
     }
 
-    func update(book: Book, author: Author) throws {
-        book.authors.append(author)
+    func update(book: Book, title: String) throws {
+        book.title = title
         try context.save()
     }
 
-    func update(book: Book, series: Series, order: Int) throws {
+    func update(book: Book, authors: [Author]) throws {
+        book.authors = authors
+        try context.save()
+    }
+
+    func update(book: Book, series: Series?, order: Int?) throws {
         book.series = series
         book.seriesOrder = order
+        try context.save()
+    }
+
+    func update(book: Book, order: Int?) throws {
+        book.seriesOrder = order
+        try context.save()
+    }
+
+    func update(author: Author, firstName: String, lastName: String) throws {
+        author.firstName = firstName
+        author.lastName = lastName
+        try context.save()
+    }
+
+    func update(series: Series, name: String) throws {
+        series.name = name
         try context.save()
     }
 

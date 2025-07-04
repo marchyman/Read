@@ -1,47 +1,32 @@
 //
-//  BooksByAuthorView.swift
-//  Read
-//
-//  Created by Marco S Hyman on 1/29/24.
+// Copyright 2024 Marco S Hyman
+// https://www.snafu.org/
 //
 
 import SwiftData
 import SwiftUI
+import UDF
 
 struct BooksByAuthorView: View {
-    @Environment(\.modelContext) private var context
-    @Query private var authors: [Author]
+    @Environment(Store<BookState, ModelAction>.self) var store
+
     @State private var newBook = false
-    @State private var newAuthor = false
     @State private var editAuthor: Author?
 
-    let searchActive: Bool
-
-    init(search: String) {
-        searchActive = !search.isEmpty
-        let sortDescriptors: [SortDescriptor<Author>] = [
-            .init(\.lastName),
-            .init(\.firstName)
-        ]
-        let predicate = #Predicate<Author> { author in
-            if search.isEmpty {
-                return true
-            } else {
-                return author.lastName.localizedStandardContains(search)
-                    || author.firstName.localizedStandardContains(search)
-            }
-        }
-        _authors = Query(filter: predicate, sort: sortDescriptors)
-    }
+    let search: String
 
     var body: some View {
+        let authors = store.authors.filter {
+            search.isEmpty ? true
+                           : $0.name.localizedStandardContains(search)
+        }
         VStack(alignment: .leading) {
             if authors.isEmpty {
                 ContentUnavailableView {
                     Label("Books by Author", systemImage: "character.book.closed")
                 } description: {
                     Text("No Authors found.")
-                    if searchActive {
+                    if !search.isEmpty {
                         Text("Check your search string")
                     }
                 }
@@ -52,16 +37,16 @@ struct BooksByAuthorView: View {
                         DisclosureGroup(authorAndBookCount(author: item),
                                         isExpanded: $item.expanded) {
                             if item.books.isEmpty {
-                                Text(
-                                    """
+                                Text("""
                                     There are no books by this author \
                                     (swipe left to delete).
-                                    """
-                                )
+                                    """)
                                 .italic()
                             } else {
                                 ForEach(booksByTitle(item.books)) { book in
-                                    BookTitleView(book: book)
+                                    NavigationLink(value: book) {
+                                        BookTitleView(book: book)
+                                    }
                                 }
                             }
                         }
@@ -69,7 +54,9 @@ struct BooksByAuthorView: View {
                             editAuthor = item
                         }
                         .onTapGesture {
-                            item.expanded.toggle()
+                            withAnimation {
+                                item.expanded.toggle()
+                            }
                         }
                         .sheet(item: $editAuthor) { item in
                             EditAuthorView(author: item)
@@ -78,7 +65,7 @@ struct BooksByAuthorView: View {
                     .onDelete { indexSet in
                         withAnimation {
                             for index in indexSet {
-                                context.delete(authors[index])
+                                store.send(.onAuthorDelete(authors[index]))
                             }
                         }
                     }
@@ -95,26 +82,14 @@ struct BooksByAuthorView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    newAuthor = true
-                } label: {
-                    Text("Add Author")
-                }
-                .buttonStyle(.bordered)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
                     newBook = true
                 } label: {
-                    Text("Add book")
+                    Image(systemName: "plus.circle.fill")
                 }
-                .buttonStyle(.bordered)
             }
         }
         .sheet(isPresented: $newBook) {
             NewBookView()
-        }
-        .sheet(isPresented: $newAuthor) {
-            NewAuthorView()
         }
     }
 
@@ -144,7 +119,9 @@ struct BooksByAuthorView: View {
 #Preview {
     NavigationStack {
         BooksByAuthorView(search: "")
-            .modelContainer(Book.preview)
+            .environment(Store(initialState: BookState(forPreview: true,
+                                                       addTestData: true),
+                               reduce: ModelReducer()))
             .navigationTitle("Authors")
     }
 }

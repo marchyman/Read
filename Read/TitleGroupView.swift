@@ -1,16 +1,14 @@
 //
-//  TitleGroupView.swift
-//  Read
-//
-//  Created by Marco S Hyman on 3/19/24.
+// Copyright 2024 Marco S Hyman
+// https://www.snafu.org/
 //
 
 import SwiftData
 import SwiftUI
+import UDF
 
 struct TitleGroupView: View {
-    @Environment(\.modelContext) private var context
-    @Query(sort: [SortDescriptor<Book>(\.title)]) private var books: [Book]
+    @Environment(Store<BookState, ModelAction>.self) var store
 
     @Binding var title: String
 
@@ -38,11 +36,16 @@ struct TitleGroupView: View {
                 }
                 .onChange(of: title) {
                     if title.count > 1 {
-                        matchingTitles = books.map { $0.title }
+                        matchingTitles = store.books.map { $0.title }
                             .filter {
                                 $0.localizedStandardContains(title)
                             }
-                        showMatchingTitles = !matchingTitles.isEmpty
+                        if matchingTitles.count == 1 &&
+                            title == matchingTitles[0] {
+                            showMatchingTitles = false
+                        } else {
+                            showMatchingTitles = !matchingTitles.isEmpty
+                        }
                     } else {
                         showMatchingTitles = false
                     }
@@ -53,5 +56,7 @@ struct TitleGroupView: View {
 
 #Preview {
     TitleGroupView(title: .constant(""))
-        .modelContainer(Book.preview)
+        .environment(Store(initialState: BookState(forPreview: true,
+                                                   addTestData: true),
+                           reduce: ModelReducer()))
 }

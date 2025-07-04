@@ -1,18 +1,17 @@
 //
-//  NewAuthorView.swift
-//  Read
-//
-//  Created by Marco S Hyman on 1/31/24.
+// Copyright 2024 Marco S Hyman
+// https://www.snafu.org/
 //
 
 import SwiftData
 import SwiftUI
+import UDF
 
 struct NewAuthorView: View {
-    @Environment(\.modelContext) private var context
+    @Environment(Store<BookState, ModelAction>.self) var store
     @Environment(\.dismiss) var dismiss
-    @Query private var authors: [Author]
     @State private var author: Author = Author(lastName: "")
+
     var selectedAuthor: Binding<String>?
 
     enum FocusableFields: Hashable {
@@ -48,17 +47,12 @@ struct NewAuthorView: View {
 
     func invalidAuthor() -> Bool {
         guard !author.lastName.isEmpty else { return true }
-        let match = authors.first(where: { $0.name == author.name })
+        let match = store.authors.first(where: { $0.name == author.name })
         return match != nil
     }
 
     func addAuthor() {
-        context.insert(author)
-        do {
-            try context.save()
-        } catch {
-            fatalError("NewAuthorView context.save")
-        }
+        store.send(.addAuthorButton(author))
         selectedAuthor?.wrappedValue = author.name
         dismiss()
     }
@@ -66,5 +60,7 @@ struct NewAuthorView: View {
 
 #Preview {
     NewAuthorView(selectedAuthor: .constant("none"))
-        .modelContainer(Book.preview)
+        .environment(Store(initialState: BookState(forPreview: true,
+                                                   addTestData: true),
+                           reduce: ModelReducer()))
 }

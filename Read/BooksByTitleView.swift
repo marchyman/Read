@@ -1,41 +1,30 @@
 //
-//  BooksByTitleView.swift
-//  Read
-//
-//  Created by Marco S Hyman on 1/29/24.
+// Copyright 2023 Marco S Hyman
+// https://www.snafu.org/
 //
 
 import SwiftData
 import SwiftUI
+import UDF
 
 struct BooksByTitleView: View {
-    @Environment(\.modelContext) private var context
-    @Query private var books: [Book]
+    @Environment(Store<BookState, ModelAction>.self) var store
     @State private var newBook = false
 
-    let searchActive: Bool
-
-    init(search: String) {
-        searchActive = !search.isEmpty
-        let sortDescriptors: [SortDescriptor<Book>] = [.init(\.title)]
-        let predicate = #Predicate<Book> { book in
-            if search.isEmpty {
-                return true
-            } else {
-                return book.title.localizedStandardContains(search)
-            }
-        }
-        _books = Query(filter: predicate, sort: sortDescriptors)
-    }
+    let search: String
 
     var body: some View {
+        let books = store.books.filter {
+            search.isEmpty ? true
+                           : $0.title.localizedStandardContains(search)
+        }
         VStack(alignment: .leading) {
             if books.isEmpty {
                 ContentUnavailableView {
                     Label("Books by Title", systemImage: "book.closed")
                 } description: {
                     Text("No Books found.")
-                    if searchActive {
+                    if !search.isEmpty {
                         Text("Check your search string")
                     }
                 }
@@ -49,7 +38,7 @@ struct BooksByTitleView: View {
                     .onDelete { indexSet in
                         withAnimation {
                             for index in indexSet {
-                                context.delete(books[index])
+                                store.send(.onBookDelete(books[index]))
                             }
                         }
                     }
@@ -68,9 +57,8 @@ struct BooksByTitleView: View {
                 Button {
                     newBook = true
                 } label: {
-                    Text("Add book")
+                    Image(systemName: "plus.circle.fill")
                 }
-                .buttonStyle(.bordered)
             }
         }
         .sheet(isPresented: $newBook) {
@@ -82,7 +70,9 @@ struct BooksByTitleView: View {
 #Preview {
     NavigationStack {
         BooksByTitleView(search: "")
-            .modelContainer(Book.preview)
+            .environment(Store(initialState: BookState(forPreview: true,
+                                                       addTestData: true),
+                               reduce: ModelReducer()))
             .navigationTitle("Books")
     }
 }

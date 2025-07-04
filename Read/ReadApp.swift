@@ -1,30 +1,21 @@
 //
-//  ReadApp.swift
-//  Read
-//
-//  Created by Marco S Hyman on 11/6/23.
+// Copyright 2023 Marco S Hyman
+// https://www.snafu.org/
 //
 
 import SwiftData
 import SwiftUI
+import UDF
 
 @main
 struct ReadApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([Book.self])
-        let modelConfiguration = ModelConfiguration(schema: schema)
-
-        do {
-            return try ModelContainer(for: schema)
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
+    @State private var store = Store(initialState: BookState(),
+                                     reduce: ModelReducer(),
+                                     name: "Books DB Store")
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(sharedModelContainer)
+        .environment(store)
     }
 }

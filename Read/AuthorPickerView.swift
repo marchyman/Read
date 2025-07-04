@@ -1,32 +1,22 @@
 //
-//  AuthorPickerView.swift
-//  Read
-//
-//  Created by Marco S Hyman on 1/30/24.
+// Copyright 2024 Marco S Hyman
+// https://www.snafu.org/
 //
 
 import SwiftData
 import SwiftUI
+import UDF
 
 private let addAuthor = "Add new author"
 private let pickAuthor = "Select author(s)"
 
 struct AuthorPickerView: View {
-    @Environment(\.modelContext) private var context
-    @Query private var authors: [Author]
+    @Environment(Store<BookState, ModelAction>.self) var store
+
+    var selectAction: (Author) -> Void
 
     @State private var selectedAuthor = pickAuthor
     @State private var newAuthor = false
-    var selectAction: (Author) -> Void
-
-    init(selectAction: @escaping (Author) -> Void) {
-        let sortDescriptors: [SortDescriptor] = [
-            SortDescriptor<Author>(\.lastName, comparator: .localized),
-            SortDescriptor<Author>(\.firstName, comparator: .localized)
-        ]
-        _authors = Query(sort: sortDescriptors)
-        self.selectAction = selectAction
-    }
 
     var body: some View {
         HStack {
@@ -35,7 +25,7 @@ struct AuthorPickerView: View {
                     .tag(pickAuthor)
                 Text(addAuthor)
                     .tag(addAuthor)
-                ForEach(authors) {
+                ForEach(store.authors) {
                     Text($0.name)
                         .tag($0.name)
                 }
@@ -49,7 +39,9 @@ struct AuthorPickerView: View {
                 if selectedAuthor == addAuthor {
                     newAuthor.toggle()
                 } else {
-                    if let author = authors.first(where: { $0.name == selectedAuthor }) {
+                    if let author = store.authors.first(where: {
+                        $0.name == selectedAuthor
+                    }) {
                         selectAction(author)
                     }
                     selectedAuthor = pickAuthor
@@ -67,7 +59,9 @@ struct AuthorPickerView: View {
     Form {
         Section("Authors") {
             AuthorPickerView(selectAction: { _ in })
-                .modelContainer(Book.preview)
+                .environment(Store(initialState: BookState(forPreview: true,
+                                                           addTestData: true),
+                                   reduce: ModelReducer()))
         }
     }
 }

@@ -1,13 +1,11 @@
 //
-//  BookTitleView.swift
-//  Read
-//
-//  Created by Marco S Hyman on 1/31/24.
+// Copyright 2024 Marco S Hyman
+// https://www.snafu.org/
 //
 
 import SwiftData
 import SwiftUI
-
+import UDF
 struct BookTitleView: View {
     var book: Book
 
@@ -41,20 +39,16 @@ struct BookTitleView: View {
 }
 
 #Preview {
-    let container = Book.preview
-    let fetchDescriptor = FetchDescriptor<Book>()
-    // swiftlint:disable force_try
-    let book = try! container.mainContext.fetch(fetchDescriptor)[0]
-    // swiftlint:enable force_try
-    return List {
-        BookTitleView(book: Book(title: "Book Title View Test"))
-        BookTitleView(
-            book: Book(
-                title: "Future Release",
-                release: Calendar.current.date(
-                    byAdding: .day,
-                    value: 1,
-                    to: Date())!))
-        BookTitleView(book: book)
+    let store = Store(initialState: BookState(forPreview: true,
+                                              addTestData: true),
+                      reduce: ModelReducer())
+
+    // Does not work if I use List(store.books) or ForEach(store.books)?
+
+    List {
+        BookTitleView(book: store.books[0])
+        BookTitleView(book: store.books[1])
+        BookTitleView(book: store.books[2])
+        BookTitleView(book: store.books[3])
     }
 }

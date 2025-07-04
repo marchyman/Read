@@ -1,23 +1,28 @@
 //
-// Copyright 2024 Marco S Hyman
-// See LICENSE file for info
+// Copyright 2025 Marco S Hyman
 // https://www.snafu.org/
 //
 
 import SwiftData
 import SwiftUI
+import UDF
 
 struct EditSeriesView: View {
-    @Environment(\.modelContext) private var context
+    @Environment(Store<BookState, ModelAction>.self) var store
     @Environment(\.dismiss) private var dismiss
 
-    @Bindable var series: Series
+    let series: Series
+
+    @State private var name = ""
 
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
                 Spacer()
                 Button {
+                    if series.name != name {
+                        store.send(.editSeriesDone(series, name))
+                    }
                     dismiss()
                 } label: {
                     Text("done")
@@ -26,12 +31,15 @@ struct EditSeriesView: View {
                 .buttonStyle(.bordered)
             }
             Form {
-                TextField("Series name", text: $series.name)
+                TextField("Series name", text: $name)
                     .cornerRadius(8)
             }
             .cornerRadius(8)
             Spacer()
         }
         .padding()
+        .onAppear {
+            name = series.name
+        }
     }
 }
