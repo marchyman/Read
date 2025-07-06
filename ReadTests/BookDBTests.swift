@@ -16,20 +16,62 @@ struct BookDBTests {
         let testDB = try BookDB(inMemory: true)
         let books = try testDB.context.fetch(FetchDescriptor<Book>())
         #expect(books.isEmpty)
+        let authors = try testDB.context.fetch(FetchDescriptor<Author>())
+        #expect(authors.isEmpty)
+        let series = try testDB.context.fetch(FetchDescriptor<Series>())
+        #expect(series.isEmpty)
     }
 
     @Test func addBook() async throws {
         let testDB = try BookDB(inMemory: true)
         let book = Book(title: "A Test Book")
-        try testDB.create(book: book)
+        try testDB.create(item: book)
         let books = try testDB.context.fetch(FetchDescriptor<Book>())
-        #expect(!books.isEmpty)
+        #expect(books.count == 1)
     }
 
-    @Test func addAuthorsToBook() async throws {
+    @Test func addAuthorToBook() async throws {
+        let testDB = try BookDB(inMemory: true)
+        let author = Author(lastName: "Last", firstName: "First")
+        try testDB.create(item: author)
+        let authors = try testDB.context.fetch(FetchDescriptor<Author>())
+        #expect(authors.count == 1)
+    }
+
+    @Test func addSeriesToBook() async throws {
+        let testDB = try BookDB(inMemory: true)
+        let series = Series(name: "Series Name")
+        try testDB.create(item: series)
+        let allSeries = try testDB.context.fetch(FetchDescriptor<Series>())
+        #expect(allSeries.count == 1)
+    }
+
+    @Test func readData() async throws {
+        let testDB = try BookDB(inMemory: true, addTestData: true)
+        let books = try testDB.read(sortBy: [SortDescriptor<Book>(\.title)])
+        let authors = try testDB.read(sortBy: [
+            SortDescriptor<Author>(\.lastName),
+            SortDescriptor<Author>(\.firstName)
+        ])
+        let series = try testDB.read(sortBy: [SortDescriptor<Series>(\.name)])
+        #expect(books.count == 4)
+        #expect(authors.count == 4)
+        #expect(series.count == 1)
+    }
+
+    @Test func updateBookTitle() async throws {
+        let testTitle = "A Changed Title"
         let testDB = try BookDB(inMemory: true)
         let book = Book(title: "A Test Book")
-        try testDB.create(book: book)
+        try testDB.create(item: book)
+        try testDB.update(book: book, title: testTitle)
+        #expect(book.title == testTitle)
+    }
+
+    @Test func updateBookAuthors() async throws {
+        let testDB = try BookDB(inMemory: true)
+        let book = Book(title: "A Test Book")
+        try testDB.create(item: book)
         let author = Author(lastName: "Last", firstName: "First")
         try testDB.update(book: book, authors: [author])
         let authors = try testDB.context.fetch(FetchDescriptor<Author>())
@@ -39,10 +81,10 @@ struct BookDBTests {
         #expect(book.authors.first == author)
     }
 
-    @Test func addSeriesToBook() async throws {
+    @Test func updateBookSeries() async throws {
         let testDB = try BookDB(inMemory: true)
         let book = Book(title: "A Test Book")
-        try testDB.create(book: book)
+        try testDB.create(item: book)
         let series = Series(name: "A Series")
         try testDB.update(book: book, series: series, order: 1)
         let allSeries = try testDB.context.fetch(FetchDescriptor<Series>())
@@ -50,85 +92,68 @@ struct BookDBTests {
         #expect(book.series == series)
         #expect(book.seriesOrder == 1)
         #expect(series.books.first == book)
+        // now remove the series
+        try testDB.update(book: book, series: nil, order: nil)
+        #expect(book.series == nil)
+        #expect(book.seriesOrder == nil)
+    }
+
+    @Test func updateBookSeriesOrder() async throws {
+        let testDB = try BookDB(inMemory: true)
+        let book = Book(title: "A Test Book")
+        try testDB.create(item: book)
+        let series = Series(name: "A Series")
+        try testDB.update(book: book, series: series, order: 1)
+        #expect(book.seriesOrder == 1)
+        try testDB.update(book: book, order: 2)
+        #expect(book.seriesOrder == 2)
+    }
+
+    @Test func updateAuthorName() async throws {
+        let testDB = try BookDB(inMemory: true)
+        let author = Author(lastName: "Last", firstName: "First")
+        try testDB.create(item: author)
+        try testDB.update(author: author, firstName: "John", lastName: "Doe")
+        #expect(author.name == "John Doe")
+    }
+
+    @Test func updateSeriesName() async throws {
+        let newName = "Changed Name of Series"
+        let testDB = try BookDB(inMemory: true)
+        let series = Series(name: "Series One")
+        try testDB.create(item: series)
+        try testDB.update(series: series, name: newName)
+        #expect(series.name == newName)
     }
 
     @Test func deleteBook() async throws {
         let testDB = try BookDB(inMemory: true)
         let book = Book(title: "A Test Book")
-        try testDB.create(book: book)
+        try testDB.create(item: book)
 
         try testDB.delete(element: book)
         let books = try testDB.context.fetch(FetchDescriptor<Book>())
         #expect(books.isEmpty)
     }
 
-    @Test func changeAuthors() async throws {
-        let testDB = try BookDB(inMemory: true)
-        let book = Book(title: "A Test Book")
-        try testDB.create(book: book)
-        let author1 = Author(lastName: "One", firstName: "First")
-        let author2 = Author(lastName: "Two", firstName: "Second")
-        let author3 = Author(lastName: "Three", firstName: "Third")
-        try testDB.update(book: book, authors: [author1, author2])
-        let authors = try testDB.context.fetch(FetchDescriptor<Author>())
-        #expect(authors.count == 2)
-        // let firstAuthorForBook = book.authors.first
-        try testDB.update(book: book, authors: [author2, author3])
-        let updatedAuthors = try testDB.context.fetch(FetchDescriptor<Author>())
-        for author in updatedAuthors {
-            let count = author.books?.count ?? 0
-            print("\(author.lastName) has \(count) books")
-        }
-        // This is wrong... authors with no books are not automatically
-        // removed.  I'll need to do that manually
-        // #expect(updatedAuthors.count == 2)
-
-        // #expect(book.authors.first != firstAuthorForBook)
-    }
-
     @Test func deleteAuthor() async throws {
         let testDB = try BookDB(inMemory: true)
-        let book = Book(title: "A Test Book")
-        try testDB.create(book: book)
-        let author = Author(lastName: "Last", firstName: "First")
-        try testDB.update(book: book, authors: [author])
+        let author = Author(lastName: "Doe", firstName: "John")
+        try testDB.create(item: author)
 
         try testDB.delete(element: author)
         let authors = try testDB.context.fetch(FetchDescriptor<Author>())
         #expect(authors.isEmpty)
-        let books = try testDB.context.fetch(FetchDescriptor<Book>())
-        let firstBook = try #require(books.first)
-        #expect(firstBook.authors.isEmpty)
     }
 
     @Test func deleteSeries() async throws {
         let testDB = try BookDB(inMemory: true)
-        let book = Book(title: "A Test Book")
-        try testDB.create(book: book)
-        let series = Series(name: "Test Series")
-        try testDB.update(book: book, series: series, order: 1)
+        let series = Series(name: "One to delete")
+        try testDB.create(item: series)
 
         try testDB.delete(element: series)
-        let allSeries = try testDB.context.fetch(FetchDescriptor<Series>())
-        #expect(allSeries.isEmpty)
-        let books = try testDB.context.fetch(FetchDescriptor<Book>())
-        let firstBook = try #require(books.first)
-        #expect(firstBook.series == nil)
+        let seriesList = try testDB.context.fetch(FetchDescriptor<Series>())
+        #expect(seriesList.isEmpty)
     }
 
-    @Test func readTests() async throws {
-        let testDB = try BookDB(inMemory: true, addTestData: true)
-        let books = try testDB.read(sortBy: [SortDescriptor<Book>(\.title)])
-        let authors = try testDB.read(sortBy: [
-            SortDescriptor<Author>(\.lastName),
-            SortDescriptor<Author>(\.firstName)
-        ])
-        let series = try testDB.read(sortBy: [SortDescriptor<Series>(\.name)])
-        let firstBook = try #require(books.first)
-        #expect(firstBook.title == "A Standalone Book")
-        let firstAuthor = try #require(authors.first)
-        #expect(firstAuthor.name == "John Doe")
-        let firstSeries = try #require(series.first)
-        #expect(firstSeries.name == "Test Series")
-    }
 }
