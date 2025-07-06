@@ -10,6 +10,7 @@ import UDF
 struct BooksByTitleView: View {
     @Environment(Store<BookState, ModelAction>.self) var store
     @State private var newBook = false
+    @State private var updater = false
 
     let search: String
 
@@ -44,6 +45,7 @@ struct BooksByTitleView: View {
                     }
                 }
                 .listStyle(.plain)
+                .id(updater)
             }
         }
         .padding(.horizontal)
@@ -63,6 +65,11 @@ struct BooksByTitleView: View {
         }
         .sheet(isPresented: $newBook) {
             NewBookView()
+        }
+        .onChange(of: store.state) {
+            // otherwise the list may not know the data that makes up
+            // BookTitleView changed.
+            updater.toggle()
         }
     }
 }

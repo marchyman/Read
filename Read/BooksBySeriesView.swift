@@ -49,6 +49,7 @@ struct BooksBySeriesView: View {
                                         BookTitleView(book: book)
                                     }
                                 }
+                                .deleteDisabled(true)
                             }
                         }
                         .onTapGesture {

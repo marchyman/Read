@@ -48,6 +48,7 @@ struct BooksByAuthorView: View {
                                         BookTitleView(book: book)
                                     }
                                 }
+                                .deleteDisabled(true)
                             }
                         }
                         .onLongPressGesture {

@@ -211,7 +211,10 @@ extension ModelReducer {
     private func onSeriesDelete(state: inout BookState, series: Series) {
         let name = series.name
         do {
-            series.books = []
+            for book in series.books {
+                book.series = nil
+                book.seriesOrder = nil
+            }
             try state.bookDB.delete(element: series)
             state.series = try state.sortedSeries()
             logger.info("Deleted series \(name, privacy: .public)")
