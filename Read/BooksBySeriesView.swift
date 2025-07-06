@@ -93,7 +93,9 @@ struct BooksBySeriesView: View {
             NewBookView()
         }
     }
+}
 
+extension BooksBySeriesView {
     func booksBySeriesOrder(_ books: [Book]?) -> [Book] {
         guard let books else { return [] }
         let descriptors: [SortDescriptor<Book>] = [

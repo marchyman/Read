@@ -178,6 +178,7 @@ extension ModelReducer {
     private func onAuthorDelete(state: inout BookState, author: Author) {
         let name = author.name
         do {
+            author.books = []
             try state.bookDB.delete(element: author)
             state.authors = try state.sortedAuthors()
             logger.info("Deleted author \(name, privacy: .public)")
@@ -210,6 +211,7 @@ extension ModelReducer {
     private func onSeriesDelete(state: inout BookState, series: Series) {
         let name = series.name
         do {
+            series.books = []
             try state.bookDB.delete(element: series)
             state.series = try state.sortedSeries()
             logger.info("Deleted series \(name, privacy: .public)")

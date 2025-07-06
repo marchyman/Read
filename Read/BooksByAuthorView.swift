@@ -92,6 +92,9 @@ struct BooksByAuthorView: View {
             NewBookView()
         }
     }
+}
+
+extension BooksByAuthorView {
 
     func authorAndBookCount(author: Author) -> LocalizedStringKey {
         var name = "\(author.firstName) **\(author.lastName)**  --  "

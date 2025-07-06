@@ -6,7 +6,7 @@
 import OSLog
 import SwiftData
 
-struct BookState {
+struct BookState: Equatable {
     var books: [Book] = []
     var authors: [Author] = []
     var series: [Series] = []

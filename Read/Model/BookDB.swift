@@ -25,6 +25,12 @@ final class BookDB {
     }
 }
 
+extension BookDB: Equatable {
+    static func == (lhs: BookDB, rhs: BookDB) -> Bool {
+        lhs.container == rhs.container && lhs.context == rhs.context
+    }
+}
+
 // create test data for previews and unit tests
 
 extension BookDB {
@@ -130,10 +136,7 @@ extension BookDB {
     }
 
     func delete<T: PersistentModel>(element: T) throws {
-        let idToDelete = element.persistentModelID
-            try context.delete(model: T.self,
-                               where: #Predicate { element in
-                                   element.persistentModelID == idToDelete
-                               })
+        context.delete(element)
+        try context.save()
     }
 }
