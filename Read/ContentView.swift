@@ -27,7 +27,7 @@ struct ContentView: View {
                 Label("Titles", systemImage: "book.closed")
             }
 
-            NavigationStack {
+            NavigationStack(path: $path) {
                 BooksByAuthorView(search: searchText)
                     .searchable(text: $searchText, prompt: "Author search")
                     .navigationDestination(for: Book.self) { book in
@@ -40,7 +40,7 @@ struct ContentView: View {
                 Label("Authors", systemImage: "character.book.closed")
             }
 
-            NavigationStack {
+            NavigationStack(path: $path) {
                 BooksBySeriesView(search: searchText)
                     .searchable(text: $searchText, prompt: "Series search")
                     .navigationDestination(for: Book.self) { book in

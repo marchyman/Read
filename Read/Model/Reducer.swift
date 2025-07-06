@@ -84,7 +84,7 @@ extension ModelReducer {
         }
     }
 
-    // swiftlint:disable:next function_parameter_count cyclomatic_complexity
+    // swiftlint:disable:next function_parameter_count
     private func bookUpdateOrAddButtin(_ state: inout BookState,
                                        _ book: Book, _ title: String,
                                        _ authors: [Author],
@@ -103,50 +103,35 @@ extension ModelReducer {
             // title change
             if book.title != title {
                 book.title = title
+                try state.bookDB.update(book: book, title: title)
                 state.books = try state.sortedBooks()
+                logger.info("Updated book (title) \(title, privacy: .public)")
             }
             // author change
             if book.authors != authors {
-                for author in book.authors
-                where !authors.map({ $0.id }).contains(author.id) {
-                    // this author is no longer assigned to this book.
-                    // if this was the only book by the author remove the
-                    // author entry
-                    if author.books.count == 1 {
-                        do {
-                            try state.bookDB.delete(element: author)
-                        }
-                    }
-                }
                 try state.bookDB.update(book: book, authors: authors)
                 state.authors = try state.sortedAuthors()
+                logger.info("Updated book (authors) \(title, privacy: .public)")
             }
             // series change and/or series order change
             if seriesName.isEmpty {
-                if let series = book.series {
+                if book.series != nil {
                     // delete the series and the seriesOrder from the book
                     try state.bookDB.update(book: book, series: nil, order: nil)
-                    // if the series no longer contains any books delete it
-                    // as well
-                    if series.books == nil || series.books.isEmpty {
-                        try state.bookDB.delete(element: series)
-                        state.series = try state.sortedSeries()
-                    }
+                    logger.info("Updated book (removed series) \(title, privacy: .public)")
                 }
             } else {
                 let series = getSeries(matching: seriesName)
                 if book.series != series {
-                    if let series = book.series, series.books.count == 1 {
-                        try state.bookDB.delete(element: series)
-                    }
                     try state.bookDB.update(book: book, series: series,
                                             order: seriesOrder)
                     state.series = try state.sortedSeries()
+                    logger.info("Updated book (series) \(title, privacy: .public)")
                 } else if book.seriesOrder != seriesOrder {
                     try state.bookDB.update(book: book, order: seriesOrder)
+                    logger.info("Updated book (seriesOrder) \(title, privacy: .public)")
                 }
             }
-            logger.info("Updated book \(book.title, privacy: .public)")
         } catch {
             let errorTxt = error.localizedDescription
             state.lastError = errorTxt
