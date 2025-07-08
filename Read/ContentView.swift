@@ -3,12 +3,9 @@
 // https://www.snafu.org/
 //
 
-import SwiftData
 import SwiftUI
-import UDF
 
 struct ContentView: View {
-    @Environment(Store<BookState, ModelAction>.self) var store
     @State private var searchText = ""
     @State private var path = NavigationPath()
 
@@ -58,7 +55,4 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environment(Store(initialState: BookState(forPreview: true,
-                                                   addTestData: true),
-                           reduce: ModelReducer()))
 }

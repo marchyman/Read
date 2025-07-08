@@ -3,9 +3,7 @@
 // https://www.snafu.org/
 //
 
-import SwiftData
 import SwiftUI
-import UDF
 
 struct BookTitleView: View {
     var book: Book
@@ -39,7 +37,10 @@ struct BookTitleView: View {
     }
 }
 
+import UDF  // only needed for preview
+
 #Preview {
+
     let store = Store(initialState: BookState(forPreview: true,
                                               addTestData: true),
                       reduce: ModelReducer())
