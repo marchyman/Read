@@ -4,10 +4,13 @@
 //
 
 import SwiftUI
+import UDF
 
 struct ContentView: View {
+    @Environment(Store<BookState, ModelAction>.self) var store
     @State private var searchText = ""
     @State private var path = NavigationPath()
+    @State private var errorAlert = false
 
     var body: some View {
         TabView {
@@ -50,9 +53,26 @@ struct ContentView: View {
                 Label("Series", systemImage: "books.vertical")
             }
         }
+        .onChange(of: store.lastError) {
+            if store.lastError != nil {
+                errorAlert.toggle()
+            }
+        }
+        .alert("Something unexpected happened", isPresented: $errorAlert) {
+            // system provides a button to dismiss
+        } message: {
+            Text("""
+                Error text:
+
+                \(store.lastError ?? "unknown error")
+                """)
+        }
     }
 }
 
 #Preview {
     ContentView()
+        .environment(Store(initialState: BookState(forPreview: true,
+                                                   addTestData: true),
+                           reduce: ModelReducer()))
 }
