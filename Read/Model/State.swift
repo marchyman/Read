@@ -26,6 +26,8 @@ struct BookState: Equatable {
         self.books = (try? sortedBooks()) ?? []
         self.authors = (try? sortedAuthors()) ?? []
         self.series = (try? sortedSeries()) ?? []
+        Logger(subsystem: "org.snafu", category: "BookState")
+            .info("Book state created")
     }
 }
 

@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var searchText = ""
     @State private var path = NavigationPath()
     @State private var errorAlert = false
+    @State private var showLog = false
 
     var body: some View {
         TabView {
@@ -53,11 +54,26 @@ struct ContentView: View {
                 Label("Series", systemImage: "books.vertical")
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                Button {
+                    showLog.toggle()
+                } label: {
+                    Text("""
+                        ^[\(store.books.count) Book](inflect: true), \
+                        ^[\(store.authors.count) Author](inflect: true), \
+                        ^[\(store.series.count) Series](inflect: true)
+                        """)
+                }
+                .buttonStyle(.plain)
+            }
+        }
         .onChange(of: store.lastError) {
             if store.lastError != nil {
                 errorAlert.toggle()
             }
         }
+        .sheet(isPresented: $showLog) { LogView() }
         .alert("Something unexpected happened", isPresented: $errorAlert) {
             // system provides a button to dismiss
         } message: {
