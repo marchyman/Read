@@ -4,7 +4,6 @@
 //
 
 import OSLog
-import SwiftData
 
 struct BookState: Equatable {
     var books: [Book] = []

@@ -3,7 +3,6 @@
 // https://www.snafu.org/
 //
 
-import SwiftData
 import SwiftUI
 import UDF
 
