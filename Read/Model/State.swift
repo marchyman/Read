@@ -13,12 +13,17 @@ struct BookState: Equatable {
     var bookDB: BookDB
     var lastError: String?
 
+    // command line args, use for testing, override function args.
     init(forPreview: Bool = false, addTestData: Bool = false) {
-        var inMemory = forPreview
-        if CommandLine.arguments.contains("-TESTING") {
-            inMemory = true
+        var inMemoryFlag = forPreview
+        if CommandLine.arguments.contains("-MEMORY") {
+            inMemoryFlag = true
         }
-        bookDB = try! BookDB(inMemory: inMemory, addTestData: addTestData)
+        var testDataFlag = addTestData
+        if CommandLine.arguments.contains("-TESTDATA") {
+            testDataFlag = true
+        }
+        bookDB = try! BookDB(inMemory: inMemoryFlag, addTestData: testDataFlag)
         self.books = (try? sortedBooks()) ?? []
         self.authors = (try? sortedAuthors()) ?? []
         self.series = (try? sortedSeries()) ?? []
