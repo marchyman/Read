@@ -1,6 +1,9 @@
 name: Read
 
 options:
+  fileTypes:
+    "icon":
+      file: true 
   groupOrdering:
     - order: [ Read, ReadTests, Packages, Products ]
 
@@ -12,9 +15,11 @@ settings:
     CODE_SIGN_STYLE: Automatic
     DEAD_CODE_STRIPPING: YES
     DEVELOPMENT_TEAM: A3UXBEBE8Z
+    ENABLE_APP_SANDBOX: YES
     ENABLE_USER_SCRIPT_SANDBOXING: NO
     LOCALIZATION_PREFERS_STRING_CATALOGS: YES
     PRODUCT_NAME: Read
+    STRING_CATALOG_GENERATE_SYMBOLS: YES
     SWIFT_VERSION: 6.1
     SWIFT_EMIT_LOC_STRINGS: YES
     SWIFT_STRICT_CONCURRENCY: YES
