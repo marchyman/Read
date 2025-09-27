@@ -65,7 +65,6 @@ struct ContentView: View {
                         ^[\(store.series.count) Series](inflect: true)
                         """)
                 }
-                .buttonStyle(.plain)
             }
         }
         .onChange(of: store.lastError) {

@@ -20,7 +20,7 @@ settings:
     LOCALIZATION_PREFERS_STRING_CATALOGS: YES
     PRODUCT_NAME: Read
     STRING_CATALOG_GENERATE_SYMBOLS: YES
-    SWIFT_VERSION: 6.1
+    SWIFT_VERSION: 6.2
     SWIFT_EMIT_LOC_STRINGS: YES
     SWIFT_STRICT_CONCURRENCY: YES
     # the following are replaced in the target Info.plists by a post
@@ -38,7 +38,7 @@ targets:
   Read:
     type: application
     platform: iOS
-    deploymentTarget: 17.0
+    deploymentTarget: 26.0
     dependencies:
       - package: UDF
     sources:
@@ -51,26 +51,30 @@ targets:
           - iCloud.org.snafu.Read
         com.apple.developer.icloud-services:
           - CloudKit
-    settings:
-      base:
-        ENABLE_PREVIEWS: YES
-        GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: $(TARGET_NAME)
-        INFOPLIST_KEY_NSHumanReadableCopyright: Copyright 2025 Marco S Hyman
-        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
-        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad:
+    info:
+      path: Read/Supporting Files/Info.plist
+      properties:
+        CFBundleDisplayName: $(TARGET_NAME)
+        NSHumanReadableCopyright: Copyright 2025 Marco S Hyman
+        UIApplicationSceneManifest_Generation: YES
+        UIApplicationSupportsIndirectInputEvents: YES
+        UIBackgroundModes: remote-notification
+        UILaunchScreen_Generation: YES
+        UISupportedInterfaceOrientations_iPad:
           - UIInterfaceOrientationPortrait
           - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
-        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone:
+        UISupportedInterfaceOrientations_iPhone:
           - UIInterfaceOrientationPortrait
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
-        INFOPLIST_KEY_UIBackgroundModes:
+        UIBackgroundModes:
           - remote-notification
+    settings:
+      base:
+        ENABLE_PREVIEWS: YES
+        GENERATE_INFOPLIST_FILE: NO
         PRODUCT_BUNDLE_IDENTIFIER: org.snafu.Read
     postBuildScripts:
       - path: .buildversion.sh
@@ -85,7 +89,7 @@ targets:
   ReadTests:
     type: bundle.unit-test
     platform: iOS
-    deploymentTarget: 17.0
+    deploymentTarget: 26.0
     dependencies:
       - target: Read
     sources:

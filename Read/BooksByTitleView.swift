@@ -50,10 +50,6 @@ struct BooksByTitleView: View {
         .padding(.horizontal)
         .contentMargins(.horizontal, 40, for: .scrollContent)
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Text("Books")
-                    .font(.title2).bold()
-            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     newBook = true
