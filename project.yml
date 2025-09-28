@@ -59,14 +59,12 @@ targets:
         UIApplicationSceneManifest_Generation: YES
         UIApplicationSupportsIndirectInputEvents: YES
         UIBackgroundModes: remote-notification
-        UILaunchScreen_Generation: YES
-        UISupportedInterfaceOrientations_iPad:
+        UILaunchScreen:
+          UIColorName: systemBackground
+          UITabBar: {}
+        UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
           - UIInterfaceOrientationPortraitUpsideDown
-          - UIInterfaceOrientationLandscapeLeft
-          - UIInterfaceOrientationLandscapeRight
-        UISupportedInterfaceOrientations_iPhone:
-          - UIInterfaceOrientationPortrait
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
         UIBackgroundModes:
