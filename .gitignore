@@ -1,9 +1,11 @@
 *~
 .DS_Store
+.test.out
 
 notes
 buildServer.json
 Read.entitlements
+Info.plist
 
 Build/
 DerivedData/
