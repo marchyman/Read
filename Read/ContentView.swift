@@ -9,18 +9,39 @@ import UDF
 struct ContentView: View {
     @Environment(Store<BookState, ModelAction>.self) var store
     @State private var showLog = false
+    @State private var errorAlert = false
 
     var body: some View {
-        TabsView()
-        statsView
-            .padding(.bottom, 8)
-            .onTapGesture {
-                showLog.toggle()
+        VStack {
+            TabsView()
+            StatsView()
+                .padding(.bottom, 8)
+                .onTapGesture {
+                    showLog.toggle()
+                }
+                .sheet(isPresented: $showLog) { LogView() }
+        }
+        .onChange(of: store.lastError) {
+            if store.lastError != nil {
+                errorAlert.toggle()
             }
-            .sheet(isPresented: $showLog) { LogView() }
-    }
+        }
+        .alert("Something unexpected happened", isPresented: $errorAlert) {
+            // system provides a button to dismiss
+        } message: {
+            Text("""
+                Error text:
 
-    var statsView: some View {
+                \(store.lastError ?? "unknown error")
+                """)
+        }
+    }
+}
+
+struct StatsView: View {
+    @Environment(Store<BookState, ModelAction>.self) var store
+
+    var body: some View {
         Text("""
             ^[\(store.books.count) Book](inflect: true), \
             ^[\(store.authors.count) Author](inflect: true), \
