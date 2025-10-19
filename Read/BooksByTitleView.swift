@@ -29,6 +29,8 @@ struct BooksByTitleView: View {
                     }
                 }
             } else {
+                Text("Books by Title")
+                    .font(.title)
                 List {
                     ForEach(books) { book in
                         NavigationLink(value: book) {

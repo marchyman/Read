@@ -30,6 +30,8 @@ struct BooksBySeriesView: View {
                     }
                 }
             } else {
+                Text("Books by Series")
+                    .font(.title)
                 List {
                     ForEach(series) { item in
                         @Bindable var item = item

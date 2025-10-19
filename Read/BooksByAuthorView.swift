@@ -30,6 +30,8 @@ struct BooksByAuthorView: View {
                     }
                 }
             } else {
+                Text("Books by Author")
+                    .font(.title)
                 List {
                     ForEach(authors) { item in
                         @Bindable var item = item
