@@ -9,7 +9,6 @@ import SwiftData
 @Model
 final class Book {
     var added: Date = Date.now
-    var release: Date?
     var title: String = "Unknown"
     @Relationship(deleteRule: .nullify, inverse: \Author.books)
     var authors: [Author]!
@@ -17,9 +16,8 @@ final class Book {
     var series: Series?
     var seriesOrder: Int?
 
-    init(title: String, release: Date? = nil) {
+    init(title: String) {
         self.title = title
-        self.release = release
         self.authors = []
     }
 }

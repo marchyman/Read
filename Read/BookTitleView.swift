@@ -25,12 +25,9 @@ struct BookTitleView: View {
                 }
                 .padding(.leading)
                 Spacer()
-                if let release = book.release {
-                    Text(
-                        "Release date: \(release.formatted(date: .abbreviated, time: .omitted))"
-                    )
+                Text("\(book.added.formatted(date: .abbreviated, time: .omitted))")
+                    .foregroundStyle(.tertiary)
                     .padding(.trailing)
-                }
             }
         }
         .padding(.horizontal, 5)

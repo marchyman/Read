@@ -38,12 +38,7 @@ extension BookDB {
         // Define some books and add them to the container's context
         let books: [Book] = [
             Book(title: "A Standalone Book"),
-            Book(
-                title: "Future Release",
-                release: Calendar.current.date(
-                    byAdding: .day,
-                    value: 1,
-                    to: Date())!),
+            Book(title: "No more Future Release"),
             Book(title: "First book of a series"),
             Book(title: "Second book of a series")
         ]
