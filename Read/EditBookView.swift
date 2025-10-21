@@ -41,7 +41,7 @@ struct EditBookView: View {
             } label: {
                 Text("Update Book")
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.bordered)
             .disabled(updatesDisabled())
         }
     }
