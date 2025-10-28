@@ -10,9 +10,9 @@ private let addAuthor = "Add new author"
 private let pickAuthor = "Select author(s)"
 
 struct AuthorPickerView: View {
-    @Environment(Store<BookState, ModelAction>.self) var store
+    @Environment(Store<BookState, ModelEvent>.self) var store
 
-    var selectAction: (Author) -> Void
+    var selectEvent: (Author) -> Void
 
     @State private var selectedAuthor = pickAuthor
     @State private var newAuthor = false
@@ -41,7 +41,7 @@ struct AuthorPickerView: View {
                     if let author = store.authors.first(where: {
                         $0.name == selectedAuthor
                     }) {
-                        selectAction(author)
+                        selectEvent(author)
                     }
                     selectedAuthor = pickAuthor
                 }
@@ -57,7 +57,7 @@ struct AuthorPickerView: View {
 #Preview {
     Form {
         Section("Authors") {
-            AuthorPickerView(selectAction: { _ in })
+            AuthorPickerView(selectEvent: { _ in })
                 .environment(Store(initialState: BookState(forPreview: true,
                                                            addTestData: true),
                                    reduce: ModelReducer()))

@@ -7,7 +7,7 @@ import SwiftUI
 import UDF
 
 struct EditBookView: View {
-    @Environment(Store<BookState, ModelAction>.self) var store
+    @Environment(Store<BookState, ModelEvent>.self) var store
 
     var book: Book
     var updated: () -> Void     // function called after update to

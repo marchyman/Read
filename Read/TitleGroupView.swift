@@ -7,7 +7,7 @@ import SwiftUI
 import UDF
 
 struct TitleGroupView: View {
-    @Environment(Store<BookState, ModelAction>.self) var store
+    @Environment(Store<BookState, ModelEvent>.self) var store
 
     @Binding var title: String
 

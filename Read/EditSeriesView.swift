@@ -7,7 +7,7 @@ import SwiftUI
 import UDF
 
 struct EditSeriesView: View {
-    @Environment(Store<BookState, ModelAction>.self) var store
+    @Environment(Store<BookState, ModelEvent>.self) var store
     @Environment(\.dismiss) private var dismiss
 
     let series: Series

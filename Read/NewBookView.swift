@@ -7,7 +7,7 @@ import SwiftUI
 import UDF
 
 struct NewBookView: View {
-    @Environment(Store<BookState, ModelAction>.self) var store
+    @Environment(Store<BookState, ModelEvent>.self) var store
     @Environment(\.dismiss) var dismiss
 
     // create state variables for each field of a book, author, and series.

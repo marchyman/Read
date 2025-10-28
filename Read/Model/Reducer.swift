@@ -7,7 +7,7 @@ import Foundation
 import OSLog
 import UDF
 
-enum ModelAction: Equatable {
+enum ModelEvent: Equatable {
     case addAuthorButton(Author)
     case addBookButton(Book)
     case bookUpdateOrAddButton(Book, String, [Author], String, Int)
@@ -22,10 +22,10 @@ struct ModelReducer: Reducer {
     let logger = Logger(subsystem: "org.snafu", category: "reducer")
 
     func reduce(_ state: BookState,
-                _ action: ModelAction) -> BookState {
+                _ event: ModelEvent) -> BookState {
         var newState = state
 
-        switch action {
+        switch event {
         case .addAuthorButton(let author):
             addAuthorButton(state: &newState, author: author)
         case .addBookButton(let book):

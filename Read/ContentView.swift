@@ -7,7 +7,7 @@ import SwiftUI
 import UDF
 
 struct ContentView: View {
-    @Environment(Store<BookState, ModelAction>.self) var store
+    @Environment(Store<BookState, ModelEvent>.self) var store
     @State private var showLog = false
     @State private var errorAlert = false
 
@@ -39,7 +39,7 @@ struct ContentView: View {
 }
 
 struct StatsView: View {
-    @Environment(Store<BookState, ModelAction>.self) var store
+    @Environment(Store<BookState, ModelEvent>.self) var store
 
     var body: some View {
         Text("""

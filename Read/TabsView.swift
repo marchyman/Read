@@ -7,7 +7,7 @@ import SwiftUI
 import UDF
 
 struct TabsView: View {
-    @Environment(Store<BookState, ModelAction>.self) var store
+    @Environment(Store<BookState, ModelEvent>.self) var store
     @State private var searchText = ""
     @State private var path = NavigationPath()
 

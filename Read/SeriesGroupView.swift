@@ -7,7 +7,7 @@ import SwiftUI
 import UDF
 
 struct SeriesGroupView: View {
-    @Environment(Store<BookState, ModelAction>.self) var store
+    @Environment(Store<BookState, ModelEvent>.self) var store
 
     @Binding var seriesName: String
     @Binding var seriesOrder: Int

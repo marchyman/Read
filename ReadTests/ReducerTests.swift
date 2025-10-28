@@ -12,7 +12,7 @@ import UDF
 
 @MainActor
 struct ReducerTests {
-    func store(withTestData: Bool) -> Store<BookState, ModelAction> {
+    func store(withTestData: Bool) -> Store<BookState, ModelEvent> {
         Store(initialState: BookState(addTestData: withTestData),
               reduce: ModelReducer())
     }

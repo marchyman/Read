@@ -42,7 +42,7 @@ struct BookFormView: View {
                         }
                     }
                 }
-                AuthorPickerView(selectAction: selectAuthor)
+                AuthorPickerView(selectEvent: selectAuthor)
             }
 
             Section("Series") {

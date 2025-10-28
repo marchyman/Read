@@ -7,7 +7,7 @@ import SwiftUI
 import UDF
 
 struct BooksBySeriesView: View {
-    @Environment(Store<BookState, ModelAction>.self) var store
+    @Environment(Store<BookState, ModelEvent>.self) var store
 
     @State private var newBook = false
     @State private var editSeries: Series?

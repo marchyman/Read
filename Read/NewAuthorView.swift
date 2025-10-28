@@ -7,7 +7,7 @@ import SwiftUI
 import UDF
 
 struct NewAuthorView: View {
-    @Environment(Store<BookState, ModelAction>.self) var store
+    @Environment(Store<BookState, ModelEvent>.self) var store
     @Environment(\.dismiss) var dismiss
     @State private var author: Author = Author(lastName: "")
 
