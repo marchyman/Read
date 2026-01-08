@@ -1,12 +1,14 @@
 name: Read
 
 options:
+  deploymentTarget:
+    iOS: "26.0"
+    macOS: "26.0"
+  groupOrdering:
+    - order: [ Read, ReadTests, Packages, Products ]
   fileTypes:
     "icon":
       file: true 
-  groupOrdering:
-    - order: [ Read, ReadTests, Packages, Products ]
-  defaultSourceDirectoryType: "syncedFolder"
 
 settings:
   base:
@@ -39,7 +41,6 @@ targets:
   Read:
     type: application
     platform: iOS
-    deploymentTarget: 26.0
     dependencies:
       - package: UDF
     sources:
@@ -88,7 +89,6 @@ targets:
   ReadTests:
     type: bundle.unit-test
     platform: iOS
-    deploymentTarget: 26.0
     dependencies:
       - target: Read
     sources:
