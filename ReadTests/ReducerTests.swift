@@ -21,7 +21,7 @@ struct ReducerTests {
         let store = store(withTestData: false)
         #expect(store.authors.count == 0)
         let author = Author(lastName: "Doe", firstName: "John")
-        await store.send(.addAuthorButton(author))
+        store.send(.addAuthorButton(author))
         #expect(store.authors.count == 1)
         #expect(store.authors[0].name == "John Doe")
     }
@@ -31,7 +31,7 @@ struct ReducerTests {
         let store = store(withTestData: false)
         #expect(store.books.count == 0)
         let book = Book(title: title)
-        await store.send(.addBookButton(book))
+        store.send(.addBookButton(book))
         #expect(store.books.count == 1)
         #expect(store.books[0].title == title)
     }
@@ -40,7 +40,7 @@ struct ReducerTests {
         let title = "Test Book"
         let store = store(withTestData: false)
         let book = Book(title: title)
-        await store.send(.addBookButton(book))
+        store.send(.addBookButton(book))
         let newTitle = "Updated Test Book"
         let authors = book.authors!
         let seriesName = ""
@@ -57,7 +57,7 @@ struct ReducerTests {
         let title = "Test Book"
         let store = store(withTestData: false)
         let book = Book(title: title)
-        await store.send(.addBookButton(book))
+        store.send(.addBookButton(book))
         let authors = [Author(lastName: "Doe", firstName: "John")]
         let seriesName = ""
         let seriesOrder = 0
@@ -76,7 +76,7 @@ struct ReducerTests {
         let seriesName = "Test Series"
         let seriesOrder = 3
         let store = store(withTestData: false)
-        await store.send(.addBookButton(book))
+        store.send(.addBookButton(book))
 
         await store.send(.bookUpdateOrAddButton(book, title, authors,
                                                 seriesName, seriesOrder))
@@ -102,7 +102,7 @@ struct ReducerTests {
     @Test func editAuthorDone() async throws {
         let store = store(withTestData: false)
         let author = Author(lastName: "Doe", firstName: "John")
-        await store.send(.addAuthorButton(author))
+        store.send(.addAuthorButton(author))
         let newFirstName = "Mary"
         let newLastName = "Roe"
         await store.send(.editAuthorDone(author, newFirstName, newLastName))
@@ -118,7 +118,7 @@ struct ReducerTests {
         let seriesName = "Test Series"
         let seriesOrder = 3
         let store = store(withTestData: false)
-        await store.send(.addBookButton(book))
+        store.send(.addBookButton(book))
 
         await store.send(.bookUpdateOrAddButton(book, title, authors,
                                                 seriesName, seriesOrder))
@@ -132,20 +132,20 @@ struct ReducerTests {
     @Test func onAuthorDelete() async throws {
         let store = store(withTestData: false)
         let author = Author(lastName: "Doe", firstName: "John")
-        await store.send(.addAuthorButton(author))
+        store.send(.addAuthorButton(author))
         #expect(store.authors.count == 1)
 
-        await store.send(.onAuthorDelete(author))
+        store.send(.onAuthorDelete(author))
         #expect(store.authors.count == 0)
     }
 
     @Test func onBookDelete() async throws {
         let store = store(withTestData: false)
         let book = Book(title: "Title")
-        await store.send(.addBookButton(book))
+        store.send(.addBookButton(book))
         #expect(store.books.count == 1)
 
-        await store.send(.onBookDelete(book))
+        store.send(.onBookDelete(book))
         #expect(store.books.count == 0)
     }
 
@@ -157,14 +157,14 @@ struct ReducerTests {
         let seriesName = "Test Series"
         let seriesOrder = 3
         let store = store(withTestData: false)
-        await store.send(.addBookButton(book))
+        store.send(.addBookButton(book))
 
         await store.send(.bookUpdateOrAddButton(book, title, authors,
                                                 seriesName, seriesOrder))
         #expect(store.series.count == 1)
         let series = store.series[0]
 
-        await store.send(.onSeriesDelete(series))
+        store.send(.onSeriesDelete(series))
         #expect(store.series.count == 0)
     }
 }
