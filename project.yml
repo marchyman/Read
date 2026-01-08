@@ -6,6 +6,7 @@ options:
       file: true 
   groupOrdering:
     - order: [ Read, ReadTests, Packages, Products ]
+  defaultSourceDirectoryType: "syncedFolder"
 
 settings:
   base:
