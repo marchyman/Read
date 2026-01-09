@@ -9,6 +9,7 @@ options:
   fileTypes:
     "icon":
       file: true 
+  defaultSourceDirectoryType: syncedFolder
 
 settings:
   base:
@@ -44,9 +45,11 @@ targets:
     dependencies:
       - package: UDF
     sources:
+      - Supporting Files/AppIcon.icon
+      - Supporting Files/Assets.xcassets
       - Read
     entitlements:
-      path: Read/Supporting Files/Read.entitlements
+      path: Generated/Read.entitlements
       properties:
         aps-environment: development
         com.apple.developer.icloud-container-identifiers:
@@ -54,7 +57,7 @@ targets:
         com.apple.developer.icloud-services:
           - CloudKit
     info:
-      path: Read/Supporting Files/Info.plist
+      path: Generated/Info.plist
       properties:
         CFBundleDisplayName: $(TARGET_NAME)
         NSHumanReadableCopyright: Copyright 2025 Marco S Hyman
