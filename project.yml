@@ -20,13 +20,14 @@ settings:
     DEAD_CODE_STRIPPING: YES
     DEVELOPMENT_TEAM: A3UXBEBE8Z
     ENABLE_APP_SANDBOX: YES
+    ENABLE_OUTGOING_NETWORK_CONNECTIONS: YES;
     ENABLE_USER_SCRIPT_SANDBOXING: NO
     LOCALIZATION_PREFERS_STRING_CATALOGS: YES
     PRODUCT_NAME: Read
     STRING_CATALOG_GENERATE_SYMBOLS: YES
-    SWIFT_VERSION: 6.2
     SWIFT_EMIT_LOC_STRINGS: YES
     SWIFT_STRICT_CONCURRENCY: YES
+    SWIFT_VERSION: 6.2
     # the following are replaced in the target Info.plists by a post
     # build script. They are needed (?) to build the plist that the
     # script then modifies.

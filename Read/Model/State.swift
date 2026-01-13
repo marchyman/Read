@@ -2,6 +2,15 @@
 // Copyright 2025 Marco S Hyman
 // https://www.snafu.org/
 //
+// This file defines the BookState structure which serves as the
+// central state manager for the Read application. It coordinates
+// data access through the BookDB and maintains sorted collections
+// of books, authors, and series for UI presentation.
+//
+// The state is designed to work with the UDF (Unified Data Flow)
+// pattern where UI modifications are handled through reducer
+// functions that update state and trigger database operations.
+//
 
 import OSLog
 
@@ -12,15 +21,17 @@ struct BookState: Equatable {
     var bookDB: BookDB
     var lastError: String?
 
-    // command line args, use for testing, override function args.
     init(forPreview: Bool = false, addTestData: Bool = false) {
-        var inMemoryFlag = forPreview
-        if CommandLine.arguments.contains("-MEMORY") {
-            inMemoryFlag = true
+        // command line args, used when testing, override function args.
+        let inMemoryFlag = if CommandLine.arguments.contains("-MEMORY") {
+            true
+        } else {
+            forPreview
         }
-        var testDataFlag = addTestData
-        if CommandLine.arguments.contains("-TESTDATA") {
-            testDataFlag = true
+        let testDataFlag = if CommandLine.arguments.contains("-TESTDATA") {
+            true
+        } else {
+            addTestData
         }
         bookDB = try! BookDB(inMemory: inMemoryFlag, addTestData: testDataFlag)
         self.books = (try? sortedBooks()) ?? []
