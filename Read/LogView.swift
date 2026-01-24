@@ -37,6 +37,8 @@ struct LogView: View {
         }
     }
 
+    // Fetches log entries from the system log store for this process
+    // and formats them for display in the UI
     func fetchLogEntries() -> [String] {
         var entries: [String] = []
         let timeFormatter = DateFormatter()
