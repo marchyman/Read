@@ -6,50 +6,77 @@
 import SwiftUI
 import UDF
 
-struct TabsView: View {
-    @Environment(Store<BookState, ModelEvent>.self) var store
-    @State private var searchText = ""
-    @State private var path = NavigationPath()
+enum DataViews: CaseIterable, @MainActor Identifiable, View {
+    case byTitle
+    case byAuthor
+    case bySeries
+
+    var id: Self { self }
 
     var body: some View {
-        TabView {
-            Tab("Titles", systemImage: "book.closed") {
-                NavigationStack(path: $path) {
-                    BooksByTitleView(search: searchText)
-                        .searchable(text: $searchText, prompt: "Title search")
-                        .navigationDestination(for: Book.self) { book in
-                            EditBookView(book: book) {
-                                path.removeLast()
-                            }
-                        }
-                }
-            }
-
-            Tab("Authors", systemImage: "character.book.closed") {
-                NavigationStack(path: $path) {
-                    BooksByAuthorView(search: searchText)
-                        .searchable(text: $searchText, prompt: "Author search")
-                        .navigationDestination(for: Book.self) { book in
-                            EditBookView(book: book) {
-                                path.removeLast()
-                            }
-                        }
-                }
-            }
-
-            Tab("Series", systemImage: "books.vertical") {
-                NavigationStack(path: $path) {
-                    BooksBySeriesView(search: searchText)
-                        .searchable(text: $searchText, prompt: "Series search")
-                        .navigationDestination(for: Book.self) { book in
-                            EditBookView(book: book) {
-                                path.removeLast()
-                            }
-                        }
-                }
-            }
+        switch self {
+        case .byTitle:
+            BooksByTitleView()
+        case .byAuthor:
+            BooksByAuthorView()
+        case .bySeries:
+            BooksBySeriesView()
         }
-        .tabViewStyle(.page)
+    }
+
+    var searchPrompt: String {
+        switch self {
+        case .byTitle: "Title search"
+        case .byAuthor: "Author search"
+        case .bySeries: "Series search"
+        }
+    }
+
+    var pickerLabel: String {
+        switch self {
+        case .byTitle: "By Title"
+        case .byAuthor: "By Author"
+        case .bySeries: "By Series"
+        }
+    }
+}
+
+struct TabsView: View {
+    @Environment(Store<BookState, ModelEvent>.self) var store
+    @State private var path = NavigationPath()
+    @State private var dataView = DataViews.byTitle
+    @State private var showLog = false
+
+    var body: some View {
+        VStack {
+            NavigationStack(path: $path) {
+                dataView
+                    .navigationDestination(for: Book.self) { book in
+                        EditBookView(book: book) {
+                            path.removeLast()
+                        }
+                    }
+            }
+            HStack {
+                StatsView()
+                    .padding(.bottom, 8)
+                    .onTapGesture {
+                        showLog.toggle()
+                    }
+                    .sheet(isPresented: $showLog) { LogView() }
+
+                Spacer()
+
+                Picker("Books, Authors, Series",
+                       selection: $dataView) {
+                    ForEach(DataViews.allCases) { dataView in
+                        Text(dataView.pickerLabel)
+                    }
+                }
+                .pickerStyle(.menu)
+            }
+            .padding()
+        }
     }
 }
 

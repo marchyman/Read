@@ -10,8 +10,7 @@ struct BooksByTitleView: View {
     @Environment(Store<BookState, ModelEvent>.self) var store
     @State private var newBook = false
     @State private var updater = false
-
-    let search: String
+    @State private var search = ""
 
     var body: some View {
         let books = store.books.filter {
@@ -68,12 +67,13 @@ struct BooksByTitleView: View {
             // BookTitleView changed.
             updater.toggle()
         }
+        .searchable(text: $search, placement: .navigationBarDrawer, prompt: "Title search")
     }
 }
 
 #Preview {
     NavigationStack {
-        BooksByTitleView(search: "")
+        BooksByTitleView()
             .environment(Store(initialState: BookState(forPreview: true,
                                                        addTestData: true),
                                reduce: ModelReducer()))

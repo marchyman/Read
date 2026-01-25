@@ -11,8 +11,7 @@ struct BooksBySeriesView: View {
 
     @State private var newBook = false
     @State private var editSeries: Series?
-
-    let search: String
+    @State private var search = ""
 
     var body: some View {
         let series = store.series.filter {
@@ -90,6 +89,7 @@ struct BooksBySeriesView: View {
         .sheet(isPresented: $newBook) {
             NewBookView()
         }
+        .searchable(text: $search, placement: .navigationBarDrawer, prompt: "Series search")
     }
 }
 
@@ -105,7 +105,7 @@ extension BooksBySeriesView {
 
 #Preview {
     NavigationStack {
-        BooksBySeriesView(search: "")
+        BooksBySeriesView()
             .environment(Store(initialState: BookState(forPreview: true,
                                                        addTestData: true),
                                reduce: ModelReducer()))

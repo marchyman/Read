@@ -8,33 +8,24 @@ import UDF
 
 struct ContentView: View {
     @Environment(Store<BookState, ModelEvent>.self) var store
-    @State private var showLog = false
     @State private var errorAlert = false
 
     var body: some View {
-        VStack {
-            TabsView()
-            StatsView()
-                .padding(.bottom, 8)
-                .onTapGesture {
-                    showLog.toggle()
+        TabsView()
+            .onChange(of: store.lastError) {
+                if store.lastError != nil {
+                    errorAlert.toggle()
                 }
-                .sheet(isPresented: $showLog) { LogView() }
-        }
-        .onChange(of: store.lastError) {
-            if store.lastError != nil {
-                errorAlert.toggle()
             }
-        }
-        .alert("Something unexpected happened", isPresented: $errorAlert) {
-            // system provides a button to dismiss
-        } message: {
-            Text("""
-                Error text:
+            .alert("Something unexpected happened", isPresented: $errorAlert) {
+                // system provides a button to dismiss
+            } message: {
+                Text("""
+                    Error text:
 
-                \(store.lastError ?? "unknown error")
-                """)
-        }
+                    \(store.lastError ?? "unknown error")
+                    """)
+            }
     }
 }
 
