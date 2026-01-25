@@ -11,7 +11,7 @@ $(PROJECT).xcodeproj/project.pbxproj:	project.yml
 
 # Unit tests
 test:
-	xcodebuild -scheme $(PROJECT) test | tee .test.out
+	xcodebuild -scheme $(PROJECT) test | xcbeautify | tee .test.out
 
 # force project file rebuild
 proj:
