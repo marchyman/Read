@@ -11,7 +11,7 @@ struct ContentView: View {
     @State private var errorAlert = false
 
     var body: some View {
-        TabsView()
+        SelectView()
             .onChange(of: store.lastError) {
                 if store.lastError != nil {
                     errorAlert.toggle()

@@ -41,7 +41,7 @@ enum DataViews: CaseIterable, @MainActor Identifiable, View {
     }
 }
 
-struct TabsView: View {
+struct SelectView: View {
     @Environment(Store<BookState, ModelEvent>.self) var store
     @State private var path = NavigationPath()
     @State private var dataView = DataViews.byTitle
@@ -81,7 +81,7 @@ struct TabsView: View {
 }
 
 #Preview {
-    TabsView()
+    SelectView()
         .environment(Store(initialState: BookState(forPreview: true,
                                                    addTestData: true),
                            reduce: ModelReducer()))
